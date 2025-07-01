@@ -158,6 +158,47 @@ Unlike generic flight training apps, PPL Quest NZ is specifically designed for N
 - **Production Ready** - Deployed on Vercel with CI/CD pipeline
 - **CLAUDE.md Workflow** - Structured development process followed
 
+## 🛠️ Development & Testing
+
+### Local Development
+```bash
+npm install          # Install dependencies
+npm run dev         # Start development server
+```
+
+### Testing & Validation
+```bash
+# Individual test types
+npm run test:type   # TypeScript type checking (catches build errors)
+npm run lint        # ESLint code quality checks  
+npm run test        # Unit tests
+npm run test:e2e    # End-to-end tests
+
+# Combined validation (matches Vercel build)
+npm run test:build  # TypeScript + Build verification
+npm run test:all    # Complete test suite
+
+# Pre-commit validation
+./scripts/pre-commit-check.sh  # Run before committing
+```
+
+### CLAUDE.md Workflow
+This project follows a strict development workflow documented in `CLAUDE.md`:
+1. Plan tasks with TodoWrite
+2. Create E2E tests first (TDD approach)
+3. Implement features to pass tests
+4. **Run comprehensive local validation** (prevents Vercel build failures)
+5. Commit with descriptive messages
+6. Verify production deployment
+7. Update documentation
+
+### CI/CD Pipeline
+- **GitHub Actions** - Automated testing on every push
+- **TypeScript Checking** - Catches type errors before deployment  
+- **ESLint Validation** - Enforces code quality standards
+- **E2E Testing** - Verifies functionality across browsers
+- **Vercel Deployment** - Automatic production deployments
+
 ## 🤝 Contributing
 
-Built with modern web technologies following Vue 3 best practices, TypeScript standards, and mobile-first responsive design principles.
+Built with modern web technologies following Vue 3 best practices, TypeScript standards, and mobile-first responsive design principles. All contributions must pass the comprehensive test suite including TypeScript validation, ESLint checks, unit tests, and E2E tests.
