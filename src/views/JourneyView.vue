@@ -623,7 +623,7 @@ const tooltipVisible = ref(false)
 const tooltipLesson = ref(0)
 const tooltipStyle = ref({})
 const phaseTooltipVisible = ref(false)
-const phaseTooltipPhase = ref({})
+const phaseTooltipPhase = ref<any>({})
 const phaseTooltipStyle = ref({})
 const hoursTooltipVisible = ref(false)
 const hoursTooltipStyle = ref({})
@@ -824,7 +824,7 @@ const getSpendingPercentage = (category: string, budget: number) => {
 }
 
 const getBudgetStatusColor = (category: string) => {
-  const budgets = {
+  const budgets: Record<string, number> = {
     'flight-training': 25000,
     'theory-exam': 390,
     'medical': 1070
