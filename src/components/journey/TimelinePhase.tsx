@@ -31,29 +31,28 @@ export default function TimelinePhase({
     return 'upcoming'
   }
 
-  const statusClasses = {
-    completed: 'bg-gradient-to-br from-green-50 to-green-100 border-green-400 text-green-900 shadow-lg',
-    current: 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-400 text-blue-900 ring-2 ring-blue-200 shadow-lg',
-    upcoming: 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-300 text-gray-700 hover:shadow-md'
+  const getStatusClass = () => {
+    if (isCompleted) return 'bg-green-50 border-green-400'
+    if (isActive) return 'bg-blue-50 border-blue-400'
+    return 'bg-gray-50 border-gray-300'
   }
 
   return (
     <div
-      className={`flex-shrink-0 w-72 p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-        statusClasses[getPhaseStatus()]
-      }`}
+      className={`card cursor-pointer mr-4 ${getStatusClass()}`}
       onClick={onClick}
       data-testid={`phase-${phase.id}`}
+      style={{ minWidth: '280px' }}
     >
       {/* Phase Header */}
       <div className="mb-4">
-        <div className="flex items-center gap-3 mb-2">
-          <div className={`w-3 h-3 rounded-full ${
-            isCompleted ? 'bg-green-500' : isActive ? 'bg-blue-500 animate-pulse' : 'bg-gray-300'
+        <div className="flex items-center mb-2">
+          <div className={`w-3 h-3 rounded-full mr-3 ${
+            isCompleted ? 'bg-green-500' : isActive ? 'bg-blue-500' : 'bg-gray-300'
           }`} />
           <h3 className="font-bold text-xl">{phase.name}</h3>
         </div>
-        <div className="text-sm font-medium opacity-80 bg-white/50 rounded-full px-3 py-1 inline-block">
+        <div className="text-sm font-medium">
           {phase.hourRange.min}-{phase.hourRange.max} hours
         </div>
       </div>
@@ -62,12 +61,12 @@ export default function TimelinePhase({
       {isActive && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-semibold text-blue-700">Progress</span>
-            <span className="text-xs font-bold text-blue-800">{phaseProgress.toFixed(0)}%</span>
+            <span className="text-xs font-semibold">Progress</span>
+            <span className="text-xs font-bold">{phaseProgress.toFixed(0)}%</span>
           </div>
-          <div className="w-full bg-blue-100 rounded-full h-3 shadow-inner" data-testid="phase-progress-bar">
+          <div className="w-full bg-gray-200 rounded-full h-2" data-testid="phase-progress-bar">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
+              className="bg-blue-600 h-2 rounded-full"
               style={{ width: `${phaseProgress}%` }}
             />
           </div>
@@ -75,36 +74,36 @@ export default function TimelinePhase({
       )}
 
       {/* Phase Description */}
-      <p className="text-sm mb-4 leading-relaxed font-medium opacity-90 bg-white/30 rounded-lg p-3">
+      <p className="text-sm mb-4">
         {phase.description}
       </p>
 
       {/* Milestones Preview */}
-      <div className="space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider opacity-70 mb-3">Key Milestones</h4>
+      <div className="mb-4">
+        <h4 className="text-xs font-bold mb-3">Key Milestones</h4>
         {phase.milestones.slice(0, 2).map((milestone, index) => {
           const isUnlocked = progress.achievements.some(a => a.title === milestone)
           
           return (
             <div 
               key={milestone}
-              className={`text-xs p-3 rounded-lg border transition-all duration-200 ${
+              className={`text-xs p-3 mb-2 border ${
                 isUnlocked 
-                  ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-green-200 shadow-sm' 
-                  : 'bg-white/60 text-gray-700 border-gray-200 hover:bg-white/80'
+                  ? 'bg-green-50 border-green-200' 
+                  : 'bg-white border-gray-200'
               }`}
               data-testid={`phase-preview-milestone-${milestone.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{ borderRadius: 'var(--radius-md)' }}
             >
-              <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full flex items-center justify-center ${
+              <div className="flex items-center">
+                <div className={`w-3 h-3 rounded-full mr-3 ${
                   isUnlocked ? 'bg-green-500' : 'bg-gray-300'
                 }`}>
-                  {isUnlocked && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                 </div>
                 <span className="font-semibold">{milestone}</span>
               </div>
               {isUnlocked && (
-                <div className="text-xs opacity-75 mt-2 ml-6 font-medium" data-testid={`phase-preview-milestone-${milestone.toLowerCase().replace(/\s+/g, '-')}-date`}>
+                <div className="text-xs mt-2 pl-6 font-medium" data-testid={`phase-preview-milestone-${milestone.toLowerCase().replace(/\s+/g, '-')}-date`}>
                   ✓ Completed
                 </div>
               )}
@@ -113,21 +112,21 @@ export default function TimelinePhase({
         })}
         
         {phase.milestones.length > 2 && (
-          <div className="text-xs font-medium text-center pt-2 opacity-70 bg-white/40 rounded-lg py-2">
+          <div className="text-xs font-medium text-center p-2 bg-gray-100" style={{ borderRadius: 'var(--radius-md)' }}>
             +{phase.milestones.length - 2} more milestones
           </div>
         )}
       </div>
 
       {/* Phase Status Indicator */}
-      <div className="mt-4 pt-4 border-t border-white/30">
-        <div className={`text-xs font-bold text-center py-2 px-4 rounded-full ${
+      <div className="mt-4">
+        <div className={`text-xs font-bold text-center py-2 px-4 text-white ${
           isCompleted 
-            ? 'bg-green-500 text-white shadow-md' 
+            ? 'bg-green-500' 
             : isActive 
-            ? 'bg-blue-500 text-white shadow-md animate-pulse' 
-            : 'bg-gray-400 text-white/90'
-        }`}>
+            ? 'bg-blue-500' 
+            : 'bg-gray-400'
+        }`} style={{ borderRadius: 'var(--radius-xl)' }}>
           {isCompleted && '✓ COMPLETED'}
           {isActive && '🎯 CURRENT PHASE'}
           {!isCompleted && !isActive && '🔒 UPCOMING'}
