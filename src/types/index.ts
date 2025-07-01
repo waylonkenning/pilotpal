@@ -122,7 +122,7 @@ export interface TheoryExam {
   expiryDate: Date // Passes expire after certain period
 }
 
-export interface TheoryProgress {
+export type TheoryProgress = {
   [K in TheorySubject]: {
     attempts: TheoryExam[]
     isPassed: boolean
