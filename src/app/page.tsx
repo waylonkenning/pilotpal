@@ -3,9 +3,17 @@
 import { useProgress } from '@/lib/useProgress'
 import WelcomeScreen from '@/components/dashboard/WelcomeScreen'
 import Dashboard from '@/components/dashboard/Dashboard'
+import AchievementNotification from '@/components/shared/AchievementNotification'
 
 export default function Home() {
-  const { progress, isLoading, startJourney } = useProgress()
+  const { 
+    progress, 
+    isLoading, 
+    newAchievement,
+    startJourney, 
+    logFlightHours,
+    dismissAchievement 
+  } = useProgress()
 
   if (isLoading) {
     return (
@@ -19,5 +27,17 @@ export default function Home() {
     return <WelcomeScreen onStartJourney={startJourney} />
   }
 
-  return <Dashboard progress={progress} />
+  return (
+    <>
+      <Dashboard 
+        progress={progress} 
+        onLogFlightHours={logFlightHours}
+      />
+      
+      <AchievementNotification
+        achievement={newAchievement}
+        onClose={dismissAchievement}
+      />
+    </>
+  )
 }

@@ -7,6 +7,14 @@ export interface UserProgress {
   theoryExams: TheoryExams
   achievements: Achievement[]
   expenses: Expense[]
+  flightEntries: FlightEntry[]
+}
+
+export interface FlightEntry {
+  id: string
+  date: Date
+  description: string
+  hours: FlightHours
 }
 
 export interface UserProfile {

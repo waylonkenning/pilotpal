@@ -52,11 +52,17 @@ This project follows a structured development workflow as defined in `CLAUDE.md`
 ## MVP Development Phases
 
 ### Phase 1 (MVP) - Core Journey
-- [ ] Basic dashboard with progress overview
+- [x] **Basic dashboard with progress overview** ✅
+  - Welcome screen with user onboarding flow
+  - Progress overview cards showing flight hours, current phase, achievements
+  - Next milestone display with badge requirements
+  - Navigation structure for future sections
+  - Local storage persistence across sessions
+  - All E2E tests passing (12/12) on production
 - [ ] Flight hours logging
 - [ ] Journey timeline visualization
 - [ ] Core achievement badges (First Flight, Solo, Licensed)
-- [ ] Local storage setup
+- [ ] Local storage setup ✅
 
 ### Phase 2 - Enhanced Tracking
 - [ ] All 27 lesson badges
@@ -129,15 +135,31 @@ interface UserProgress {
 git clone https://github.com/waylonkenning/pilotpal.git
 cd pilotpal
 
-# Install dependencies (when Next.js setup is complete)
+# Install dependencies
 npm install
 
 # Start development server
 npm run dev
 
-# Run E2E tests
+# Run E2E tests locally
 npm run test:e2e
+
+# Run E2E tests against production
+CI=true npm run test:e2e
+
+# Build for production
+npm run build
 ```
+
+## Current Features
+
+### ✅ Dashboard (MVP Phase 1 Complete)
+- **Welcome Screen**: New user onboarding with name input
+- **Progress Overview**: Visual cards showing flight hours, current training phase, and achievement progress
+- **Next Milestone**: Display of upcoming badge with requirements
+- **Data Persistence**: All progress saved locally with export/import capabilities
+- **Responsive Design**: Works on desktop and mobile devices
+- **E2E Testing**: Comprehensive test coverage (12 tests passing)
 
 ## Data Privacy
 

@@ -29,7 +29,8 @@ export const createDefaultProgress = (): UserProgress => ({
     radioTelephony: { attempted: false, passed: false }
   },
   achievements: [],
-  expenses: []
+  expenses: [],
+  flightEntries: []
 })
 
 export const saveProgress = (data: UserProgress): void => {
@@ -50,6 +51,10 @@ export const saveProgress = (data: UserProgress): void => {
       expenses: data.expenses.map(expense => ({
         ...expense,
         date: expense.date.toISOString()
+      })),
+      flightEntries: data.flightEntries.map(entry => ({
+        ...entry,
+        date: entry.date.toISOString()
       })),
       theoryExams: {
         ...data.theoryExams,
@@ -114,6 +119,10 @@ export const loadProgress = (): UserProgress | null => {
         ...expense,
         date: new Date(expense.date)
       })),
+      flightEntries: parsed.flightEntries?.map((entry: any) => ({
+        ...entry,
+        date: new Date(entry.date)
+      })) || [],
       theoryExams: {
         ...parsed.theoryExams,
         airLaw: {

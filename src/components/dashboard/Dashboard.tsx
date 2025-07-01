@@ -1,15 +1,26 @@
 'use client'
 
-import { UserProgress } from '@/types'
+import { useState } from 'react'
+import { UserProgress, FlightHours } from '@/types'
 import Navigation from './Navigation'
 import ProgressOverview from './ProgressOverview'
 import NextMilestone from './NextMilestone'
+import FlightHoursModal from '@/components/tracking/FlightHoursModal'
+import RecentFlights from '@/components/tracking/RecentFlights'
 
 interface DashboardProps {
   progress: UserProgress
+  onLogFlightHours: (hours: FlightHours, description: string, date: Date) => void
 }
 
-export default function Dashboard({ progress }: DashboardProps) {
+export default function Dashboard({ progress, onLogFlightHours }: DashboardProps) {
+  const [isFlightModalOpen, setIsFlightModalOpen] = useState(false)
+
+  const handleLogFlightHours = (hours: FlightHours, description: string, date: Date) => {
+    onLogFlightHours(hours, description, date)
+    setIsFlightModalOpen(false)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -28,15 +39,18 @@ export default function Dashboard({ progress }: DashboardProps) {
         {/* Progress Overview Cards */}
         <ProgressOverview progress={progress} />
 
-        {/* Next Milestone */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
           <NextMilestone progress={progress} />
           
           {/* Quick Actions */}
           <div className="bg-white rounded-lg shadow-md p-6 border">
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
             <div className="space-y-3">
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={() => setIsFlightModalOpen(true)}
+                className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+              >
                 📝 Log Flight Hours
               </button>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors">
@@ -48,7 +62,21 @@ export default function Dashboard({ progress }: DashboardProps) {
             </div>
           </div>
         </div>
+
+        {/* Recent Flights */}
+        {progress.flightEntries.length > 0 && (
+          <div className="mb-8">
+            <RecentFlights flights={progress.flightEntries} />
+          </div>
+        )}
       </div>
+
+      {/* Flight Hours Modal */}
+      <FlightHoursModal
+        isOpen={isFlightModalOpen}
+        onClose={() => setIsFlightModalOpen(false)}
+        onSave={handleLogFlightHours}
+      />
     </div>
   )
 }
