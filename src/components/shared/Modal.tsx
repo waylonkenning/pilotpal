@@ -41,7 +41,7 @@ export default function Modal({ isOpen, onClose, title, children, 'data-testid':
       
       {/* Modal */}
       <div 
-        className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto flex flex-col"
+        className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto flex flex-col"
         data-testid={testId}
       >
         {/* Header */}
