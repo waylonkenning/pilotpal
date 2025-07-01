@@ -10,7 +10,7 @@
       </div>
 
       <!-- Medical Certificate Section -->
-      <div class="card mb-6" data-testid="upcoming-requirements">
+      <div class="card mb-6" data-testid="medical-certificate-section">
         <h2 class="text-xl font-semibold mb-4 text-blue-600">🏥 Medical Certificate</h2>
         
         <div v-if="!progress.medicalCertificate" class="space-y-4">
@@ -20,7 +20,7 @@
             <button 
               @click="showMedicalInfo = true"
               class="btn btn-secondary btn-sm" 
-              data-testid="medical-cert-info"
+              data-testid="medical-certificate-learn-more"
             >
               Learn More
             </button>
@@ -67,7 +67,7 @@
               <button 
                 @click="showFppInfo = true"
                 class="btn btn-secondary btn-sm" 
-                data-testid="fpp-info"
+                data-testid="fpp-learn-more-button"
               >
                 Learn More
               </button>
@@ -183,12 +183,12 @@
 
     <!-- Medical Certificate Information Modal -->
     <div v-if="showMedicalInfo" class="modal-overlay" @click="showMedicalInfo = false">
-      <div class="modal-content" @click.stop data-testid="requirement-explanation">
+      <div class="modal-content" @click.stop data-testid="medical-education-modal">
         <div class="p-6">
           <h3 class="text-xl font-bold mb-4">Medical Certificate Options</h3>
           
-          <div class="space-y-4" data-testid="medical-options">
-            <div class="border rounded-lg p-4">
+          <div class="space-y-4" data-testid="medical-cost-comparison">
+            <div class="border rounded-lg p-4" data-testid="class-2-explanation">
               <h4 class="font-semibold text-blue-600 mb-2">Class 2 Medical Certificate</h4>
               <p class="text-gray-700 mb-2">
                 Full aviation medical examination by CAA-approved doctor. Required before solo flight.
@@ -198,7 +198,7 @@
               </div>
             </div>
             
-            <div class="border rounded-lg p-4">
+            <div class="border rounded-lg p-4" data-testid="dl9-explanation">
               <h4 class="font-semibold text-green-600 mb-2">DL9 Driver License Medical</h4>
               <p class="text-gray-700 mb-2">
                 Use your existing NZ driver license medical if valid. Simpler and more cost-effective option.
@@ -206,6 +206,29 @@
               <div class="text-sm text-green-600" data-testid="dl9-cost">
                 Save $300-$800 compared to Class 2 medical
               </div>
+            </div>
+          </div>
+
+          <!-- Eligibility Requirements -->
+          <div class="bg-blue-50 p-4 rounded-lg mt-4" data-testid="medical-eligibility-info">
+            <h4 class="font-semibold text-blue-800 mb-2">✅ Eligibility Requirements</h4>
+            <div class="text-blue-700 text-sm space-y-1">
+              <p>• Must be at least 17 years old for PPL training</p>
+              <p>• No disqualifying medical conditions</p>
+              <p>• Meet vision standards (correctable to 20/20)</p>
+              <p>• Meet hearing standards</p>
+              <p>• Declare any medications or medical history</p>
+            </div>
+          </div>
+
+          <!-- Next Steps -->
+          <div class="bg-green-50 p-4 rounded-lg mt-4" data-testid="medical-next-steps">
+            <h4 class="font-semibold text-green-800 mb-2">🎯 Next Steps</h4>
+            <div class="text-green-700 text-sm space-y-2">
+              <p><strong>1. Choose your option:</strong> Decide between Class 2 or DL9 based on your needs</p>
+              <p><strong>2. Find a CAME:</strong> Locate a Civil Aviation Medical Examiner near you</p>
+              <p><strong>3. Book examination:</strong> Schedule your medical examination</p>
+              <p><strong>4. Complete forms:</strong> Fill out CAA medical forms accurately</p>
             </div>
           </div>
           
@@ -278,30 +301,67 @@
 
     <!-- FPP Information Modal -->
     <div v-if="showFppInfo" class="modal-overlay" @click="showFppInfo = false">
-      <div class="modal-content" @click.stop>
+      <div class="modal-content" @click.stop data-testid="fpp-education-modal">
         <div class="p-6">
-          <h3 class="text-xl font-bold mb-4">Fit and Proper Person Assessment</h3>
+          <h3 class="text-xl font-bold mb-4">🎯 Flight Proficiency Program (FPP)</h3>
           
-          <div class="space-y-4" data-testid="fpp-explanation">
-            <p class="text-gray-700">
-              The FPP assessment involves disclosure of criminal history, alcohol/drug use, and general character 
-              to determine if you're suitable to hold a pilot license.
-            </p>
-            
-            <div class="bg-blue-50 p-4 rounded-lg" data-testid="fpp-legal-basis">
-              <div class="font-semibold text-blue-800 mb-2">Legal Requirement</div>
-              <div class="text-blue-700">
-                Required under Section 80 of the Civil Aviation Act 2023
+          <!-- FPP Components -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="border rounded-lg p-4" data-testid="fpp-oral-exam-info">
+              <h4 class="font-semibold text-blue-600 mb-2">🗣️ Oral Examination</h4>
+              <div class="text-sm space-y-2">
+                <p><strong>Duration:</strong> 30-60 minutes</p>
+                <p><strong>Content:</strong> Theory knowledge application</p>
+                <p>The oral examination tests your understanding of aircraft systems, weather, navigation, and regulations.</p>
               </div>
             </div>
-            
-            <div class="bg-yellow-50 p-4 rounded-lg" data-testid="fpp-validity">
-              <div class="font-semibold text-yellow-800 mb-2">Important Notes</div>
-              <div class="text-yellow-700">
-                • Declaration must be truthful and complete<br>
-                • Updates required if circumstances change<br>
-                • Valid for 1 year from submission
+
+            <div class="border rounded-lg p-4" data-testid="fpp-flight-test-info">
+              <h4 class="font-semibold text-green-600 mb-2">✈️ Practical Flight Test</h4>
+              <div class="text-sm space-y-2">
+                <p><strong>Duration:</strong> 90-120 minutes</p>
+                <p><strong>Content:</strong> Demonstration of flying skills</p>
+                <p>The flight test demonstrates your practical ability to safely operate an aircraft to PPL standards.</p>
               </div>
+            </div>
+          </div>
+
+          <!-- Preparation Tips -->
+          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="fpp-preparation-tips">
+            <h4 class="font-semibold text-blue-800 mb-3">📚 Preparation Tips</h4>
+            <div class="text-blue-700 text-sm space-y-1">
+              <p>• Complete instructor recommendation before booking</p>
+              <p>• Review all theory subjects thoroughly</p>
+              <p>• Practice flight test maneuvers to standards</p>
+              <p>• Study aircraft systems and emergency procedures</p>
+            </div>
+          </div>
+
+          <!-- Required Documents -->
+          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="fpp-required-documents">
+            <h4 class="font-semibold text-green-800 mb-2">📄 Required Documents</h4>
+            <div class="text-green-700 text-sm space-y-1">
+              <p>• Valid medical certificate</p>
+              <p>• Student pilot permit</p>
+              <p>• Photo identification</p>
+              <p>• Logbook with endorsements</p>
+              <p>• Theory exam certificates</p>
+            </div>
+          </div>
+
+          <!-- Examiner Information -->
+          <div class="bg-purple-50 p-4 rounded-lg mb-6" data-testid="fpp-examiner-info">
+            <h4 class="font-semibold text-purple-800 mb-2">👨‍✈️ About Your Examiner</h4>
+            <div class="text-purple-700 text-sm">
+              <p>Your flight test will be conducted by a CAA authorised examiner who holds appropriate qualifications and experience.</p>
+            </div>
+          </div>
+
+          <!-- Cost Information -->
+          <div class="bg-orange-50 p-4 rounded-lg" data-testid="fpp-cost-info">
+            <h4 class="font-semibold text-orange-800 mb-2">💰 Cost Information</h4>
+            <div class="text-orange-700 text-sm">
+              <p><strong>Typical FPP Costs:</strong> $800-$1,200 including examiner fee and aircraft rental</p>
             </div>
           </div>
           

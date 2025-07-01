@@ -2,11 +2,20 @@
   <div class="min-h-screen gradient-sky">
     <div class="container p-6">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-4">💰 Financial Tracking</h1>
-        <p class="text-lg text-gray-600 mb-6">
-          Manage your PPL training budget and track expenses
-        </p>
+      <div class="flex justify-between items-center mb-8">
+        <div class="text-center flex-1">
+          <h1 class="text-3xl font-bold mb-4">💰 Financial Tracking</h1>
+          <p class="text-lg text-gray-600">
+            Manage your PPL training budget and track expenses
+          </p>
+        </div>
+        <button 
+          @click="showContextualHelp = true"
+          class="btn btn-secondary text-sm"
+          data-testid="contextual-help-trigger"
+        >
+          ❓ Help
+        </button>
       </div>
 
       <!-- Financial Overview Cards -->
@@ -557,6 +566,54 @@
         <div>Data exported successfully!</div>
       </div>
     </div>
+
+    <!-- Contextual Help Modal -->
+    <div v-if="showContextualHelp" class="modal-overlay" @click="showContextualHelp = false">
+      <div class="modal-content max-w-2xl" @click.stop data-testid="contextual-help-panel">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">💰 Financial Help</h3>
+          
+          <div class="space-y-4" data-testid="financial-help-content">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-blue-800 mb-2">📊 Budget Tracking</h4>
+              <p class="text-blue-700 text-sm">
+                Set realistic budgets for each category and monitor your spending to stay on track. PPL training costs typically range from $25,000-$35,000 NZD.
+              </p>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-green-800 mb-2">💳 Expense Categories</h4>
+              <p class="text-green-700 text-sm">
+                Track expenses across Flight Training, Theory Exams, Medical Certificate, Equipment, and FPP costs. This helps identify areas to optimize spending.
+              </p>
+            </div>
+            
+            <div class="bg-orange-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-orange-800 mb-2">📈 Cost Management</h4>
+              <p class="text-orange-700 text-sm">
+                Monitor your cost per flight hour and look for trends. Consistent training reduces overall costs by minimizing skill decay between lessons.
+              </p>
+            </div>
+            
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-purple-800 mb-2">📋 Export & Records</h4>
+              <p class="text-purple-700 text-sm">
+                Export your financial data for tax purposes or loan applications. Keep detailed records of all training-related expenses.
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showContextualHelp = false" class="btn btn-primary flex-1">
+              Got it!
+            </button>
+            <router-link to="/education" class="btn btn-secondary">
+              Cost Guide
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -593,6 +650,7 @@ const currentBudget = ref(30000) // Default budget
 const activeTab = ref('expenses')
 const showAddExpense = ref(false)
 const editingExpense = ref<Expense | null>(null)
+const showContextualHelp = ref(false)
 const showEligibilityInfo = ref(false)
 const showExportSuccess = ref(false)
 const customBudgetInput = ref('30000')

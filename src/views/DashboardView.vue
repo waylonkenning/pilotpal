@@ -3,6 +3,30 @@
     <div class="container">
       <div class="p-6">
         
+        <!-- Header with Help and Education -->
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h1 class="text-2xl font-bold">Dashboard</h1>
+            <p class="text-gray-600">Track your PPL training progress</p>
+          </div>
+          <div class="flex gap-3">
+            <button 
+              @click="showContextualHelp = true"
+              class="btn btn-secondary text-sm"
+              data-testid="contextual-help-trigger"
+            >
+              ❓ Help
+            </button>
+            <button 
+              @click="showEducationCenter = true"
+              class="btn btn-primary text-sm"
+              data-testid="education-center-button"
+            >
+              📚 Education Center
+            </button>
+          </div>
+        </div>
+        
         <!-- Today's Focus - Primary lesson display -->
         <div class="card mb-6" data-testid="todays-focus">
           <div class="text-center mb-4">
@@ -316,6 +340,229 @@
         </div>
       </div>
     </div>
+
+    <!-- Contextual Help Modal -->
+    <div v-if="showContextualHelp" class="modal-overlay" @click="showContextualHelp = false">
+      <div class="modal-content max-w-2xl" @click.stop data-testid="contextual-help-panel">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">📖 Dashboard Help</h3>
+          
+          <div class="space-y-4" data-testid="dashboard-help-content">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-blue-800 mb-2">🎯 Today's Focus</h4>
+              <p class="text-blue-700 text-sm">
+                Your dashboard shows your current lesson and what you need to prepare. Complete lessons to progress through your PPL training.
+              </p>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-green-800 mb-2">📊 Progress Tracking</h4>
+              <p class="text-green-700 text-sm">
+                Monitor your flight hours, achievements, and upcoming requirements. The app tracks your progress automatically as you complete lessons.
+              </p>
+            </div>
+            
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-purple-800 mb-2">🏆 Achievements</h4>
+              <p class="text-purple-700 text-sm">
+                Earn badges for completing milestones like your first solo flight, navigation flights, and theory exams.
+              </p>
+            </div>
+            
+            <div class="bg-orange-50 p-4 rounded-lg">
+              <h4 class="font-semibold text-orange-800 mb-2">⚠️ Requirements</h4>
+              <p class="text-orange-700 text-sm">
+                Keep track of upcoming requirements like medical certificates, theory exams, and minimum flight hours.
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showContextualHelp = false" class="btn btn-primary flex-1">
+              Got it!
+            </button>
+            <router-link to="/education" class="btn btn-secondary">
+              Education Center
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education Center Modal -->
+    <div v-if="showEducationCenter" class="modal-overlay" @click="showEducationCenter = false">
+      <div class="modal-content max-w-4xl" @click.stop data-testid="education-center-modal">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">📚 Education Center</h3>
+          
+          <!-- PPL Pathway Overview -->
+          <div class="card mb-8" data-testid="ppl-pathway-overview">
+            <h2 class="text-xl font-semibold mb-4">🎯 Complete PPL Pathway</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div class="text-center p-4 bg-blue-50 rounded-lg">
+                <div class="text-3xl mb-2">📋</div>
+                <div class="font-semibold">Medical Certificate</div>
+                <div class="text-sm text-gray-600">Class 2 or DL9</div>
+              </div>
+              <div class="text-center p-4 bg-green-50 rounded-lg">
+                <div class="text-3xl mb-2">✈️</div>
+                <div class="font-semibold">Flight Training</div>
+                <div class="text-sm text-gray-600">50+ hours</div>
+              </div>
+              <div class="text-center p-4 bg-purple-50 rounded-lg">
+                <div class="text-3xl mb-2">📚</div>
+                <div class="font-semibold">Theory Exams</div>
+                <div class="text-sm text-gray-600">6 subjects</div>
+              </div>
+              <div class="text-center p-4 bg-orange-50 rounded-lg">
+                <div class="text-3xl mb-2">🎯</div>
+                <div class="font-semibold">Flight Test</div>
+                <div class="text-sm text-gray-600">FPP Practical</div>
+              </div>
+            </div>
+            
+            <!-- CAA Part 61 Explanation -->
+            <div class="bg-blue-50 p-4 rounded-lg" data-testid="part-61-explanation">
+              <h3 class="font-semibold text-blue-800 mb-2">📜 CAA Part 61 Requirements</h3>
+              <p class="text-blue-700 text-sm">
+                New Zealand Private Pilot Licence requirements are governed by CAA Part 61. 
+                This comprehensive regulation outlines all training, experience, and examination 
+                requirements for obtaining your PPL(A) in New Zealand airspace.
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline and Cost Information -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Typical Timeline -->
+            <div class="card" data-testid="typical-timeline-info">
+              <h3 class="text-lg font-semibold mb-4">⏳ Typical Training Timeline</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between">
+                  <span>Accelerated (3-4 lessons/week):</span>
+                  <span class="font-semibold">3-4 months</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Standard (1-2 lessons/week):</span>
+                  <span class="font-semibold">6-8 months</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Part-time (1 lesson/week):</span>
+                  <span class="font-semibold">8-12 months</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cost Breakdown Education -->
+            <div class="card" data-testid="cost-breakdown-education">
+              <h3 class="text-lg font-semibold mb-4">💰 Comprehensive Cost Guide</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>Flight Training (40-50hrs):</span>
+                  <span>$18,000-$25,000</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Theory Exams (6 subjects):</span>
+                  <span>$390</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Medical Certificate:</span>
+                  <span>$420-$1,070</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Equipment & Materials:</span>
+                  <span>$2,000-$4,000</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Flight Test (FPP):</span>
+                  <span>$800-$1,200</span>
+                </div>
+                <div class="border-t pt-2 mt-2 font-semibold">
+                  <div class="flex justify-between">
+                    <span>Total Estimated Cost:</span>
+                    <span>$25,000-$35,000</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Study Resources -->
+          <div class="card mb-8" data-testid="study-resources-section">
+            <h3 class="text-lg font-semibold mb-4">📖 Study Resources & Links</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- CAA Resources -->
+              <div data-testid="caa-links">
+                <h4 class="font-semibold mb-3">🏛️ Official CAA Resources</h4>
+                <div class="space-y-2 text-sm">
+                  <a href="https://www.caa.govt.nz" target="_blank" class="block text-blue-600 hover:underline">
+                    CAA New Zealand Website
+                  </a>
+                  <a href="https://www.caa.govt.nz/rules/rule-part-61/" target="_blank" class="block text-blue-600 hover:underline">
+                    Part 61 - Pilot Licences and Ratings
+                  </a>
+                </div>
+              </div>
+
+              <!-- Regulatory Documents -->
+              <div data-testid="regulatory-documents">
+                <h4 class="font-semibold mb-3">📋 Regulatory Documents</h4>
+                <div class="space-y-2 text-sm">
+                  <div class="text-gray-600">• CAA Part 61 Regulations</div>
+                  <div class="text-gray-600">• Visual Flight Rules Guide</div>
+                  <div class="text-gray-600">• AIP New Zealand</div>
+                </div>
+              </div>
+
+              <!-- Recommended Reading -->
+              <div data-testid="recommended-reading">
+                <h4 class="font-semibold mb-3">📚 Recommended Reading</h4>
+                <div class="space-y-2 text-sm">
+                  <div class="text-gray-600">• Flight training manuals</div>
+                  <div class="text-gray-600">• Aviation safety publications</div>
+                  <div class="text-gray-600">• Weather interpretation guides</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- School Selection Tips -->
+          <div class="card mb-8" data-testid="school-selection-tips">
+            <h3 class="text-lg font-semibold mb-4">🏫 Choosing a Flight School</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold mb-3">✅ What to Look For</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                  <li>• CAA Part 141 or Part 61 authorization</li>
+                  <li>• Experienced, qualified instructors</li>
+                  <li>• Well-maintained aircraft fleet</li>
+                  <li>• Good safety record</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-3">❓ Questions to Ask</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                  <li>• What is the average time to PPL completion?</li>
+                  <li>• What are the total costs involved?</li>
+                  <li>• How often can I schedule lessons?</li>
+                  <li>• What is your first-time pass rate?</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <button @click="showEducationCenter = false" class="btn btn-primary flex-1">
+              Close
+            </button>
+            <router-link to="/education" class="btn btn-secondary">
+              Full Education Center
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -351,6 +598,8 @@ const progress = ref({
 
 const showCompleteLesson = ref(false)
 const showAchievementCelebration = ref(false)
+const showContextualHelp = ref(false)
+const showEducationCenter = ref(false)
 const showRequirementModal = ref(false)
 const newAchievements = ref<string[]>([])
 

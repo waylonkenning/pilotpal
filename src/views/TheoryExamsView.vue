@@ -2,11 +2,21 @@
   <div class="min-h-screen gradient-sky">
     <div class="container p-6">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-4">📚 Theory Examinations</h1>
-        <p class="text-lg text-gray-600 mb-6">
-          Track your progress through all 6 required theory subjects
-        </p>
+      <div class="flex justify-between items-center mb-8">
+        <div class="text-center flex-1">
+          <h1 class="text-3xl font-bold mb-4">📚 Theory Examinations</h1>
+          <p class="text-lg text-gray-600">
+            Track your progress through all 6 required theory subjects
+          </p>
+        </div>
+        <button 
+          @click="showTheoryEducation = true"
+          class="btn btn-secondary text-sm"
+          data-testid="theory-exam-help-button"
+        >
+          ❓ Help
+        </button>
+      </div>
         
         <!-- Overall Progress -->
         <div class="card max-w-lg mx-auto mb-8">
@@ -253,7 +263,92 @@
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Theory Education Modal -->
+    <div v-if="showTheoryEducation" class="modal-overlay" @click="showTheoryEducation = false">
+      <div class="modal-content max-w-5xl" @click.stop data-testid="theory-education-modal">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">📚 Theory Exam Requirements</h3>
+          
+          <!-- Exam Format Info -->
+          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="exam-format-info">
+            <h4 class="font-semibold text-blue-800 mb-2">📋 Exam Format</h4>
+            <div class="text-blue-700 text-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <strong>Format:</strong> Multiple choice
+                <br><strong>Duration:</strong> 90 minutes each
+              </div>
+              <div>
+                <strong>Pass Mark:</strong> 70% minimum
+                <br><strong>Cost:</strong> $65 per exam
+              </div>
+              <div>
+                <strong>Attempts:</strong> Unlimited
+                <br><strong>Validity:</strong> 2 years
+              </div>
+            </div>
+          </div>
+
+          <!-- 6 Exam Subjects -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="border rounded-lg p-4" data-testid="air-law-explanation">
+              <h4 class="font-semibold text-purple-600 mb-2">📜 Air Law</h4>
+              <p class="text-sm text-gray-600">Aviation regulations, airspace, and legal requirements</p>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="navigation-explanation">
+              <h4 class="font-semibold text-blue-600 mb-2">🧭 Navigation</h4>
+              <p class="text-sm text-gray-600">Chart reading, flight planning, and navigation techniques</p>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="technical-knowledge-explanation">
+              <h4 class="font-semibold text-green-600 mb-2">🔧 Technical Knowledge</h4>
+              <p class="text-sm text-gray-600">Aircraft systems, engines, and performance</p>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="human-factors-explanation">
+              <h4 class="font-semibold text-orange-600 mb-2">🧠 Human Factors</h4>
+              <p class="text-sm text-gray-600">Aviation psychology, decision making, and safety</p>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="meteorology-explanation">
+              <h4 class="font-semibold text-indigo-600 mb-2">🌤️ Meteorology</h4>
+              <p class="text-sm text-gray-600">Weather theory, forecasting, and interpretation</p>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="radio-telephony-explanation">
+              <h4 class="font-semibold text-red-600 mb-2">📻 Radio Telephony</h4>
+              <p class="text-sm text-gray-600">Communication procedures and phraseology</p>
+            </div>
+          </div>
+
+          <!-- Study Resources -->
+          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="theory-study-resources">
+            <h4 class="font-semibold text-green-800 mb-3">📖 Study Resources</h4>
+            <div class="text-green-700 text-sm">
+              <p>Official CAA resources, online practice exams, and aviation textbooks are recommended for preparation.</p>
+            </div>
+          </div>
+
+          <!-- Booking Information -->
+          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="exam-booking-info">
+            <h4 class="font-semibold text-yellow-800 mb-2">📅 Booking Your Exams</h4>
+            <div class="text-yellow-700 text-sm">
+              <p>Theory exams are conducted at approved testing centres. Contact your local testing centre to schedule exams.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button @click="showTheoryEducation = false" class="btn btn-primary flex-1">
+              Start Studying!
+            </button>
+            <router-link to="/education" class="btn btn-secondary">
+              Education Center
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -287,6 +382,7 @@ const progress = ref({
 // Modal states
 const showAttemptForm = ref(false)
 const showExamDetails = ref(false)
+const showTheoryEducation = ref(false)
 const selectedSubject = ref('')
 
 // Form data

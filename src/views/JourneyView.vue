@@ -2,11 +2,20 @@
   <div class="min-h-screen gradient-sky">
     <div class="container p-6">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-4">🗺️ Your PPL Journey</h1>
-        <p class="text-lg text-gray-600 mb-6">
-          Visual progress tracking with interactive charts and timelines
-        </p>
+      <div class="flex justify-between items-center mb-8">
+        <div class="text-center flex-1">
+          <h1 class="text-3xl font-bold mb-4">🗺️ Your PPL Journey</h1>
+          <p class="text-lg text-gray-600">
+            Visual progress tracking with interactive charts and timelines
+          </p>
+        </div>
+        <button 
+          @click="showHoursEducation = true"
+          class="btn btn-secondary text-sm"
+          data-testid="flight-hours-education-button"
+        >
+          ⏱️ Hours Guide
+        </button>
       </div>
 
       <!-- Journey Timeline -->
@@ -586,6 +595,84 @@
 
     <!-- Hover Animations Container -->
     <div data-testid="hover-animation" class="hidden"></div>
+
+    <!-- Hours Education Modal -->
+    <div v-if="showHoursEducation" class="modal-overlay" @click="showHoursEducation = false">
+      <div class="modal-content max-w-4xl" @click.stop data-testid="hours-education-modal">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">⏱️ Flight Hours Requirements</h3>
+          
+          <!-- Minimum Hours -->
+          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="minimum-hours-explanation">
+            <h4 class="font-semibold text-blue-800 mb-2">📊 Minimum Hour Requirements</h4>
+            <div class="text-blue-700">
+              <p class="mb-2"><strong>Total Minimum:</strong> 50 hours flight time</p>
+              <p class="text-sm">Most students require 60-80 hours to reach proficiency for the flight test.</p>
+            </div>
+          </div>
+
+          <!-- Hour Types Breakdown -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="border rounded-lg p-4" data-testid="dual-hours-explanation">
+              <h4 class="font-semibold text-green-600 mb-2">👨‍✈️ Dual Instruction Hours</h4>
+              <div class="text-sm space-y-2">
+                <p><strong>Minimum Required:</strong> 25 hours with instructor</p>
+                <p>Covers basic flight maneuvers, emergency procedures, and cross-country navigation.</p>
+              </div>
+            </div>
+
+            <div class="border rounded-lg p-4" data-testid="solo-hours-explanation">
+              <h4 class="font-semibold text-purple-600 mb-2">🦅 Solo Flight Hours</h4>
+              <div class="text-sm space-y-2">
+                <p><strong>Minimum Required:</strong> 15 hours solo</p>
+                <p>Includes 5 hours solo cross-country and local area practice.</p>
+              </div>
+            </div>
+
+            <div class="border rounded-lg p-4 md:col-span-2" data-testid="cross-country-explanation">
+              <h4 class="font-semibold text-orange-600 mb-2">🗺️ Cross-Country Requirements</h4>
+              <div class="text-sm">
+                <p><strong>Solo Cross-Country:</strong> 5 hours minimum including at least one flight over 150nm with 2 intermediate stops.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- NZ-Specific Requirements -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-green-50 p-4 rounded-lg" data-testid="nz-terrain-awareness-info">
+              <h4 class="font-semibold text-green-800 mb-2">🏔️ NZ Terrain Awareness</h4>
+              <div class="text-green-700 text-sm">
+                <p>New Zealand's mountainous terrain requires specific training in mountain flying techniques and weather recognition.</p>
+              </div>
+            </div>
+
+            <div class="bg-purple-50 p-4 rounded-lg" data-testid="controlled-airspace-info">
+              <h4 class="font-semibold text-purple-800 mb-2">🛂 Controlled Airspace</h4>
+              <div class="text-purple-700 text-sm">
+                <p>Training must include controlled airspace operations and ATC communication procedures.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hour Logging Guidance -->
+          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="hour-logging-guidance">
+            <h4 class="font-semibold text-yellow-800 mb-2">📝 Hour Logging Guidelines</h4>
+            <div class="text-yellow-700 text-sm">
+              <p>Log all flight time from engine start to engine stop. Dual flights must be signed by instructor.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button @click="showHoursEducation = false" class="btn btn-primary flex-1">
+              Start Logging Hours
+            </button>
+            <router-link to="/education" class="btn btn-secondary">
+              Education Center
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -627,6 +714,7 @@ const phaseTooltipPhase = ref<any>({})
 const phaseTooltipStyle = ref({})
 const hoursTooltipVisible = ref(false)
 const hoursTooltipStyle = ref({})
+const showHoursEducation = ref(false)
 
 // Training phases
 const trainingPhases = [
