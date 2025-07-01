@@ -151,7 +151,7 @@
 
         <!-- Quick Navigation -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <router-link to="/journey" class="btn btn-secondary text-center">
+          <router-link to="/journey" class="btn btn-secondary text-center" data-testid="journey-tab">
             🗺️ View Journey
           </router-link>
           <router-link to="/achievements" class="btn btn-secondary" data-testid="achievements-tab">
@@ -231,11 +231,22 @@
     <div v-if="showAchievementCelebration" class="modal-overlay">
       <div class="modal-content" @click.stop data-testid="lesson-complete-celebration">
         <div class="p-6 text-center">
-          <div class="text-6xl mb-4">🎉</div>
+          <!-- Milestone Celebration Animation -->
+          <div class="animate-bounce text-6xl mb-4" data-testid="milestone-celebration-animation">🎉</div>
+          
+          <!-- Celebration Particles -->
+          <div class="absolute inset-0 pointer-events-none z-10" data-testid="celebration-particles">
+            <div class="animate-ping absolute top-4 left-4 w-2 h-2 bg-yellow-400 rounded-full opacity-100"></div>
+            <div class="animate-ping absolute top-8 right-6 w-3 h-3 bg-blue-400 rounded-full opacity-100" style="animation-delay: 0.5s;"></div>
+            <div class="animate-ping absolute bottom-12 left-8 w-2 h-2 bg-green-400 rounded-full opacity-100" style="animation-delay: 1s;"></div>
+            <div class="animate-ping absolute bottom-6 right-4 w-3 h-3 bg-red-400 rounded-full opacity-100" style="animation-delay: 1.5s;"></div>
+          </div>
+          
           <h3 class="text-2xl font-bold mb-4">Lesson Complete!</h3>
           
           <div v-if="newAchievements.length > 0" data-testid="badge-celebration">
-            <div class="text-4xl mb-4">🏆</div>
+            <!-- Milestone Badge with Glow -->
+            <div class="text-4xl mb-4 animate-pulse" data-testid="milestone-badge-glow" style="filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.8));">🏆</div>
             <div class="font-bold text-green-600 mb-2" data-testid="badge-celebration-title">{{ getBadgeName(newAchievements[0]) }} Achievement Unlocked!</div>
             <div class="text-lg font-semibold mb-4" data-testid="badge-celebration-name">{{ getBadgeName(newAchievements[0]) }} badge unlocked!</div>
           </div>
@@ -244,6 +255,15 @@
             <div>Hours logged: {{ lastLessonHours }}h</div>
             <div v-if="lastLessonCost > 0">Cost: ${{ lastLessonCost }}</div>
             <div>Total progress: {{ progress.completedLessons.length }}/27 lessons</div>
+            
+            <!-- Progress Bar Animation -->
+            <div class="mt-4" data-testid="progress-bar-animation">
+              <div class="text-sm mb-1">Overall Progress</div>
+              <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-blue-600 h-3 rounded-full transition-all duration-1000 animate-pulse"
+                     :style="{ width: ((progress.completedLessons.length / 27) * 100) + '%' }"></div>
+              </div>
+            </div>
           </div>
           
           <button @click="closeCelebration" class="btn btn-primary" data-testid="continue-to-next-lesson">
