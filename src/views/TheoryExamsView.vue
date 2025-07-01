@@ -259,15 +259,28 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
+// Types
+interface TheoryAttempt {
+  id: string
+  subject: string
+  attemptNumber: number
+  examDate: string
+  score: number
+  passed: boolean
+  examCenter: string
+  cost: number
+  expiryDate: string
+}
+
 // State
 const progress = ref({
   theoryExams: {
-    airLaw: { attempts: [], passed: false },
-    navigation: { attempts: [], passed: false },
-    technicalKnowledge: { attempts: [], passed: false },
-    humanFactors: { attempts: [], passed: false },
-    meteorology: { attempts: [], passed: false },
-    radioTelephony: { attempts: [], passed: false }
+    airLaw: { attempts: [] as TheoryAttempt[], passed: false },
+    navigation: { attempts: [] as TheoryAttempt[], passed: false },
+    technicalKnowledge: { attempts: [] as TheoryAttempt[], passed: false },
+    humanFactors: { attempts: [] as TheoryAttempt[], passed: false },
+    meteorology: { attempts: [] as TheoryAttempt[], passed: false },
+    radioTelephony: { attempts: [] as TheoryAttempt[], passed: false }
   }
 })
 
