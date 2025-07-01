@@ -42,7 +42,7 @@ test.describe('Journey Timeline Visualization', () => {
     
     // Should highlight Foundation Phase as current
     await expect(page.locator('[data-testid="phase-foundation"]'))
-      .toHaveClass(/bg-blue-100/);
+      .toHaveClass(/from-blue-50/);
     
     // Should show current position indicator
     await expect(page.locator('[data-testid="current-position-indicator"]'))
@@ -108,11 +108,11 @@ test.describe('Journey Timeline Visualization', () => {
     
     // Should now highlight Circuit Phase as current (15-25 hours)
     await expect(page.locator('[data-testid="phase-circuit"]'))
-      .toHaveClass(/bg-blue-100/);
+      .toHaveClass(/from-blue-50/);
     
     // Foundation phase should be completed
     await expect(page.locator('[data-testid="phase-foundation"]'))
-      .toHaveClass(/bg-green-100/);
+      .toHaveClass(/from-green-50/);
     
     // Should show updated hours
     await expect(page.locator('[data-testid="hours-completed"]'))
@@ -142,7 +142,7 @@ test.describe('Journey Timeline Visualization', () => {
     
     // Foundation should be the current phase with 8 hours
     await expect(page.locator('[data-testid="phase-foundation"]'))
-      .toHaveClass(/bg-blue-100/);
+      .toHaveClass(/from-blue-50/);
     
     // Verify that the current position indicator shows Foundation Phase
     await expect(page.locator('[data-testid="current-position-indicator"]'))
