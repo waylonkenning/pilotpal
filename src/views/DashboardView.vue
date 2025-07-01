@@ -138,7 +138,11 @@
                 <div class="font-semibold">{{ requirement.title }}</div>
                 <div class="text-sm text-gray-600">{{ requirement.description }}</div>
               </div>
-              <button class="btn btn-secondary btn-sm" :data-testid="requirement.id + '-info'">
+              <button 
+                @click="showRequirementInfo(requirement.id)"
+                class="btn btn-secondary btn-sm" 
+                :data-testid="requirement.id + '-info'"
+              >
                 Info
               </button>
             </div>
@@ -153,12 +157,12 @@
           <router-link to="/achievements" class="btn btn-secondary" data-testid="achievements-tab">
             🏆 Achievements
           </router-link>
-          <button class="btn btn-secondary" data-testid="theory-tab">
+          <router-link to="/theory" class="btn btn-secondary" data-testid="theory-tab">
             📚 Theory Exams
-          </button>
-          <button class="btn btn-secondary" data-testid="requirements-tab">
+          </router-link>
+          <router-link to="/requirements" class="btn btn-secondary" data-testid="requirements-tab">
             📋 Requirements
-          </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -245,6 +249,50 @@
         </div>
       </div>
     </div>
+
+    <!-- Medical Certificate Information Modal -->
+    <div v-if="showRequirementModal" class="modal-overlay" @click="showRequirementModal = false">
+      <div class="modal-content" @click.stop data-testid="requirement-explanation">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">Medical Certificate Requirement</h3>
+          
+          <p class="text-gray-700 mb-4">
+            A medical certificate is required before solo flight to ensure you meet the health standards for safe aviation.
+          </p>
+          
+          <div class="space-y-4" data-testid="medical-options">
+            <div class="border rounded-lg p-4">
+              <h4 class="font-semibold text-blue-600 mb-2">Class 2 Medical Certificate</h4>
+              <p class="text-gray-700 mb-2">
+                Full aviation medical examination by CAA-approved doctor.
+              </p>
+              <div class="text-sm text-orange-600" data-testid="class-2-cost">
+                Cost: $420-$1070 depending on location and tests required
+              </div>
+            </div>
+            
+            <div class="border rounded-lg p-4">
+              <h4 class="font-semibold text-green-600 mb-2">DL9 Driver License Medical</h4>
+              <p class="text-gray-700 mb-2">
+                Use your existing NZ driver license medical if valid. More cost-effective option.
+              </p>
+              <div class="text-sm text-green-600" data-testid="dl9-cost">
+                Save $300-$800 compared to Class 2 medical
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showRequirementModal = false" class="btn btn-primary flex-1">
+              Got it
+            </button>
+            <router-link to="/requirements" class="btn btn-secondary">
+              View All Requirements
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -280,6 +328,7 @@ const progress = ref({
 
 const showCompleteLesson = ref(false)
 const showAchievementCelebration = ref(false)
+const showRequirementModal = ref(false)
 const newAchievements = ref<string[]>([])
 
 // Form data
@@ -522,6 +571,13 @@ const getBadgeDescription = (badgeId: string) => {
     'licensed-pilot': 'Complete your PPL requirements'
   }
   return badgeDescriptions[badgeId] || 'Achievement unlocked'
+}
+
+const showRequirementInfo = (requirementId: string) => {
+  if (requirementId === 'medical-cert') {
+    showRequirementModal.value = true
+  }
+  // Add other requirement types as needed
 }
 
 const closeCelebration = () => {
