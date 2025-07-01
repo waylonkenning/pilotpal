@@ -1,6 +1,8 @@
 @tailwind base;
-@tailwind components;
+@tailwind components; 
 @tailwind utilities;
+
+/* Cache bust: 2024-07-01 */
 
 :root {
   --background: #ffffff;
@@ -47,5 +49,10 @@ body {
   .backdrop-blur-sm {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+  }
+  
+  /* Force cache refresh */
+  body {
+    font-display: swap;
   }
 }
