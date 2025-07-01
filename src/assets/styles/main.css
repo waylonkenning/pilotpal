@@ -304,3 +304,47 @@ p {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Additional utilities for PPL Quest */
+.text-6xl { font-size: 3.75rem; }
+.btn-sm { 
+  padding: var(--space-1) var(--space-2); 
+  font-size: var(--text-xs); 
+}
+.space-y-2 > * + * { margin-top: var(--space-2); }
+.space-y-3 > * + * { margin-top: var(--space-3); }
+.space-y-4 > * + * { margin-top: var(--space-4); }
+.flex-1 { flex: 1 1 0%; }
+.gap-3 { gap: var(--space-3); }
+.max-w-lg { max-width: 32rem; }
+.max-w-2xl { max-width: 42rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.inline-block { display: inline-block; }
+
+/* Color utilities */
+.text-blue-600 { color: var(--blue-600); }
+.text-blue-700 { color: #1d4ed8; }
+.text-blue-800 { color: #1e40af; }
+.text-green-600 { color: var(--green-600); }
+.text-orange-600 { color: var(--orange-600); }
+.text-purple-600 { color: #9333ea; }
+.text-gray-600 { color: #4b5563; }
+.text-gray-700 { color: #374151; }
+
+.bg-blue-50 { background-color: var(--blue-50); }
+.bg-blue-100 { background-color: #dbeafe; }
+.bg-blue-500 { background-color: var(--blue-500); }
+.bg-green-500 { background-color: var(--green-500); }
+.bg-orange-500 { background-color: var(--orange-500); }
+.bg-purple-500 { background-color: #a855f7; }
+.bg-yellow-50 { background-color: #fefce8; }
+.bg-gray-100 { background-color: #f3f4f6; }
+
+.border-blue-200 { border-color: #bfdbfe; }
+.border-yellow-200 { border-color: #fde047; }
+
+.rounded-full { border-radius: 50%; }
+.rounded-lg { border-radius: var(--radius-lg); }
+
+.transition-all { transition: all 0.3s ease; }
+.duration-300 { transition-duration: 300ms; }

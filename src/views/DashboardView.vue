@@ -1,74 +1,231 @@
 <template>
-  <div class="min-h-screen gradient-sky">
+  <div class="min-h-screen gradient-sky" data-testid="main-dashboard">
     <div class="container">
       <div class="p-6">
-        <h1 class="text-3xl font-bold mb-6">Flight Dashboard</h1>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 mb-8">
+        <!-- Today's Focus - Primary lesson display -->
+        <div class="card mb-6" data-testid="todays-focus">
+          <div class="text-center mb-4">
+            <h1 class="text-2xl font-bold mb-2">Today's Focus</h1>
+            <div class="text-sm text-gray-600">Your next step in the PPL journey</div>
+          </div>
+          
+          <div class="bg-blue-50 rounded-lg p-6" data-testid="current-lesson">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-3xl font-bold" data-testid="current-lesson-title">
+                  Lesson {{ progress.currentLesson }}
+                </h2>
+                <div class="text-lg text-gray-600" data-testid="current-lesson-description">
+                  {{ currentLessonInfo.name }}
+                </div>
+              </div>
+              <div class="text-6xl">{{ currentLessonInfo.icon }}</div>
+            </div>
+            
+            <p class="text-gray-700 mb-4">{{ currentLessonInfo.description }}</p>
+            
+            <div class="bg-blue-100 p-4 rounded-lg mb-4" data-testid="preparation-needed">
+              <div class="font-semibold text-blue-800 mb-2">📋 What you need to do:</div>
+              <div class="text-blue-700">{{ currentLessonInfo.preparation }}</div>
+            </div>
+            
+            <div class="flex gap-3">
+              <button 
+                @click="showCompleteLesson = true" 
+                class="btn btn-primary flex-1"
+                data-testid="complete-lesson-button"
+              >
+                ✅ Complete This Lesson
+              </button>
+              <button class="btn btn-secondary" data-testid="lesson-info-button">
+                ℹ️ More Info
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 mb-6">
+          <!-- Flight Hours -->
           <div class="card">
-            <h3 class="text-lg font-semibold mb-2">Total Flight Hours</h3>
-            <div class="text-3xl font-bold text-blue-600 mb-2">
-              {{ totalHours.toFixed(1) }}
+            <h3 class="text-lg font-semibold mb-2">Flight Hours</h3>
+            <div class="text-3xl font-bold text-blue-600 mb-2" data-testid="total-hours">
+              {{ progress.flightHours.total.toFixed(1) }}
             </div>
             <div class="text-sm text-gray-600">
-              <div>Dual: {{ flightHours.dual }}h</div>
-              <div>Solo: {{ flightHours.solo }}h</div>
-              <div>Cross Country: {{ flightHours.crossCountry }}h</div>
+              <div data-testid="dual-hours">Dual: {{ progress.flightHours.dual.toFixed(1) }}h</div>
+              <div>Solo: {{ progress.flightHours.solo.toFixed(1) }}h</div>
+              <div>Cross Country: {{ progress.flightHours.crossCountry.toFixed(1) }}h</div>
             </div>
           </div>
           
+          <!-- Lesson Progress -->
           <div class="card">
-            <h3 class="text-lg font-semibold mb-2">Current Phase</h3>
-            <div class="text-xl font-bold mb-2">{{ currentPhase }}</div>
-            <div class="text-sm text-gray-600 mb-3">
-              Building fundamental flying skills
+            <h3 class="text-lg font-semibold mb-2">Lesson Progress</h3>
+            <div class="text-xl font-bold mb-2" data-testid="lesson-progress">
+              {{ progress.completedLessons.length }} of 27
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2">
-              <div class="bg-blue-600 h-2 rounded-full" :style="{ width: progress + '%' }"></div>
+            <div class="text-sm text-gray-600 mb-3">lessons completed</div>
+            <div class="w-full bg-gray-200 rounded-full h-3" data-testid="progress-bar">
+              <div 
+                class="bg-blue-600 h-3 rounded-full transition-all duration-300" 
+                :style="{ width: lessonProgress + '%' }"
+                data-testid="progress-bar-fill"
+              ></div>
             </div>
           </div>
           
+          <!-- Achievements -->
           <div class="card">
             <h3 class="text-lg font-semibold mb-2">Achievements</h3>
-            <div class="text-3xl font-bold text-green-600 mb-2">
-              {{ achievements }} of {{ totalAchievements }}
+            <div class="text-3xl font-bold text-green-600 mb-2" data-testid="badges-earned">
+              {{ progress.achievements.length }} of 12
             </div>
             <div class="text-sm text-gray-600">
-              {{ achievements === 0 ? 'Start flying to unlock badges!' : 'Great progress!' }}
+              {{ progress.achievements.length === 0 ? 'Start flying to unlock badges!' : 'Great progress!' }}
             </div>
           </div>
         </div>
-        
+
+        <!-- Financial Tracking -->
         <div class="grid grid-cols-1 md:grid-cols-2 mb-6">
           <div class="card">
-            <h3 class="text-lg font-semibold mb-4">Next Milestone</h3>
-            <div class="text-2xl font-bold mb-2">{{ nextMilestone }}</div>
-            <p class="text-gray-600 mb-4">{{ milestoneDescription }}</p>
-            <div class="btn btn-success w-full">
-              🎯 View Requirements
+            <h3 class="text-lg font-semibold mb-4">Training Costs</h3>
+            <div class="text-2xl font-bold text-orange-600 mb-2" data-testid="total-spent">
+              ${{ progress.totalSpent.toFixed(0) }}
+            </div>
+            <div class="text-sm text-gray-600 mb-3">total spent</div>
+            <div v-if="progress.flightHours.total > 0" class="text-sm text-gray-600" data-testid="cost-per-hour">
+              ${{ (progress.totalSpent / progress.flightHours.total).toFixed(0) }}/hour average
             </div>
           </div>
           
+          <!-- Next Major Milestone -->
           <div class="card">
-            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
-            <div class="flex flex-col gap-3">
-              <button class="btn btn-primary">
-                📝 Log Flight Hours
-              </button>
-              <button class="btn btn-secondary">
-                📚 Update Theory Progress
-              </button>
-              <button class="btn btn-secondary">
-                💰 Track Expenses
+            <h3 class="text-lg font-semibold mb-4">Next Major Milestone</h3>
+            <div class="text-xl font-bold mb-2" data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
+            <p class="text-gray-600 mb-4">{{ milestoneDescription }}</p>
+            <button class="btn btn-success w-full">
+              🎯 View Requirements
+            </button>
+          </div>
+        </div>
+
+        <!-- Upcoming Requirements -->
+        <div class="card mb-6" data-testid="upcoming-requirements">
+          <h3 class="text-lg font-semibold mb-4">📋 Upcoming Requirements</h3>
+          <div class="space-y-3">
+            <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
+                 class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+              <div>
+                <div class="font-semibold">{{ requirement.title }}</div>
+                <div class="text-sm text-gray-600">{{ requirement.description }}</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" :data-testid="requirement.id + '-info'">
+                Info
               </button>
             </div>
           </div>
         </div>
-        
-        <div class="text-center">
-          <router-link to="/" class="btn btn-secondary">
-            ← Back to Home
+
+        <!-- Quick Navigation -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <router-link to="/journey" class="btn btn-secondary text-center">
+            🗺️ View Journey
           </router-link>
+          <button class="btn btn-secondary" data-testid="achievements-tab">
+            🏆 Achievements
+          </button>
+          <button class="btn btn-secondary" data-testid="theory-tab">
+            📚 Theory Exams
+          </button>
+          <button class="btn btn-secondary" data-testid="requirements-tab">
+            📋 Requirements
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complete Lesson Modal -->
+    <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false">
+      <div class="modal-content" @click.stop>
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">Complete {{ currentLessonInfo.name }}</h3>
+          
+          <div class="space-y-4 mb-6">
+            <div>
+              <label class="form-label">Flight Hours</label>
+              <input 
+                v-model="lessonHours" 
+                type="number" 
+                step="0.1" 
+                min="0" 
+                max="10"
+                class="form-input" 
+                placeholder="1.5"
+                data-testid="lesson-hours-input"
+              >
+            </div>
+            
+            <div>
+              <label class="form-label">Cost (optional)</label>
+              <input 
+                v-model="lessonCost" 
+                type="number" 
+                step="1" 
+                min="0"
+                class="form-input" 
+                placeholder="180"
+                data-testid="lesson-cost-input"
+              >
+            </div>
+            
+            <div>
+              <label class="form-label">Notes (optional)</label>
+              <textarea 
+                v-model="lessonNotes" 
+                class="form-input" 
+                rows="3"
+                placeholder="How did the lesson go?"
+              ></textarea>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <button @click="completeLesson" class="btn btn-primary flex-1" data-testid="save-hours-button">
+              ✅ Complete Lesson
+            </button>
+            <button @click="showCompleteLesson = false" class="btn btn-secondary">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement Celebration Modal -->
+    <div v-if="showAchievementCelebration" class="modal-overlay">
+      <div class="modal-content" @click.stop data-testid="lesson-complete-celebration">
+        <div class="p-6 text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h3 class="text-2xl font-bold mb-4">Lesson Complete!</h3>
+          
+          <div v-if="newAchievements.length > 0" data-testid="achievement-notification">
+            <div class="text-4xl mb-4">🏆</div>
+            <div class="font-bold text-green-600 mb-2">Achievement Unlocked!</div>
+            <div class="text-lg font-semibold mb-4">{{ newAchievements[0] }} badge unlocked!</div>
+          </div>
+          
+          <div class="space-y-2 mb-6">
+            <div>Hours logged: {{ lastLessonHours }}h</div>
+            <div v-if="lastLessonCost > 0">Cost: ${{ lastLessonCost }}</div>
+            <div>Total progress: {{ progress.completedLessons.length }}/27 lessons</div>
+          </div>
+          
+          <button @click="closeCelebration" class="btn btn-primary" data-testid="continue-to-next-lesson">
+            {{ progress.currentLesson <= 27 ? 'Continue to Next Lesson' : 'View Progress' }} 🚀
+          </button>
         </div>
       </div>
     </div>
@@ -76,54 +233,196 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
-// Reactive data
-const flightHours = ref({
-  dual: 0,
-  solo: 0,
-  crossCountry: 0,
-  instrument: 0,
-  night: 0
+// State
+const progress = ref({
+  currentLesson: 1,
+  completedLessons: [] as number[],
+  flightHours: {
+    dual: 0,
+    solo: 0,
+    crossCountry: 0,
+    instrument: 0,
+    terrainAwareness: 0,
+    night: 0,
+    total: 0
+  },
+  achievements: [] as string[],
+  totalSpent: 0,
+  expenses: [] as any[],
+  medicalCertificate: null,
+  theoryExams: {
+    airLaw: { attempts: [], passed: false },
+    navigation: { attempts: [], passed: false },
+    technicalKnowledge: { attempts: [], passed: false },
+    humanFactors: { attempts: [], passed: false },
+    meteorology: { attempts: [], passed: false },
+    radioTelephony: { attempts: [], passed: false }
+  }
 })
 
-const achievements = ref(0)
-const totalAchievements = ref(4)
+const showCompleteLesson = ref(false)
+const showAchievementCelebration = ref(false)
+const newAchievements = ref<string[]>([])
+
+// Form data
+const lessonHours = ref('')
+const lessonCost = ref('')
+const lessonNotes = ref('')
+const lastLessonHours = ref(0)
+const lastLessonCost = ref(0)
+
+// Lesson definitions
+const lessons = [
+  { id: 1, name: 'Introductory Flight', icon: '🛫', description: 'Get familiar with the aircraft and basic controls', preparation: 'Book your first lesson with a flight instructor' },
+  { id: 2, name: 'Aircraft Familiarization', icon: '✈️', description: 'Learn aircraft systems and pre-flight inspection', preparation: 'Review aircraft manual and practice pre-flight checklist' },
+  { id: 3, name: 'Taxi and Ground Operations', icon: '🛞', description: 'Master taxiing, radio communications, and ground procedures', preparation: 'Study airport diagrams and radio phraseology' },
+  { id: 4, name: 'Straight and Level Flight', icon: '📏', description: 'Maintain altitude, heading, and speed in cruise flight', preparation: 'Practice attitude flying and instrument scanning' },
+  { id: 5, name: 'Climbing and Descending', icon: '📈', description: 'Control aircraft in climbs and descents', preparation: 'Understand power and attitude relationships' },
+  // Add more lessons as needed
+]
 
 // Computed properties
-const totalHours = computed(() => {
-  return Object.values(flightHours.value).reduce((sum, hours) => sum + hours, 0)
+const currentLessonInfo = computed(() => {
+  return lessons.find(l => l.id === progress.value.currentLesson) || lessons[0]
 })
 
-const currentPhase = computed(() => {
-  if (totalHours.value < 15) return 'Foundation Phase'
-  if (totalHours.value < 25) return 'Circuit Phase'
-  if (totalHours.value < 40) return 'Navigation Phase'
-  if (totalHours.value < 50) return 'Advanced Phase'
-  return 'Certification Phase'
+const lessonProgress = computed(() => {
+  return (progress.value.completedLessons.length / 27) * 100
 })
 
-const progress = computed(() => {
-  // Simple progress calculation for current phase
-  const hours = totalHours.value
-  if (hours < 15) return (hours / 15) * 100
-  if (hours < 25) return ((hours - 15) / 10) * 100
-  if (hours < 40) return ((hours - 25) / 15) * 100
-  if (hours < 50) return ((hours - 40) / 10) * 100
-  return 100
-})
-
-const nextMilestone = computed(() => {
-  if (totalHours.value === 0) return 'First Flight'
-  if (totalHours.value < 5) return 'Controls Master'
-  if (achievements.value < 2) return 'Solo Wings'
+const nextMajorMilestone = computed(() => {
+  if (progress.value.flightHours.total === 0) return 'First Flight'
+  if (progress.value.flightHours.total < 5) return 'Controls Master' 
+  if (progress.value.flightHours.solo === 0) return 'Solo Wings'
+  if (progress.value.achievements.length < 6) return 'Navigation Phase'
   return 'Licensed Pilot'
 })
 
 const milestoneDescription = computed(() => {
-  if (totalHours.value === 0) return 'Complete your introductory flight'
-  if (totalHours.value < 5) return 'Demonstrate basic aircraft control'
-  if (achievements.value < 2) return 'Your first solo flight - a major milestone!'
-  return 'Complete your PPL requirements and pass the test'
+  if (progress.value.flightHours.total === 0) return 'Complete your introductory flight and earn your first badge'
+  if (progress.value.flightHours.total < 5) return 'Demonstrate basic aircraft control with 5 hours dual instruction'
+  if (progress.value.flightHours.solo === 0) return 'Your first solo flight - a major milestone!'
+  return 'Continue progressing through your training phases'
+})
+
+const upcomingRequirements = computed(() => {
+  const requirements = []
+  
+  if (!progress.value.medicalCertificate) {
+    requirements.push({
+      id: 'medical-cert',
+      title: 'Medical Certificate',
+      description: 'Required before solo flight - choose Class 2 or DL9 option'
+    })
+  }
+  
+  if (progress.value.flightHours.total > 8 && progress.value.flightHours.solo === 0) {
+    requirements.push({
+      id: 'solo-endorsement',
+      title: 'Solo Flight Endorsement',
+      description: 'Get instructor endorsement for your first solo flight'
+    })
+  }
+  
+  const passedExams = Object.values(progress.value.theoryExams).filter(exam => exam.passed).length
+  if (passedExams < 6) {
+    requirements.push({
+      id: 'theory-exams',
+      title: 'Theory Examinations',
+      description: `Complete ${6 - passedExams} remaining theory exam${passedExams === 5 ? '' : 's'}`
+    })
+  }
+  
+  return requirements
+})
+
+// Actions
+const completeLesson = () => {
+  const hours = parseFloat(lessonHours.value) || 0
+  const cost = parseFloat(lessonCost.value) || 0
+  
+  if (hours <= 0) {
+    alert('Please enter valid flight hours')
+    return
+  }
+  
+  lastLessonHours.value = hours
+  lastLessonCost.value = cost
+  
+  // Update progress
+  progress.value.completedLessons.push(progress.value.currentLesson)
+  progress.value.flightHours.dual += hours
+  progress.value.flightHours.total += hours
+  progress.value.totalSpent += cost
+  
+  // Check for achievements
+  const beforeAchievements = progress.value.achievements.length
+  checkAchievements()
+  const afterAchievements = progress.value.achievements.length
+  
+  if (afterAchievements > beforeAchievements) {
+    newAchievements.value = progress.value.achievements.slice(beforeAchievements)
+  } else {
+    newAchievements.value = []
+  }
+  
+  // Move to next lesson
+  if (progress.value.currentLesson < 27) {
+    progress.value.currentLesson++
+  }
+  
+  // Save progress
+  saveProgress()
+  
+  // Show celebration
+  showCompleteLesson.value = false
+  showAchievementCelebration.value = true
+  
+  // Reset form
+  lessonHours.value = ''
+  lessonCost.value = ''
+  lessonNotes.value = ''
+}
+
+const checkAchievements = () => {
+  const achievements = progress.value.achievements
+  
+  // First Flight badge
+  if (progress.value.flightHours.total >= 0.5 && !achievements.includes('first-flight')) {
+    achievements.push('first-flight')
+  }
+  
+  // Controls Master badge  
+  if (progress.value.flightHours.dual >= 5 && !achievements.includes('controls-master')) {
+    achievements.push('controls-master')
+  }
+  
+  // Add more achievement logic as needed
+}
+
+const closeCelebration = () => {
+  showAchievementCelebration.value = false
+  newAchievements.value = []
+}
+
+const saveProgress = () => {
+  localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
+}
+
+const loadProgress = () => {
+  const saved = localStorage.getItem('ppl-quest-progress')
+  if (saved) {
+    try {
+      progress.value = { ...progress.value, ...JSON.parse(saved) }
+    } catch (error) {
+      console.error('Failed to load progress:', error)
+    }
+  }
+}
+
+onMounted(() => {
+  loadProgress()
 })
 </script>
