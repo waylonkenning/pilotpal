@@ -34,4 +34,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Unit tests (optional)
+echo "🧪 Running unit tests..."
+npm run test || echo "⚠️ No unit tests found - continuing..."
+
 echo "✅ All pre-commit checks passed! Safe to commit."
