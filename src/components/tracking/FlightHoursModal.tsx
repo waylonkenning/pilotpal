@@ -105,11 +105,11 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
       title="Log Flight Hours"
       data-testid="flight-hours-modal"
     >
-      <div className="space-y-2">
+      <div className="flex flex-col">
         {/* Date and Description */}
-        <div className="grid md:grid-cols-2 gap-2">
-          <div>
-            <label htmlFor="flight-date" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 mb-4">
+          <div className="mb-4 md:mb-0 md:pr-2">
+            <label htmlFor="flight-date" className="form-label">
               Flight Date
             </label>
             <input
@@ -117,12 +117,12 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               type="date"
               value={formData.date}
               onChange={(e) => handleInputChange('date', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="flight-date-input"
             />
           </div>
-          <div>
-            <label htmlFor="flight-description" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="md:pl-2">
+            <label htmlFor="flight-description" className="form-label">
               Description
             </label>
             <input
@@ -131,16 +131,16 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="e.g., Pattern work, Cross country to NZAA"
               value={formData.description}
               onChange={(e) => handleInputChange('description', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="flight-description-input"
             />
           </div>
         </div>
 
         {/* Hours Inputs */}
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label htmlFor="dual-hours" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="grid grid-cols-2 mb-4">
+          <div className="pr-2 mb-4">
+            <label htmlFor="dual-hours" className="form-label">
               Dual
             </label>
             <input
@@ -151,13 +151,13 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="0.0"
               value={formData.dual}
               onChange={(e) => handleInputChange('dual', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="dual-hours-input"
             />
           </div>
           
-          <div>
-            <label htmlFor="solo-hours" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="pl-2 mb-4">
+            <label htmlFor="solo-hours" className="form-label">
               Solo
             </label>
             <input
@@ -168,13 +168,13 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="0.0"
               value={formData.solo}
               onChange={(e) => handleInputChange('solo', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="solo-hours-input"
             />
           </div>
           
-          <div>
-            <label htmlFor="cross-country-hours" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="pr-2 mb-4">
+            <label htmlFor="cross-country-hours" className="form-label">
               Cross Country
             </label>
             <input
@@ -185,13 +185,13 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="0.0"
               value={formData.crossCountry}
               onChange={(e) => handleInputChange('crossCountry', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="cross-country-hours-input"
             />
           </div>
           
-          <div>
-            <label htmlFor="instrument-hours" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="pl-2 mb-4">
+            <label htmlFor="instrument-hours" className="form-label">
               Instrument
             </label>
             <input
@@ -202,13 +202,13 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="0.0"
               value={formData.instrument}
               onChange={(e) => handleInputChange('instrument', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="instrument-hours-input"
             />
           </div>
           
-          <div>
-            <label htmlFor="night-hours" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="grid-cols-2 col-span-2 pr-2">
+            <label htmlFor="night-hours" className="form-label">
               Night
             </label>
             <input
@@ -219,7 +219,7 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
               placeholder="0.0"
               value={formData.night}
               onChange={(e) => handleInputChange('night', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               data-testid="night-hours-input"
             />
           </div>
@@ -227,23 +227,23 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
 
         {/* Validation Error */}
         {validationError && (
-          <div className="text-red-600 text-sm" data-testid="validation-error">
+          <div className="text-sm mb-4" style={{color: 'var(--red-600)'}} data-testid="validation-error">
             {validationError}
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex gap-2 pt-1 sticky bottom-0 bg-white">
+        <div className="flex">
           <button
             onClick={handleCancel}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="btn btn-secondary flex-1 mr-2"
             data-testid="cancel-flight-button"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="btn btn-primary flex-1"
             data-testid="save-flight-button"
           >
             Save Flight

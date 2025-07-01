@@ -22,16 +22,16 @@ export default function Dashboard({ progress, onLogFlightHours }: DashboardProps
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen gradient-primary pb-mobile-nav">
       <Navigation />
       
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="container">
         {/* User Greeting */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2" data-testid="user-greeting">
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2" data-testid="user-greeting">
             Hello, {progress.profile.name}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm md:text-base">
             Welcome back to your PPL journey! Here's your progress overview.
           </p>
         </div>
@@ -40,23 +40,24 @@ export default function Dashboard({ progress, onLogFlightHours }: DashboardProps
         <ProgressOverview progress={progress} />
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 mb-6">
           <NextMilestone progress={progress} />
           
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow-md p-6 border">
+          <div className="card">
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-            <div className="space-y-3">
+            <div className="flex flex-col">
               <button 
                 onClick={() => setIsFlightModalOpen(true)}
-                className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                className="btn btn-primary mb-3 text-left"
+                data-testid="log-flight-hours-button"
               >
                 📝 Log Flight Hours
               </button>
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+              <button className="btn btn-secondary mb-3 text-left">
                 📚 Update Theory Progress
               </button>
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+              <button className="btn btn-secondary text-left">
                 💰 Track Expenses
               </button>
             </div>
@@ -65,7 +66,7 @@ export default function Dashboard({ progress, onLogFlightHours }: DashboardProps
 
         {/* Recent Flights */}
         {progress.flightEntries.length > 0 && (
-          <div className="mb-8">
+          <div className="mb-6">
             <RecentFlights flights={progress.flightEntries} />
           </div>
         )}
