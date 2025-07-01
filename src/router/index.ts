@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/journey',
       name: 'journey',
       component: () => import('@/views/JourneyView.vue')
+    },
+    {
+      path: '/achievements',
+      name: 'achievements',
+      component: () => import('@/views/AchievementsView.vue')
     }
   ]
 })

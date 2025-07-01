@@ -82,8 +82,24 @@
             <div class="text-3xl font-bold text-green-600 mb-2" data-testid="badges-earned">
               {{ progress.achievements.length }} of 12
             </div>
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600 mb-3">
               {{ progress.achievements.length === 0 ? 'Start flying to unlock badges!' : 'Great progress!' }}
+            </div>
+            
+            <!-- Recent badges -->
+            <div v-if="progress.achievements.length > 0" class="space-y-2">
+              <div v-for="achievement in progress.achievements.slice(-3)" 
+                   :key="achievement" 
+                   class="flex items-center gap-2 p-2 bg-green-50 rounded unlocked"
+                   :data-testid="achievement + '-badge'">
+                <div class="text-2xl">{{ getBadgeIcon(achievement) }}</div>
+                <div>
+                  <div class="font-semibold text-sm">{{ getBadgeName(achievement) }}</div>
+                  <div class="text-xs text-gray-600" :data-testid="achievement + '-badge-description'">
+                    {{ getBadgeDescription(achievement) }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -134,9 +150,9 @@
           <router-link to="/journey" class="btn btn-secondary text-center">
             🗺️ View Journey
           </router-link>
-          <button class="btn btn-secondary" data-testid="achievements-tab">
+          <router-link to="/achievements" class="btn btn-secondary" data-testid="achievements-tab">
             🏆 Achievements
-          </button>
+          </router-link>
           <button class="btn btn-secondary" data-testid="theory-tab">
             📚 Theory Exams
           </button>
@@ -211,10 +227,10 @@
           <div class="text-6xl mb-4">🎉</div>
           <h3 class="text-2xl font-bold mb-4">Lesson Complete!</h3>
           
-          <div v-if="newAchievements.length > 0" data-testid="achievement-notification">
+          <div v-if="newAchievements.length > 0" data-testid="badge-celebration">
             <div class="text-4xl mb-4">🏆</div>
-            <div class="font-bold text-green-600 mb-2">Achievement Unlocked!</div>
-            <div class="text-lg font-semibold mb-4">{{ newAchievements[0] }} badge unlocked!</div>
+            <div class="font-bold text-green-600 mb-2" data-testid="badge-celebration-title">{{ getBadgeName(newAchievements[0]) }} Achievement Unlocked!</div>
+            <div class="text-lg font-semibold mb-4" data-testid="badge-celebration-name">{{ getBadgeName(newAchievements[0]) }} badge unlocked!</div>
           </div>
           
           <div class="space-y-2 mb-6">
@@ -389,17 +405,123 @@ const completeLesson = () => {
 const checkAchievements = () => {
   const achievements = progress.value.achievements
   
-  // First Flight badge
+  // First Flight badge - complete any lesson with flight hours
   if (progress.value.flightHours.total >= 0.5 && !achievements.includes('first-flight')) {
     achievements.push('first-flight')
   }
   
-  // Controls Master badge  
+  // Controls Master badge - 5 hours dual instruction
   if (progress.value.flightHours.dual >= 5 && !achievements.includes('controls-master')) {
     achievements.push('controls-master')
   }
   
-  // Add more achievement logic as needed
+  // Circuit Master badge - complete 3 lessons
+  if (progress.value.completedLessons.length >= 3 && !achievements.includes('circuit-master')) {
+    achievements.push('circuit-master')
+  }
+  
+  // Solo Wings badge - first solo flight
+  if (progress.value.flightHours.solo >= 0.5 && !achievements.includes('solo-wings')) {
+    achievements.push('solo-wings')
+  }
+  
+  // Navigation Pioneer badge - 5 hours cross country
+  if (progress.value.flightHours.crossCountry >= 5 && !achievements.includes('navigation-pioneer')) {
+    achievements.push('navigation-pioneer')
+  }
+  
+  // Theory Scholar badge - pass first theory exam
+  const passedExams = Object.values(progress.value.theoryExams).filter(exam => exam.passed).length
+  if (passedExams >= 1 && !achievements.includes('theory-scholar')) {
+    achievements.push('theory-scholar')
+  }
+  
+  // Theory Master badge - pass all 6 theory exams
+  if (passedExams >= 6 && !achievements.includes('theory-master')) {
+    achievements.push('theory-master')
+  }
+  
+  // Night Flyer badge - 5 hours night flying (optional)
+  if ((progress.value.flightHours.night || 0) >= 5 && !achievements.includes('night-flyer')) {
+    achievements.push('night-flyer')
+  }
+  
+  // Instrument Rated badge - 5 hours instrument time
+  if (progress.value.flightHours.instrument >= 5 && !achievements.includes('instrument-rated')) {
+    achievements.push('instrument-rated')
+  }
+  
+  // Terrain Master badge - 5 hours terrain awareness (NZ specific)
+  if (progress.value.flightHours.terrainAwareness >= 5 && !achievements.includes('terrain-master')) {
+    achievements.push('terrain-master')
+  }
+  
+  // Big Spender badge - spend over $10,000
+  if (progress.value.totalSpent >= 10000 && !achievements.includes('big-spender')) {
+    achievements.push('big-spender')
+  }
+  
+  // Licensed Pilot badge - complete all requirements (final badge)
+  if (progress.value.completedLessons.length >= 27 && 
+      progress.value.flightHours.total >= 50 && 
+      passedExams >= 6 && 
+      !achievements.includes('licensed-pilot')) {
+    achievements.push('licensed-pilot')
+  }
+}
+
+const getBadgeName = (badgeId: string) => {
+  const badgeNames: Record<string, string> = {
+    'first-flight': 'First Flight',
+    'controls-master': 'Controls Master',
+    'circuit-master': 'Circuit Master',
+    'solo-wings': 'Solo Wings',
+    'navigation-pioneer': 'Navigation Pioneer',
+    'theory-scholar': 'Theory Scholar',
+    'theory-master': 'Theory Master',
+    'night-flyer': 'Night Flyer',
+    'instrument-rated': 'Instrument Rated',
+    'terrain-master': 'Terrain Master',
+    'big-spender': 'Big Spender',
+    'licensed-pilot': 'Licensed Pilot'
+  }
+  return badgeNames[badgeId] || badgeId
+}
+
+const getBadgeIcon = (badgeId: string) => {
+  const badgeIcons: Record<string, string> = {
+    'first-flight': '🛫',
+    'controls-master': '🎮',
+    'circuit-master': '🔄',
+    'solo-wings': '🦅',
+    'navigation-pioneer': '🧭',
+    'theory-scholar': '📖',
+    'theory-master': '🎓',
+    'night-flyer': '🌙',
+    'instrument-rated': '📊',
+    'terrain-master': '🏔️',
+    'big-spender': '💰',
+    'licensed-pilot': '👨‍✈️'
+  }
+  return badgeIcons[badgeId] || '🏆'
+}
+
+const getBadgeDescription = (badgeId: string) => {
+  const badgeDescriptions: Record<string, string> = {
+    'first-flight': 'Complete your introductory flight',
+    'controls-master': 'Master basic aircraft controls',
+    'circuit-master': 'Complete multiple circuit lessons',
+    'solo-wings': 'Your first solo flight milestone',
+    'navigation-pioneer': 'Navigate cross-country flights',
+    'theory-scholar': 'Pass your first theory exam',
+    'theory-master': 'Pass all required theory exams',
+    'night-flyer': 'Optional night flying qualification',
+    'instrument-rated': 'Master instrument flying',
+    'terrain-master': 'NZ terrain awareness training',
+    'big-spender': 'Invest significantly in training',
+    'licensed-pilot': 'Complete your PPL requirements'
+  }
+  return badgeDescriptions[badgeId] || 'Achievement unlocked'
 }
 
 const closeCelebration = () => {
