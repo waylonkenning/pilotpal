@@ -12,7 +12,15 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      backdropBlur: {
+        sm: '4px',
+        md: '12px',
+        lg: '16px',
+      },
     },
   },
   plugins: [],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 } satisfies Config

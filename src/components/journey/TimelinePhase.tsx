@@ -32,14 +32,14 @@ export default function TimelinePhase({
   }
 
   const statusClasses = {
-    completed: 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-400 text-green-900 shadow-green-100',
-    current: 'bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-400 text-blue-900 shadow-blue-200 ring-2 ring-blue-200 shadow-lg',
-    upcoming: 'bg-gradient-to-br from-gray-50 to-slate-100 border-gray-300 text-gray-700 hover:shadow-md'
+    completed: 'bg-gradient-to-br from-green-50 to-green-100 border-green-400 text-green-900 shadow-lg',
+    current: 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-400 text-blue-900 ring-2 ring-blue-200 shadow-lg',
+    upcoming: 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-300 text-gray-700 hover:shadow-md'
   }
 
   return (
     <div
-      className={`flex-shrink-0 w-72 p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl backdrop-blur-sm ${
+      className={`flex-shrink-0 w-72 p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${
         statusClasses[getPhaseStatus()]
       }`}
       onClick={onClick}
