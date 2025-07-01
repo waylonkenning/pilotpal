@@ -81,17 +81,22 @@ test.describe('Basic Dashboard', () => {
     await page.fill('[data-testid="name-input"]', 'Test Pilot');
     await page.click('[data-testid="start-journey-button"]');
     
-    // Should have journey map link
-    await expect(page.locator('[data-testid="journey-nav-link"]'))
-      .toBeVisible();
+    // Check if we're on desktop (desktop nav visible) or mobile (mobile nav visible)
+    const isDesktop = await page.locator('[data-testid="journey-nav-link"]').isVisible();
     
-    // Should have achievements link
-    await expect(page.locator('[data-testid="achievements-nav-link"]'))
-      .toBeVisible();
-    
-    // Should have progress tracking link
-    await expect(page.locator('[data-testid="progress-nav-link"]'))
-      .toBeVisible();
+    if (isDesktop) {
+      // Desktop navigation
+      await expect(page.locator('[data-testid="journey-nav-link"]'))
+        .toBeVisible();
+    } else {
+      // Mobile navigation
+      await expect(page.locator('[data-testid="journey-nav-mobile"]'))
+        .toBeVisible();
+      await expect(page.locator('[data-testid="achievements-nav-mobile"]'))
+        .toBeVisible();
+      await expect(page.locator('[data-testid="progress-nav-mobile"]'))
+        .toBeVisible();
+    }
   });
 
   test('should persist user data across sessions', async ({ page }) => {

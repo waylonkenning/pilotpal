@@ -261,7 +261,7 @@ test.describe('Journey Timeline Visualization', () => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     
-    await page.click('[data-testid="journey-nav-link"]');
+    await page.click('[data-testid="journey-nav-mobile"]');
     
     // Timeline should be visible and usable on mobile
     await expect(page.locator('[data-testid="journey-timeline"]'))
