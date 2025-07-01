@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Basic Dashboard', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear storage to start fresh for each test
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+  });
+
   test('should display welcome message for new user', async ({ page }) => {
     await page.goto('/');
     
@@ -55,7 +61,7 @@ test.describe('Basic Dashboard', () => {
     await expect(page.locator('[data-testid="achievements-card"]'))
       .toBeVisible();
     await expect(page.locator('[data-testid="achievements-count"]'))
-      .toContainText('0 of 27');
+      .toContainText('0 of 4');
   });
 
   test('should display next milestone information', async ({ page }) => {

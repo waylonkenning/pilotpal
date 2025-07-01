@@ -2,6 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Journey Timeline Visualization', () => {
   test.beforeEach(async ({ page }) => {
+    // Clear storage to start fresh
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    
     // Setup: Create a user and get to dashboard
     await page.goto('/');
     await page.click('[data-testid="get-started-button"]');

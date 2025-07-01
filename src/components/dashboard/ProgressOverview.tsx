@@ -1,5 +1,5 @@
 import { UserProgress } from '@/types'
-import { TRAINING_PHASES } from '@/lib/constants'
+import { TRAINING_PHASES, CORE_BADGES } from '@/lib/constants'
 import Card from '@/components/shared/Card'
 
 interface ProgressOverviewProps {
@@ -13,7 +13,7 @@ export default function ProgressOverview({ progress }: ProgressOverviewProps) {
   ) || TRAINING_PHASES[0]
 
   const achievementCount = progress.achievements.length
-  const totalAchievements = 27
+  const totalAchievements = CORE_BADGES.length
 
   return (
     <div className="grid md:grid-cols-3 gap-6 mb-8">
