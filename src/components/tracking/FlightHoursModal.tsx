@@ -105,9 +105,9 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
       title="Log Flight Hours"
       data-testid="flight-hours-modal"
     >
-      <div className="space-y-3">
+      <div className="space-y-2">
         {/* Date and Description */}
-        <div className="grid md:grid-cols-2 gap-3">
+        <div className="grid md:grid-cols-2 gap-2">
           <div>
             <label htmlFor="flight-date" className="block text-sm font-medium text-gray-700 mb-1">
               Flight Date
@@ -138,7 +138,7 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
         </div>
 
         {/* Hours Inputs */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <div>
             <label htmlFor="dual-hours" className="block text-sm font-medium text-gray-700 mb-1">
               Dual
@@ -233,7 +233,7 @@ export default function FlightHoursModal({ isOpen, onClose, onSave }: FlightHour
         )}
 
         {/* Actions */}
-        <div className="flex gap-4 pt-2">
+        <div className="flex gap-2 pt-1 sticky bottom-0 bg-white">
           <button
             onClick={handleCancel}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
