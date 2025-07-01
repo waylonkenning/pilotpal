@@ -150,7 +150,7 @@
         </div>
 
         <!-- Quick Navigation -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <router-link to="/journey" class="btn btn-secondary text-center">
             🗺️ View Journey
           </router-link>
@@ -162,6 +162,9 @@
           </router-link>
           <router-link to="/requirements" class="btn btn-secondary" data-testid="requirements-tab">
             📋 Requirements
+          </router-link>
+          <router-link to="/finances" class="btn btn-secondary" data-testid="finances-tab">
+            💰 Finances
           </router-link>
         </div>
       </div>
