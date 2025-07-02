@@ -142,6 +142,7 @@
             <button 
               @click="recordAttempt(subject)"
               class="btn btn-secondary flex-1"
+              data-testid="record-attempt-button"
             >
               📝 Record Attempt
             </button>
@@ -177,6 +178,7 @@
                 v-model="attemptForm.examDate" 
                 type="date" 
                 class="form-input"
+                data-testid="exam-date-input"
               >
             </div>
             
@@ -189,6 +191,7 @@
                 max="100"
                 class="form-input"
                 placeholder="75"
+                data-testid="exam-score-input"
               >
             </div>
             
@@ -199,6 +202,7 @@
                 type="text" 
                 class="form-input"
                 placeholder="Auckland"
+                data-testid="exam-center-input"
               >
             </div>
             
@@ -209,6 +213,7 @@
                 type="number" 
                 class="form-input"
                 placeholder="65"
+                data-testid="exam-cost-input"
               >
             </div>
 
@@ -221,7 +226,7 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="saveAttempt" class="btn btn-primary flex-1">
+            <button @click="saveAttempt" class="btn btn-primary flex-1" data-testid="save-exam-attempt">
               Save Attempt
             </button>
             <button @click="showAttemptForm = false" class="btn btn-secondary">

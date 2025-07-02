@@ -280,4 +280,117 @@ test.describe('Regulatory Requirements Tracking', () => {
     await expect(page.locator('[data-testid="solo-prerequisites"]'))
       .toContainText('Instructor endorsement required')
   })
+
+  test('should record theory exam attempts with scores and locations', async ({ page }) => {
+    // Navigate to theory exams
+    await page.click('[data-testid="theory-tab"]')
+    
+    // Record an attempt for Air Law
+    await page.click('[data-testid="air-law-exam"] [data-testid="record-attempt-button"]')
+    
+    // Fill in exam attempt details
+    await page.fill('[data-testid="exam-date-input"]', '2024-06-15')
+    await page.fill('[data-testid="exam-score-input"]', '85')
+    await page.fill('[data-testid="exam-center-input"]', 'Auckland')
+    await page.fill('[data-testid="exam-cost-input"]', '65')
+    
+    // Save the attempt
+    await page.click('[data-testid="save-exam-attempt"]')
+    
+    // Should show as passed (85% > 70%)
+    await expect(page.locator('[data-testid="air-law-exam"]'))
+      .toContainText('✅')
+    
+    // Should show attempt in history
+    await expect(page.locator('[data-testid="air-law-exam"]'))
+      .toContainText('85%')
+  })
+
+  test('should handle failed exam attempts and retakes', async ({ page }) => {
+    // Navigate to theory exams
+    await page.click('[data-testid="theory-tab"]')
+    
+    // Record a failed attempt for Navigation
+    await page.click('[data-testid="navigation-exam"] [data-testid="record-attempt-button"]')
+    
+    // Fill in failing score
+    await page.fill('[data-testid="exam-date-input"]', '2024-06-10')
+    await page.fill('[data-testid="exam-score-input"]', '65')
+    await page.fill('[data-testid="exam-center-input"]', 'Wellington')
+    await page.fill('[data-testid="exam-cost-input"]', '65')
+    
+    // Save the failed attempt
+    await page.click('[data-testid="save-exam-attempt"]')
+    
+    // Should still show as pending (65% < 70%)
+    await expect(page.locator('[data-testid="navigation-exam"]'))
+      .toContainText('⏳')
+    
+    // Should show failed attempt in history
+    await expect(page.locator('[data-testid="navigation-exam"]'))
+      .toContainText('65%')
+    
+    // Record a passing retake
+    await page.click('[data-testid="navigation-exam"] [data-testid="record-attempt-button"]')
+    
+    // Fill in passing score
+    await page.fill('[data-testid="exam-date-input"]', '2024-06-20')
+    await page.fill('[data-testid="exam-score-input"]', '78')
+    await page.fill('[data-testid="exam-center-input"]', 'Wellington')
+    await page.fill('[data-testid="exam-cost-input"]', '65')
+    
+    // Save the passing attempt
+    await page.click('[data-testid="save-exam-attempt"]')
+    
+    // Should now show as passed
+    await expect(page.locator('[data-testid="navigation-exam"]'))
+      .toContainText('✅')
+    
+    // Should show 2 attempts
+    await expect(page.locator('[data-testid="navigation-exam"]'))
+      .toContainText('2 attempts')
+  })
+
+  test('should display theory exam education and resources', async ({ page }) => {
+    // Navigate to theory exams
+    await page.click('[data-testid="theory-tab"]')
+    
+    // Open theory education modal
+    await page.click('[data-testid="theory-exam-help-button"]')
+    
+    // Should show theory education modal
+    await expect(page.locator('[data-testid="theory-education-modal"]'))
+      .toBeVisible()
+    
+    // Should show exam format information
+    await expect(page.locator('[data-testid="exam-format-info"]'))
+      .toContainText('Multiple choice')
+    
+    // Should show all 6 subject explanations
+    await expect(page.locator('[data-testid="air-law-explanation"]'))
+      .toBeVisible()
+    
+    await expect(page.locator('[data-testid="navigation-explanation"]'))
+      .toBeVisible()
+    
+    await expect(page.locator('[data-testid="technical-knowledge-explanation"]'))
+      .toBeVisible()
+    
+    await expect(page.locator('[data-testid="human-factors-explanation"]'))
+      .toBeVisible()
+    
+    await expect(page.locator('[data-testid="meteorology-explanation"]'))
+      .toBeVisible()
+    
+    await expect(page.locator('[data-testid="radio-telephony-explanation"]'))
+      .toBeVisible()
+    
+    // Should show study resources
+    await expect(page.locator('[data-testid="theory-study-resources"]'))
+      .toContainText('CAA')
+    
+    // Should show exam booking information
+    await expect(page.locator('[data-testid="exam-booking-info"]'))
+      .toBeVisible()
+  })
 })

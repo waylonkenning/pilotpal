@@ -284,4 +284,172 @@ test.describe('Enhanced Financial Tracking', () => {
     await expect(page.locator('[data-testid="potential-deduction"]'))
       .toContainText('$')
   })
+
+  test('should handle expense editing and updating', async ({ page }) => {
+    // Navigate to finances
+    await page.click('[data-testid="finances-tab"]')
+    
+    // Add an expense first
+    await page.click('[data-testid="add-expense-button"]')
+    await page.selectOption('[data-testid="expense-category-select"]', 'Flight Training')
+    await page.fill('[data-testid="expense-amount-input"]', '150')
+    await page.fill('[data-testid="expense-description-input"]', 'Initial lesson')
+    await page.fill('[data-testid="expense-date-input"]', '2024-06-01')
+    await page.click('[data-testid="save-expense-button"]')
+    
+    // Edit the expense
+    await page.click('[data-testid="expense-item"]:first-child [data-testid="edit-expense-button"]')
+    
+    // Update the amount
+    await page.fill('[data-testid="expense-amount-input"]', '175')
+    await page.fill('[data-testid="expense-description-input"]', 'Updated lesson cost')
+    await page.click('[data-testid="save-expense-button"]')
+    
+    // Should show updated amount
+    await expect(page.locator('[data-testid="expense-item"]:first-child'))
+      .toContainText('$175')
+    
+    // Should show updated description
+    await expect(page.locator('[data-testid="expense-item"]:first-child'))
+      .toContainText('Updated lesson cost')
+    
+    // Total should reflect the change
+    await expect(page.locator('[data-testid="total-spent"]'))
+      .toContainText('175')
+  })
+
+  test('should handle expense deletion with confirmation', async ({ page }) => {
+    // Navigate to finances
+    await page.click('[data-testid="finances-tab"]')
+    
+    // Add an expense first
+    await page.click('[data-testid="add-expense-button"]')
+    await page.selectOption('[data-testid="expense-category-select"]', 'Equipment')
+    await page.fill('[data-testid="expense-amount-input"]', '250')
+    await page.fill('[data-testid="expense-description-input"]', 'Headset purchase')
+    await page.fill('[data-testid="expense-date-input"]', '2024-06-05')
+    await page.click('[data-testid="save-expense-button"]')
+    
+    // Delete the expense
+    await page.click('[data-testid="expense-item"]:first-child [data-testid="delete-expense-button"]')
+    
+    // Should show confirmation dialog
+    await expect(page.locator('[data-testid="delete-confirmation"]'))
+      .toBeVisible()
+    
+    // Confirm deletion
+    await page.click('[data-testid="confirm-delete-expense"]')
+    
+    // Expense should be removed
+    await expect(page.locator('[data-testid="expense-item"]'))
+      .toHaveCount(0)
+    
+    // Total should reflect the change
+    await expect(page.locator('[data-testid="total-spent"]'))
+      .toContainText('0')
+  })
+
+  test('should export financial data in CSV and PDF formats', async ({ page }) => {
+    // Navigate to finances
+    await page.click('[data-testid="finances-tab"]')
+    
+    // Add some expenses for export
+    const expenses = [
+      { category: 'Flight Training', amount: '150', description: 'Lesson 1' },
+      { category: 'Theory Exams', amount: '65', description: 'Air Law exam' },
+      { category: 'Medical Certificate', amount: '200', description: 'DL9 medical' }
+    ]
+    
+    for (const expense of expenses) {
+      await page.click('[data-testid="add-expense-button"]')
+      await page.selectOption('[data-testid="expense-category-select"]', expense.category)
+      await page.fill('[data-testid="expense-amount-input"]', expense.amount)
+      await page.fill('[data-testid="expense-description-input"]', expense.description)
+      await page.fill('[data-testid="expense-date-input"]', '2024-06-01')
+      await page.click('[data-testid="save-expense-button"]')
+    }
+    
+    // Export as CSV
+    await page.click('[data-testid="export-csv"]')
+    
+    // Should show export success message
+    await expect(page.locator('[data-testid="export-success"]'))
+      .toBeVisible()
+    
+    // Should show success message content
+    await expect(page.locator('[data-testid="export-success"]'))
+      .toContainText('Data exported successfully')
+    
+    // Wait for success message to disappear
+    await page.waitForTimeout(1000)
+    
+    // Export as PDF
+    await page.click('[data-testid="export-pdf-report"]')
+    
+    // Should show export success message again
+    await expect(page.locator('[data-testid="export-success"]'))
+      .toBeVisible()
+  })
+
+  test('should validate expense input and show appropriate errors', async ({ page }) => {
+    // Navigate to finances
+    await page.click('[data-testid="finances-tab"]')
+    
+    // Try to add expense with missing required fields
+    await page.click('[data-testid="add-expense-button"]')
+    
+    // Leave amount empty and try to save
+    await page.selectOption('[data-testid="expense-category-select"]', 'Flight Training')
+    await page.fill('[data-testid="expense-description-input"]', 'Test expense')
+    await page.click('[data-testid="save-expense-button"]')
+    
+    // Should show validation error for missing amount
+    await expect(page.locator('[data-testid="expense-form"] .error'))
+      .toBeVisible()
+    
+    // Test with valid data
+    await page.fill('[data-testid="expense-amount-input"]', '100')
+    await page.fill('[data-testid="expense-date-input"]', '2024-06-01')
+    await page.click('[data-testid="save-expense-button"]')
+    
+    // Should successfully save
+    await expect(page.locator('[data-testid="expense-item"]'))
+      .toHaveCount(1)
+  })
+
+  test('should calculate and display accurate spending by category', async ({ page }) => {
+    // Navigate to finances
+    await page.click('[data-testid="finances-tab"]')
+    
+    // Add expenses across different categories
+    const expensesByCategory = [
+      { category: 'Flight Training', amount: '1500', description: 'Multiple lessons' },
+      { category: 'Flight Training', amount: '800', description: 'More lessons' },
+      { category: 'Theory Exams', amount: '390', description: 'All 6 exams' },
+      { category: 'Equipment', amount: '250', description: 'Headset and charts' }
+    ]
+    
+    for (const expense of expensesByCategory) {
+      await page.click('[data-testid="add-expense-button"]')
+      await page.selectOption('[data-testid="expense-category-select"]', expense.category)
+      await page.fill('[data-testid="expense-amount-input"]', expense.amount)
+      await page.fill('[data-testid="expense-description-input"]', expense.description)
+      await page.fill('[data-testid="expense-date-input"]', '2024-06-01')
+      await page.click('[data-testid="save-expense-button"]')
+    }
+    
+    // Should show correct category totals
+    await expect(page.locator('[data-testid="flight-training-costs"]'))
+      .toContainText('2,300') // $1500 + $800
+    
+    await expect(page.locator('[data-testid="theory-exam-costs"]'))
+      .toContainText('390')
+    
+    await expect(page.locator('[data-testid="equipment-costs"]'))
+      .toContainText('250')
+    
+    // Should show correct total
+    await expect(page.locator('[data-testid="total-spent"]'))
+      .toContainText('2,940') // $2300 + $390 + $250
+  })
 })

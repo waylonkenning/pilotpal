@@ -10,6 +10,7 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:production": "BASE_URL=https://pilotpal-two.vercel.app playwright test",
     "test:type": "vue-tsc --noEmit",
     "test:build": "npm run test:type && npm run build",
     "test:all": "npm run test:type && npm run lint && npm run test && npm run test:e2e",
