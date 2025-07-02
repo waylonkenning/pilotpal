@@ -174,7 +174,7 @@
         </div>
 
         <!-- Quick Navigation -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <router-link to="/journey" class="btn btn-secondary text-center" data-testid="journey-tab">
             🗺️ View Journey
           </router-link>
@@ -189,6 +189,9 @@
           </router-link>
           <router-link to="/finances" class="btn btn-secondary" data-testid="finances-tab">
             💰 Finances
+          </router-link>
+          <router-link to="/profile" class="btn btn-secondary" data-testid="user-profile-tab">
+            👤 Profile
           </router-link>
         </div>
       </div>
