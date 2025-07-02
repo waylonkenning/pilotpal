@@ -9,15 +9,15 @@ Follow this exact workflow for all feature development:
 1. **Update todo list** - Use TodoWrite to plan and track all tasks
 2. **Create e2e tests** - Write end-to-end tests for the new feature before implementation
 3. **Code the feature** - Implement the feature according to the tests
-4. **Run local validation** - Execute comprehensive local testing before committing:
-   - `npm run test:type` - TypeScript type checking (catches build errors)
-   - `npm run lint` - ESLint code quality checks  
-   - `npm run test:e2e` - End-to-end functionality tests
-   - `npm run test:build` - Full build verification (same as Vercel)
+4. **Run local validation** - Execute `./scripts/pre-commit-check.sh` to verify:
+   - TypeScript type checking (catches build errors)
+   - ESLint code quality checks  
+   - Build verification (same as Vercel)
+   - Unit tests (if any exist)
 5. **Git commit** - Commit changes with descriptive message
 6. **Git push** - Push to remote repository
 7. **Wait for Vercel deployment** - Allow deployment to complete
-8. **Run e2e tests on deployed version** - Verify feature works in production
+8. **Test deployed version** - Manually verify feature works in production
 9. **Update README** - Document the new feature once fully tested and deployed
 
-This workflow ensures quality, testing coverage, and proper documentation for all features.
+This workflow ensures quality through local validation, eliminating CI/CD complexity while maintaining code standards.
