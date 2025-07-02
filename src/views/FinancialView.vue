@@ -122,6 +122,108 @@
             </div>
           </div>
 
+          <!-- Export Section -->
+          <div class="card mb-6" data-testid="export-section">
+            <h3 class="text-lg font-semibold mb-4">📊 Export Financial Data</h3>
+            <div class="text-sm text-gray-600 mb-4" data-testid="export-description">
+              Export your financial data for record-keeping, tax purposes, or external analysis
+            </div>
+            
+            <!-- Export Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="form-label">From Date</label>
+                <input 
+                  v-model="exportFilters.dateFrom" 
+                  type="date" 
+                  class="form-input"
+                  data-testid="export-date-from"
+                >
+              </div>
+              <div>
+                <label class="form-label">To Date</label>
+                <input 
+                  v-model="exportFilters.dateTo" 
+                  type="date" 
+                  class="form-input"
+                  data-testid="export-date-to"
+                >
+              </div>
+              <div>
+                <label class="form-label">Category Filter</label>
+                <select 
+                  v-model="exportFilters.category" 
+                  class="form-input"
+                  data-testid="export-category-filter"
+                >
+                  <option value="">All Categories</option>
+                  <option value="flight-training">Flight Training</option>
+                  <option value="theory-exam">Theory Exams</option>
+                  <option value="medical">Medical Certificates</option>
+                  <option value="equipment">Equipment</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Export Statistics -->
+            <div v-if="filteredExpensesForExport.length > 0" class="bg-blue-50 p-4 rounded-lg mb-4" data-testid="export-stats">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div>
+                  <div class="text-2xl font-bold text-blue-600" data-testid="export-total-expenses">
+                    {{ filteredExpensesForExport.length }}
+                  </div>
+                  <div class="text-sm text-gray-600">Total Expenses</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold text-green-600" data-testid="export-total-amount">
+                    ${{ getFilteredTotal().toFixed(0) }}
+                  </div>
+                  <div class="text-sm text-gray-600">Total Amount</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold text-orange-600" data-testid="export-categories-count">
+                    {{ getUniqueCategories().length }}
+                  </div>
+                  <div class="text-sm text-gray-600">Categories</div>
+                </div>
+              </div>
+              <div class="text-center mt-2 text-sm text-gray-600" data-testid="export-date-range">
+                {{ formatExportDateRange() }}
+              </div>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="flex gap-3">
+              <button 
+                @click="exportToCSV"
+                class="btn btn-primary flex-1"
+                data-testid="export-csv-button"
+                :disabled="filteredExpensesForExport.length === 0"
+              >
+                📄 Export as CSV
+              </button>
+              <button 
+                @click="exportToPDF"
+                class="btn btn-secondary flex-1"
+                data-testid="export-pdf-button"
+                :disabled="filteredExpensesForExport.length === 0"
+              >
+                📋 Export as PDF
+              </button>
+            </div>
+
+            <!-- No Data Message -->
+            <div v-if="filteredExpensesForExport.length === 0" class="text-center py-4 text-gray-500" data-testid="export-empty-message">
+              No expense data to export with current filters
+            </div>
+
+            <!-- Success Message -->
+            <div v-if="exportMessage" class="mt-4 p-3 rounded-lg" :class="exportMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'" data-testid="export-success-message">
+              {{ exportMessage.text }}
+            </div>
+          </div>
+
           <!-- Expense List -->
           <div class="card">
             <h3 class="text-lg font-semibold mb-4">Recent Expenses</h3>
@@ -699,6 +801,15 @@ const formErrors = ref({
   date: ''
 })
 
+// Export functionality state
+const exportFilters = ref({
+  dateFrom: '',
+  dateTo: '',
+  category: ''
+})
+
+const exportMessage = ref<{ type: 'success' | 'error', text: string } | null>(null)
+
 // Form data
 const expenseForm = ref({
   category: '',
@@ -912,13 +1023,210 @@ const setCustomBudget = () => {
   }
 }
 
-const exportData = (format: string) => {
-  // Simulate export functionality
-  console.log(`Exporting financial data as ${format}`)
-  showExportSuccess.value = true
+// Export computed properties
+const filteredExpensesForExport = computed(() => {
+  return expenses.value.filter(expense => {
+    // Date filtering
+    if (exportFilters.value.dateFrom && expense.date < exportFilters.value.dateFrom) {
+      return false
+    }
+    if (exportFilters.value.dateTo && expense.date > exportFilters.value.dateTo) {
+      return false
+    }
+    
+    // Category filtering
+    if (exportFilters.value.category && expense.category !== exportFilters.value.category) {
+      return false
+    }
+    
+    return true
+  })
+})
+
+// Export utility functions
+const getFilteredTotal = () => {
+  return filteredExpensesForExport.value.reduce((sum, expense) => sum + expense.amount, 0)
+}
+
+const getUniqueCategories = () => {
+  const categories = new Set(filteredExpensesForExport.value.map(e => e.category))
+  return Array.from(categories)
+}
+
+const formatExportDateRange = () => {
+  if (!exportFilters.value.dateFrom && !exportFilters.value.dateTo) {
+    return 'All dates'
+  }
+  
+  const from = exportFilters.value.dateFrom || 'Beginning'
+  const to = exportFilters.value.dateTo || 'Present'
+  return `${from} to ${to}`
+}
+
+const generateFilename = (extension: string) => {
+  const today = new Date().toISOString().split('T')[0]
+  let filename = `ppl-quest-expenses-${today}`
+  
+  if (exportFilters.value.dateFrom && exportFilters.value.dateTo) {
+    filename = `ppl-quest-expenses-${exportFilters.value.dateFrom}_to_${exportFilters.value.dateTo}`
+  }
+  
+  if (exportFilters.value.category) {
+    filename += `-${exportFilters.value.category}`
+  }
+  
+  return `${filename}.${extension}`
+}
+
+const clearExportMessage = () => {
   setTimeout(() => {
-    showExportSuccess.value = false
+    exportMessage.value = null
   }, 3000)
+}
+
+// CSV Export function
+const exportToCSV = () => {
+  if (filteredExpensesForExport.value.length === 0) {
+    exportMessage.value = { type: 'error', text: 'No expense data to export' }
+    clearExportMessage()
+    return
+  }
+
+  try {
+    // Create CSV headers
+    const headers = ['Date', 'Category', 'Description', 'Amount', 'Created At']
+    
+    // Create CSV rows
+    const rows = filteredExpensesForExport.value.map(expense => [
+      expense.date,
+      getCategoryName(expense.category),
+      `"${expense.description.replace(/"/g, '""')}"`, // Escape quotes
+      expense.amount.toString(),
+      expense.createdAt
+    ])
+    
+    // Combine headers and rows
+    const csvContent = [headers, ...rows]
+      .map(row => row.join(','))
+      .join('\n')
+    
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    
+    link.setAttribute('href', url)
+    link.setAttribute('download', generateFilename('csv'))
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    
+    exportMessage.value = { type: 'success', text: 'CSV export completed successfully' }
+    clearExportMessage()
+  } catch (error) {
+    console.error('CSV export failed:', error)
+    exportMessage.value = { type: 'error', text: 'CSV export failed. Please try again.' }
+    clearExportMessage()
+  }
+}
+
+// PDF Export function  
+const exportToPDF = () => {
+  if (filteredExpensesForExport.value.length === 0) {
+    exportMessage.value = { type: 'error', text: 'No expense data to export' }
+    clearExportMessage()
+    return
+  }
+
+  try {
+    // Create HTML content for PDF
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>PPL Quest NZ - Financial Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .summary { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+          .summary-item { display: inline-block; margin: 0 20px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+          th { background-color: #f2f2f2; }
+          .total-row { font-weight: bold; background-color: #e3f2fd; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>🛩️ PPL Quest NZ - Financial Report</h1>
+          <p>Generated on ${new Date().toLocaleDateString()}</p>
+          <p>${formatExportDateRange()}</p>
+        </div>
+        
+        <div class="summary">
+          <div class="summary-item"><strong>Total Expenses:</strong> ${filteredExpensesForExport.value.length}</div>
+          <div class="summary-item"><strong>Total Amount:</strong> $${getFilteredTotal().toFixed(2)}</div>
+          <div class="summary-item"><strong>Categories:</strong> ${getUniqueCategories().length}</div>
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredExpensesForExport.value.map(expense => `
+              <tr>
+                <td>${expense.date}</td>
+                <td>${getCategoryName(expense.category)}</td>
+                <td>${expense.description}</td>
+                <td>$${expense.amount.toFixed(2)}</td>
+              </tr>
+            `).join('')}
+            <tr class="total-row">
+              <td colspan="3"><strong>Total</strong></td>
+              <td><strong>$${getFilteredTotal().toFixed(2)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `
+    
+    // Create a new window for printing to PDF
+    const printWindow = window.open('', '_blank')
+    if (printWindow) {
+      printWindow.document.write(htmlContent)
+      printWindow.document.close()
+      
+      // Wait for content to load then trigger print
+      printWindow.addEventListener('load', () => {
+        printWindow.print()
+        printWindow.close()
+      })
+    }
+    
+    exportMessage.value = { type: 'success', text: 'PDF export completed successfully' }
+    clearExportMessage()
+  } catch (error) {
+    console.error('PDF export failed:', error)
+    exportMessage.value = { type: 'error', text: 'PDF export failed. Please try again.' }
+    clearExportMessage()
+  }
+}
+
+const exportData = (format: string) => {
+  // Legacy function - keeping for compatibility
+  if (format === 'csv') {
+    exportToCSV()
+  } else if (format === 'pdf') {
+    exportToPDF()
+  }
 }
 
 const saveProgress = () => {
