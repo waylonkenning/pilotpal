@@ -431,7 +431,7 @@
 
     <!-- Add/Edit Expense Modal -->
     <div v-if="showAddExpense || editingExpense" class="modal-overlay" @click="closeExpenseModal">
-      <div class="modal-content" @click.stop>
+      <div class="modal-content" @click.stop data-testid="expense-form">
         <div class="p-6">
           <h3 class="text-xl font-bold mb-4">
             {{ editingExpense ? 'Edit Expense' : 'Add New Expense' }}
@@ -443,6 +443,7 @@
               <select 
                 v-model="expenseForm.category" 
                 class="form-input"
+                :class="{ 'border-red-500': formErrors.category }"
                 data-testid="expense-category-select"
               >
                 <option value="">Select category...</option>
@@ -453,6 +454,9 @@
                 <option value="fuel">Fuel</option>
                 <option value="other">Other</option>
               </select>
+              <div v-if="formErrors.category" class="error text-red-500 text-sm mt-1">
+                {{ formErrors.category }}
+              </div>
             </div>
             
             <div>
@@ -462,9 +466,13 @@
                 type="number" 
                 step="0.01"
                 class="form-input"
+                :class="{ 'border-red-500': formErrors.amount }"
                 placeholder="180.00"
-                data-testid="expense-amount"
+                data-testid="expense-amount-input"
               >
+              <div v-if="formErrors.amount" class="error text-red-500 text-sm mt-1">
+                {{ formErrors.amount }}
+              </div>
             </div>
             
             <div>
@@ -474,7 +482,7 @@
                 type="text" 
                 class="form-input"
                 placeholder="Lesson 5 - Circuit training"
-                data-testid="expense-description"
+                data-testid="expense-description-input"
               >
             </div>
             
@@ -484,7 +492,7 @@
                 v-model="expenseForm.date" 
                 type="date" 
                 class="form-input"
-                data-testid="expense-date"
+                data-testid="expense-date-input"
               >
             </div>
           </div>
@@ -614,6 +622,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="showDeleteConfirmation" class="modal-overlay" @click="showDeleteConfirmation = false">
+      <div class="modal-content" @click.stop data-testid="delete-confirmation">
+        <div class="p-6 text-center">
+          <div class="text-6xl mb-4">🗑️</div>
+          <h3 class="text-xl font-bold mb-4">Delete Expense</h3>
+          <p class="text-gray-600 mb-6">
+            Are you sure you want to delete this expense? This action cannot be undone.
+          </p>
+          <div class="flex gap-3">
+            <button 
+              @click="confirmDelete" 
+              class="btn btn-primary flex-1"
+              data-testid="confirm-delete-expense"
+            >
+              Delete
+            </button>
+            <button 
+              @click="showDeleteConfirmation = false" 
+              class="btn btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -654,6 +690,14 @@ const showContextualHelp = ref(false)
 const showEligibilityInfo = ref(false)
 const showExportSuccess = ref(false)
 const customBudgetInput = ref('30000')
+const showDeleteConfirmation = ref(false)
+const expenseToDelete = ref<string | null>(null)
+const formErrors = ref({
+  category: '',
+  amount: '',
+  description: '',
+  date: ''
+})
 
 // Form data
 const expenseForm = ref({
@@ -768,9 +812,39 @@ const formatCurrency = (amount: number) => {
   return amount.toLocaleString('en-NZ', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
 
+const validateForm = () => {
+  formErrors.value = {
+    category: '',
+    amount: '',
+    description: '',
+    date: ''
+  }
+  
+  let isValid = true
+  
+  if (!expenseForm.value.category) {
+    formErrors.value.category = 'Category is required'
+    isValid = false
+  }
+  
+  if (!expenseForm.value.amount) {
+    formErrors.value.amount = 'Amount is required'
+    isValid = false
+  } else if (parseFloat(expenseForm.value.amount) <= 0) {
+    formErrors.value.amount = 'Amount must be positive'
+    isValid = false
+  }
+  
+  if (!expenseForm.value.date) {
+    formErrors.value.date = 'Date is required'
+    isValid = false
+  }
+  
+  return isValid
+}
+
 const saveExpense = () => {
-  if (!expenseForm.value.category || !expenseForm.value.amount) {
-    alert('Please fill in all required fields')
+  if (!validateForm()) {
     return
   }
 
@@ -806,10 +880,17 @@ const editExpense = (expense: Expense) => {
 }
 
 const deleteExpense = (expenseId: string) => {
-  if (confirm('Are you sure you want to delete this expense?')) {
-    expenses.value = expenses.value.filter(e => e.id !== expenseId)
+  expenseToDelete.value = expenseId
+  showDeleteConfirmation.value = true
+}
+
+const confirmDelete = () => {
+  if (expenseToDelete.value) {
+    expenses.value = expenses.value.filter(e => e.id !== expenseToDelete.value)
     saveProgress()
   }
+  showDeleteConfirmation.value = false
+  expenseToDelete.value = null
 }
 
 const closeExpenseModal = () => {
