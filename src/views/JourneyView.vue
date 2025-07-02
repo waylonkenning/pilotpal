@@ -162,7 +162,7 @@
         <h3 class="text-lg font-semibold mb-4">Lesson Completion Map</h3>
         <div class="relative" data-testid="lesson-map">
           <!-- Connection Lines -->
-          <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;" data-testid="lesson-connection-lines">
             <g v-for="i in 26" :key="'line-' + i">
               <line :x1="getLessonPosition(i).x + 20" 
                     :y1="getLessonPosition(i).y + 20"
@@ -170,7 +170,7 @@
                     :y2="getLessonPosition(i + 1).y + 20"
                     stroke="#d1d5db" 
                     stroke-width="2"
-                    data-testid="lesson-connection-line"/>
+                    :data-testid="'lesson-connection-line-' + i"/>
             </g>
           </svg>
           
@@ -364,10 +364,10 @@
             <div class="text-center pt-8 text-sm text-green-700">New Zealand Flight Training Areas</div>
             
             <!-- Training Area Markers -->
-            <div class="absolute top-4 left-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-marker" title="Auckland"></div>
-            <div class="absolute top-12 right-12 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-marker" title="Hamilton"></div>
-            <div class="absolute bottom-16 left-16 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-marker" title="Wellington"></div>
-            <div class="absolute bottom-8 right-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-marker" title="Christchurch"></div>
+            <div class="absolute top-4 left-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-auckland" title="Auckland"></div>
+            <div class="absolute top-12 right-12 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-hamilton" title="Hamilton"></div>
+            <div class="absolute bottom-16 left-16 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-wellington" title="Wellington"></div>
+            <div class="absolute bottom-8 right-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-christchurch" title="Christchurch"></div>
             
             <!-- Cross Country Routes -->
             <svg class="absolute inset-0 w-full h-full" data-testid="cross-country-routes">
