@@ -143,6 +143,135 @@
         </div>
       </div>
 
+      <!-- BFR Currency Tracking Section (for Licensed Pilots) -->
+      <div class="card mb-6" data-testid="bfr-currency-section">
+        <h2 class="text-xl font-semibold mb-4 text-indigo-600">🛩️ Biennial Flight Review (BFR) Currency</h2>
+        
+        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200 mb-4" data-testid="bfr-requirements-info">
+          <div class="font-semibold text-indigo-800 mb-2">BFR Requirements for Licensed Pilots</div>
+          <div class="text-indigo-700 text-sm space-y-1">
+            <p>• Required every 24 months for license currency</p>
+            <p>• Must include minimum 1 hour flight review and 1 hour ground review</p>
+            <p>• Conducted by qualified instructor or examiner</p>
+            <p>• Covers general operating and flight rules, and safe flight operations</p>
+          </div>
+        </div>
+
+        <!-- Current BFR Status -->
+        <div v-if="!bfrRecords.length" class="space-y-4">
+          <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+            <div class="flex items-center gap-3">
+              <div class="text-2xl">⚠️</div>
+              <div>
+                <div class="font-semibold text-yellow-800" data-testid="no-bfr-recorded">No BFR recorded</div>
+                <div class="text-yellow-700">Record your BFR to track currency status</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="space-y-4">
+          <!-- BFR Status Card -->
+          <div class="p-4 rounded-lg border" :class="getBfrStatusClass()" data-testid="bfr-status-card">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="text-2xl">{{ getBfrStatusIcon() }}</div>
+                <div>
+                  <div class="font-semibold" :class="getBfrStatusTextClass()" data-testid="bfr-status">
+                    {{ getBfrStatus() }}
+                  </div>
+                  <div class="text-sm text-gray-600" data-testid="last-bfr-date">
+                    Last BFR: {{ formatDate(latestBfr.date) }}
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-600">Next due:</div>
+                <div class="font-semibold" data-testid="next-bfr-due">{{ formatDate(getNextBfrDue()) }}</div>
+              </div>
+            </div>
+            
+            <div class="text-sm" :class="getBfrStatusTextClass()" data-testid="bfr-days-remaining">
+              {{ getBfrTimeRemaining() }}
+            </div>
+          </div>
+
+          <!-- BFR Warning Messages -->
+          <div v-if="getBfrStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="bfr-warning-message">
+            <div class="font-semibold text-orange-800 mb-2">⏰ BFR Expiring Soon</div>
+            <div class="text-orange-700">Your BFR will expire soon. Schedule a flight review to maintain currency.</div>
+          </div>
+
+          <div v-if="getBfrStatus() === 'Overdue'" class="bg-red-50 p-4 rounded-lg border border-red-200" data-testid="bfr-overdue-warning">
+            <div class="font-semibold text-red-800 mb-2">🚫 BFR Overdue</div>
+            <div class="text-red-700">Your BFR has expired. You cannot exercise pilot privileges until completing a BFR.</div>
+          </div>
+        </div>
+
+        <!-- Record New BFR Button -->
+        <div class="mt-4">
+          <button 
+            @click="showBfrForm = true"
+            class="btn btn-primary w-full"
+            data-testid="record-bfr-button"
+          >
+            📝 Record BFR
+          </button>
+        </div>
+
+        <!-- BFR History -->
+        <div v-if="bfrRecords.length > 0" class="mt-6" data-testid="bfr-history">
+          <h3 class="text-lg font-semibold mb-3">BFR History</h3>
+          <div class="space-y-3">
+            <div 
+              v-for="bfr in sortedBfrRecords" 
+              :key="bfr.id"
+              class="p-4 bg-gray-50 rounded-lg border"
+              data-testid="bfr-history-item"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">{{ formatDate(bfr.date) }}</div>
+                  <div class="text-sm text-gray-600">{{ bfr.instructor }}</div>
+                  <div class="text-sm text-gray-600">{{ bfr.location }}</div>
+                  <div class="text-xs text-gray-500">
+                    Flight: {{ bfr.flightTime }}h | Ground: {{ bfr.groundTime }}h
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button 
+                    @click="editBfr(bfr)"
+                    class="text-blue-600 text-sm"
+                    data-testid="edit-bfr-button"
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    @click="deleteBfr(bfr.id)"
+                    class="text-red-600 text-sm"
+                    data-testid="delete-bfr-button"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+              <div v-if="bfr.notes" class="text-sm text-gray-600 mt-2">{{ bfr.notes }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What BFR Includes -->
+        <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200" data-testid="bfr-includes">
+          <h4 class="font-semibold text-blue-800 mb-2">What a BFR Includes</h4>
+          <div class="text-blue-700 text-sm space-y-1">
+            <p><strong>Flight Review:</strong> Demonstration of safe flight operations and general operating rules</p>
+            <p><strong>Ground Review:</strong> Discussion of regulations, aircraft systems, and operating procedures</p>
+            <p><strong>Minimum Duration:</strong> 1 hour flight + 1 hour ground (minimum)</p>
+            <p><strong>Scope:</strong> Tailored to pilot's experience and type of flying</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Night Flying Section (Optional) -->
       <div class="card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-orange-600">🌙 Night Flying (Optional)</h2>
@@ -416,11 +545,180 @@
         </div>
       </div>
     </div>
+
+    <!-- BFR Recording Form Modal -->
+    <div v-if="showBfrForm" class="modal-overlay" @click="showBfrForm = false">
+      <div class="modal-content" @click.stop data-testid="bfr-form">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">{{ editingBfr ? 'Edit BFR' : 'Record BFR' }}</h3>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="form-label">BFR Date *</label>
+              <input 
+                v-model="bfrForm.date" 
+                type="date" 
+                class="form-input"
+                data-testid="bfr-date-input"
+                :class="{ 'border-red-500': bfrErrors.date }"
+              >
+              <div v-if="bfrErrors.date" class="text-red-600 text-sm mt-1" data-testid="bfr-date-error">
+                {{ bfrErrors.date }}
+              </div>
+            </div>
+            
+            <div>
+              <label class="form-label">Instructor/Examiner *</label>
+              <input 
+                v-model="bfrForm.instructor" 
+                type="text" 
+                class="form-input"
+                placeholder="John Smith CFI"
+                data-testid="bfr-instructor-input"
+                :class="{ 'border-red-500': bfrErrors.instructor }"
+              >
+              <div v-if="bfrErrors.instructor" class="text-red-600 text-sm mt-1" data-testid="bfr-instructor-error">
+                {{ bfrErrors.instructor }}
+              </div>
+            </div>
+            
+            <div>
+              <label class="form-label">Location *</label>
+              <input 
+                v-model="bfrForm.location" 
+                type="text" 
+                class="form-input"
+                placeholder="Auckland Airport"
+                data-testid="bfr-location-input"
+                :class="{ 'border-red-500': bfrErrors.location }"
+              >
+              <div v-if="bfrErrors.location" class="text-red-600 text-sm mt-1" data-testid="bfr-location-error">
+                {{ bfrErrors.location }}
+              </div>
+            </div>
+            
+            <div>
+              <label class="form-label">Aircraft Type</label>
+              <select v-model="bfrForm.aircraftType" class="form-input" data-testid="bfr-aircraft-type">
+                <option value="">Select Aircraft Type</option>
+                <option value="Cessna 172">Cessna 172</option>
+                <option value="Cessna 152">Cessna 152</option>
+                <option value="Piper Cherokee">Piper Cherokee</option>
+                <option value="Tecnam P2002">Tecnam P2002</option>
+                <option value="Diamond DA40">Diamond DA40</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">Flight Time (hours)</label>
+                <input 
+                  v-model="bfrForm.flightTime" 
+                  type="number" 
+                  step="0.1"
+                  min="1.0"
+                  class="form-input"
+                  placeholder="1.5"
+                  data-testid="bfr-flight-time"
+                >
+              </div>
+              
+              <div>
+                <label class="form-label">Ground Time (hours)</label>
+                <input 
+                  v-model="bfrForm.groundTime" 
+                  type="number" 
+                  step="0.1"
+                  min="1.0"
+                  class="form-input"
+                  placeholder="1.0"
+                  data-testid="bfr-ground-time"
+                >
+              </div>
+            </div>
+            
+            <div>
+              <label class="form-label">Notes</label>
+              <textarea 
+                v-model="bfrForm.notes" 
+                class="form-input"
+                rows="3"
+                placeholder="BFR notes, areas covered, recommendations..."
+                data-testid="bfr-notes"
+              ></textarea>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button 
+              @click="saveBfr" 
+              class="btn btn-primary flex-1"
+              data-testid="save-bfr-button"
+            >
+              {{ editingBfr ? 'Update BFR' : 'Save BFR' }}
+            </button>
+            <button @click="cancelBfrForm" class="btn btn-secondary">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BFR Success Message -->
+    <div v-if="showBfrSuccess" class="modal-overlay" @click="showBfrSuccess = false">
+      <div class="modal-content" @click.stop>
+        <div class="p-6 text-center">
+          <div class="text-4xl mb-4">✅</div>
+          <h3 class="text-xl font-bold mb-2">BFR Recorded Successfully</h3>
+          <p class="text-gray-600 mb-4" data-testid="bfr-success-message">
+            Your Biennial Flight Review has been recorded and your currency status updated.
+          </p>
+          <button @click="showBfrSuccess = false" class="btn btn-primary">
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete BFR Confirmation -->
+    <div v-if="showDeleteBfrConfirmation" class="modal-overlay" @click="showDeleteBfrConfirmation = false">
+      <div class="modal-content" @click.stop>
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">Delete BFR Record</h3>
+          <p class="text-gray-600 mb-6">
+            Are you sure you want to delete this BFR record? This action cannot be undone.
+          </p>
+          <div class="flex gap-3">
+            <button @click="confirmDeleteBfr" class="btn btn-primary flex-1" data-testid="confirm-delete-bfr">
+              Delete BFR
+            </button>
+            <button @click="showDeleteBfrConfirmation = false" class="btn btn-secondary">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+
+// Types
+interface BfrRecord {
+  id: string
+  date: string
+  instructor: string
+  location: string
+  aircraftType?: string
+  flightTime: number
+  groundTime: number
+  notes?: string
+  createdAt: string
+}
 
 // State
 const progress = ref({
@@ -440,6 +738,14 @@ const progress = ref({
   }
 })
 
+// BFR State
+const bfrRecords = ref<BfrRecord[]>([])
+const showBfrForm = ref(false)
+const showBfrSuccess = ref(false)
+const showDeleteBfrConfirmation = ref(false)
+const editingBfr = ref<BfrRecord | null>(null)
+const bfrToDelete = ref<string | null>(null)
+
 // Modal states
 const showMedicalInfo = ref(false)
 const showMedicalForm = ref(false)
@@ -458,6 +764,220 @@ const fppForm = ref({
   declarationType: '24FPP',
   submissionDate: new Date().toISOString().split('T')[0]
 })
+
+// BFR Form data
+const bfrForm = ref({
+  date: '',
+  instructor: '',
+  location: '',
+  aircraftType: '',
+  flightTime: 1.0,
+  groundTime: 1.0,
+  notes: ''
+})
+
+const bfrErrors = ref({
+  date: '',
+  instructor: '',
+  location: ''
+})
+
+// BFR Computed Properties
+const sortedBfrRecords = computed(() => {
+  return [...bfrRecords.value].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+})
+
+const latestBfr = computed(() => {
+  return sortedBfrRecords.value[0]
+})
+
+// BFR Methods
+const getBfrStatus = () => {
+  if (!latestBfr.value) return 'No BFR Recorded'
+  
+  const bfrDate = new Date(latestBfr.value.date)
+  const now = new Date()
+  const monthsDiff = (now.getFullYear() - bfrDate.getFullYear()) * 12 + (now.getMonth() - bfrDate.getMonth())
+  
+  if (monthsDiff >= 24) return 'Overdue'
+  if (monthsDiff >= 22) return 'Expiring Soon'
+  return 'Current'
+}
+
+const getBfrStatusClass = () => {
+  const status = getBfrStatus()
+  return {
+    'bg-green-50 border-green-200': status === 'Current',
+    'bg-orange-50 border-orange-200': status === 'Expiring Soon',
+    'bg-red-50 border-red-200': status === 'Overdue',
+    'bg-gray-50 border-gray-200': status === 'No BFR Recorded'
+  }
+}
+
+const getBfrStatusTextClass = () => {
+  const status = getBfrStatus()
+  return {
+    'text-green-700': status === 'Current',
+    'text-orange-700': status === 'Expiring Soon',
+    'text-red-700': status === 'Overdue',
+    'text-gray-700': status === 'No BFR Recorded'
+  }
+}
+
+const getBfrStatusIcon = () => {
+  const status = getBfrStatus()
+  return {
+    'Current': '✅',
+    'Expiring Soon': '⚠️',
+    'Overdue': '🚫',
+    'No BFR Recorded': '❓'
+  }[status] || '❓'
+}
+
+const getNextBfrDue = () => {
+  if (!latestBfr.value) return ''
+  
+  const bfrDate = new Date(latestBfr.value.date)
+  const dueDate = new Date(bfrDate)
+  dueDate.setMonth(dueDate.getMonth() + 24)
+  
+  return dueDate.toISOString().split('T')[0]
+}
+
+const getBfrTimeRemaining = () => {
+  if (!latestBfr.value) return ''
+  
+  const dueDate = new Date(getNextBfrDue())
+  const now = new Date()
+  const timeDiff = dueDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) {
+    return `${Math.abs(daysDiff)} days overdue`
+  } else if (daysDiff === 0) {
+    return 'Due today'
+  } else if (daysDiff === 1) {
+    return '1 day remaining'
+  } else {
+    return `${daysDiff} days remaining`
+  }
+}
+
+const validateBfrForm = () => {
+  bfrErrors.value = { date: '', instructor: '', location: '' }
+  let isValid = true
+  
+  if (!bfrForm.value.date) {
+    bfrErrors.value.date = 'Date is required'
+    isValid = false
+  }
+  
+  if (!bfrForm.value.instructor.trim()) {
+    bfrErrors.value.instructor = 'Instructor is required'
+    isValid = false
+  }
+  
+  if (!bfrForm.value.location.trim()) {
+    bfrErrors.value.location = 'Location is required'
+    isValid = false
+  }
+  
+  return isValid
+}
+
+const saveBfr = () => {
+  if (!validateBfrForm()) return
+  
+  const bfrData: BfrRecord = {
+    id: editingBfr.value?.id || 'bfr-' + Date.now(),
+    date: bfrForm.value.date,
+    instructor: bfrForm.value.instructor.trim(),
+    location: bfrForm.value.location.trim(),
+    aircraftType: bfrForm.value.aircraftType,
+    flightTime: parseFloat(bfrForm.value.flightTime.toString()) || 1.0,
+    groundTime: parseFloat(bfrForm.value.groundTime.toString()) || 1.0,
+    notes: bfrForm.value.notes.trim(),
+    createdAt: editingBfr.value?.createdAt || new Date().toISOString()
+  }
+  
+  if (editingBfr.value) {
+    // Update existing BFR
+    const index = bfrRecords.value.findIndex(b => b.id === editingBfr.value!.id)
+    if (index !== -1) {
+      bfrRecords.value[index] = bfrData
+    }
+  } else {
+    // Add new BFR
+    bfrRecords.value.push(bfrData)
+  }
+  
+  saveBfrData()
+  showBfrForm.value = false
+  showBfrSuccess.value = true
+  resetBfrForm()
+}
+
+const editBfr = (bfr: BfrRecord) => {
+  editingBfr.value = bfr
+  bfrForm.value = {
+    date: bfr.date,
+    instructor: bfr.instructor,
+    location: bfr.location,
+    aircraftType: bfr.aircraftType || '',
+    flightTime: bfr.flightTime,
+    groundTime: bfr.groundTime,
+    notes: bfr.notes || ''
+  }
+  showBfrForm.value = true
+}
+
+const deleteBfr = (bfrId: string) => {
+  bfrToDelete.value = bfrId
+  showDeleteBfrConfirmation.value = true
+}
+
+const confirmDeleteBfr = () => {
+  if (bfrToDelete.value) {
+    bfrRecords.value = bfrRecords.value.filter(b => b.id !== bfrToDelete.value)
+    saveBfrData()
+  }
+  showDeleteBfrConfirmation.value = false
+  bfrToDelete.value = null
+}
+
+const cancelBfrForm = () => {
+  showBfrForm.value = false
+  resetBfrForm()
+}
+
+const resetBfrForm = () => {
+  editingBfr.value = null
+  bfrForm.value = {
+    date: '',
+    instructor: '',
+    location: '',
+    aircraftType: '',
+    flightTime: 1.0,
+    groundTime: 1.0,
+    notes: ''
+  }
+  bfrErrors.value = { date: '', instructor: '', location: '' }
+}
+
+const saveBfrData = () => {
+  localStorage.setItem('ppl-quest-bfr-records', JSON.stringify(bfrRecords.value))
+}
+
+const loadBfrData = () => {
+  const saved = localStorage.getItem('ppl-quest-bfr-records')
+  if (saved) {
+    try {
+      bfrRecords.value = JSON.parse(saved)
+    } catch (error) {
+      console.error('Failed to load BFR data:', error)
+    }
+  }
+}
 
 // Methods
 const formatDate = (dateString: string) => {
@@ -557,5 +1077,6 @@ const loadProgress = () => {
 
 onMounted(() => {
   loadProgress()
+  loadBfrData()
 })
 </script>
