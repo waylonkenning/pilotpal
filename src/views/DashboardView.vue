@@ -70,7 +70,7 @@
         </div>
 
         <!-- Progress Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-3 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <!-- Flight Hours -->
           <div class="card">
             <h3 class="text-lg font-semibold mb-2">Flight Hours</h3>
@@ -174,7 +174,7 @@
         </div>
 
         <!-- Quick Navigation -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="grid grid-auto-fit gap-4">
           <router-link to="/journey" class="btn btn-secondary text-center" data-testid="journey-tab">
             🗺️ View Journey
           </router-link>

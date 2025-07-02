@@ -38,7 +38,7 @@
         <!-- Foundation Badges -->
         <div class="card" data-testid="foundation-badges">
           <h2 class="text-xl font-semibold mb-4 text-blue-600">🛫 Foundation</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in foundationBadges" :key="badge.id" 
                  class="badge-card" 
                  :class="{ 'earned': isEarned(badge.id), 'locked': !isEarned(badge.id) }"
@@ -56,7 +56,7 @@
         <!-- Skills Badges -->
         <div class="card" data-testid="skills-badges">
           <h2 class="text-xl font-semibold mb-4 text-green-600">⚡ Skills</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in skillsBadges" :key="badge.id" 
                  class="badge-card" 
                  :class="{ 'earned': isEarned(badge.id), 'locked': !isEarned(badge.id) }"
@@ -74,7 +74,7 @@
         <!-- Knowledge Badges -->
         <div class="card" data-testid="knowledge-badges">
           <h2 class="text-xl font-semibold mb-4 text-purple-600">📚 Knowledge</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in knowledgeBadges" :key="badge.id" 
                  class="badge-card" 
                  :class="{ 'earned': isEarned(badge.id), 'locked': !isEarned(badge.id) }"
@@ -92,7 +92,7 @@
         <!-- Special Badges -->
         <div class="card" data-testid="special-badges">
           <h2 class="text-xl font-semibold mb-4 text-orange-600">⭐ Special</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in specialBadges" :key="badge.id" 
                  class="badge-card" 
                  :class="{ 'earned': isEarned(badge.id), 'locked': !isEarned(badge.id) }"

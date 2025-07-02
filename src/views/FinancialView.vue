@@ -19,7 +19,7 @@
       </div>
 
       <!-- Financial Overview Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 content-wrapper">
         <!-- Total Spent -->
         <div class="card">
           <h3 class="text-lg font-semibold mb-2">Total Spent</h3>
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Expense Categories Summary -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="grid grid-auto-fill gap-4 mb-6">
             <div class="card text-center" data-testid="flight-training-costs">
               <div class="text-2xl mb-2">✈️</div>
               <div class="font-semibold">Flight Training</div>
