@@ -262,7 +262,7 @@
     </div>
 
     <!-- Complete Lesson Modal -->
-    <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false">
+    <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false; demonstratedSkills = {}">
       <div class="modal-content" @click.stop data-testid="complete-lesson-modal">
         <div class="p-6">
           <h3 class="text-xl font-bold mb-4">Complete {{ currentLessonInfo.name }}</h3>
@@ -295,6 +295,29 @@
               >
             </div>
             
+            <!-- Skill Demonstrations for Current Lesson -->
+            <div v-if="getLessonSkills(progress.currentLesson).length > 0" class="bg-blue-50 p-4 rounded-lg" data-testid="skill-demonstrations">
+              <h4 class="font-semibold text-blue-800 mb-3">🎯 Skills Demonstrated This Lesson</h4>
+              <div class="space-y-2">
+                <label 
+                  v-for="skill in getLessonSkills(progress.currentLesson)" 
+                  :key="skill.id"
+                  class="flex items-center gap-3 cursor-pointer"
+                >
+                  <input 
+                    type="checkbox" 
+                    v-model="demonstratedSkills[skill.id]"
+                    class="w-4 h-4 text-blue-600 rounded"
+                    :data-testid="`skill-${skill.id}`"
+                  >
+                  <div>
+                    <div class="font-medium text-blue-900">{{ skill.name }}</div>
+                    <div class="text-sm text-blue-700">{{ skill.description }}</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
             <div>
               <label class="form-label">Notes (optional)</label>
               <textarea 
@@ -310,7 +333,7 @@
             <button @click="completeLesson" class="btn btn-primary flex-1" data-testid="save-hours-button">
               ✅ Complete Lesson
             </button>
-            <button @click="showCompleteLesson = false" class="btn btn-secondary">
+            <button @click="showCompleteLesson = false; demonstratedSkills = {}" class="btn btn-secondary">
               Cancel
             </button>
           </div>
@@ -773,6 +796,7 @@ const progress = ref({
   achievements: [] as string[],
   totalSpent: 0,
   expenses: [] as any[],
+  demonstratedSkills: {} as { [skillId: string]: { lessonNumber: number; dateCompleted: string } },
   medicalCertificate: null as { type: string; expiryDate: string } | null,
   theoryExams: {
     airLaw: { attempts: [], passed: false },
@@ -800,6 +824,7 @@ const progressTooltipStyle = ref({})
 const lessonHours = ref('')
 const lessonCost = ref('')
 const lessonNotes = ref('')
+const demonstratedSkills = ref<{[key: string]: boolean}>({})
 const lastLessonHours = ref(0)
 const lastLessonCost = ref(0)
 
@@ -902,6 +927,17 @@ const completeLesson = () => {
   lastLessonHours.value = hours
   lastLessonCost.value = cost
   
+  // Save demonstrated skills
+  const currentDate = new Date().toISOString().split('T')[0]
+  Object.keys(demonstratedSkills.value).forEach(skillId => {
+    if (demonstratedSkills.value[skillId]) {
+      progress.value.demonstratedSkills[skillId] = {
+        lessonNumber: progress.value.currentLesson,
+        dateCompleted: currentDate
+      }
+    }
+  })
+  
   // Update progress
   progress.value.completedLessons.push(progress.value.currentLesson)
   progress.value.flightHours.dual += hours
@@ -927,14 +963,15 @@ const completeLesson = () => {
   // Save progress
   saveProgress()
   
-  // Show celebration
-  showCompleteLesson.value = false
-  showAchievementCelebration.value = true
-  
-  // Reset form
+  // Clear form
   lessonHours.value = ''
   lessonCost.value = ''
   lessonNotes.value = ''
+  demonstratedSkills.value = {}
+  
+  // Show celebration
+  showCompleteLesson.value = false
+  showAchievementCelebration.value = true
 }
 
 const checkAchievements = () => {
@@ -1210,6 +1247,100 @@ const getLessonCost = (lessonNum: number): string => {
   if (lessonNum <= 25) return '$400-$600 (intensive preparation)'
   if (lessonNum === 26) return '$500-$800 (examiner + aircraft)'
   return '$0 (license issue only)'
+}
+
+const getLessonSkills = (lessonNum: number) => {
+  const lessonSkills: { [key: number]: Array<{id: string, name: string, description: string}> } = {
+    1: [
+      { id: 'cockpit-familiarization', name: 'Cockpit Familiarization', description: 'Student can identify and operate basic flight controls' },
+      { id: 'basic-controls', name: 'Basic Control Understanding', description: 'Understands primary flight controls (elevator, aileron, rudder)' }
+    ],
+    2: [
+      { id: 'preflight-inspection', name: 'Pre-flight Inspection', description: 'Completed thorough aircraft inspection using checklist' },
+      { id: 'aircraft-systems', name: 'Aircraft Systems Knowledge', description: 'Demonstrates understanding of basic aircraft systems' }
+    ],
+    3: [
+      { id: 'taxi-procedures', name: 'Taxi Procedures', description: 'Safely taxi aircraft using proper techniques' },
+      { id: 'radio-communication', name: 'Radio Communication', description: 'Demonstrates proper radio phraseology for ground operations' }
+    ],
+    4: [
+      { id: 'attitude-control', name: 'Attitude Control', description: 'Maintains straight and level flight within standards' },
+      { id: 'trim-usage', name: 'Trim Usage', description: 'Properly uses elevator trim to maintain attitude' }
+    ],
+    5: [
+      { id: 'climbing-technique', name: 'Climbing Technique', description: 'Maintains proper climb attitude and airspeed' },
+      { id: 'descending-technique', name: 'Descending Technique', description: 'Controls descent rate and maintains airspeed' }
+    ],
+    6: [
+      { id: 'coordinated-turns', name: 'Coordinated Turns', description: 'Executes turns using proper rudder coordination' },
+      { id: 'bank-angle-control', name: 'Bank Angle Control', description: 'Maintains desired bank angles and roll-out timing' }
+    ],
+    7: [
+      { id: 'slow-flight-control', name: 'Slow Flight Control', description: 'Maintains control at minimum controllable airspeed' },
+      { id: 'configuration-changes', name: 'Configuration Changes', description: 'Properly configures aircraft for slow flight' }
+    ],
+    8: [
+      { id: 'stall-recognition', name: 'Stall Recognition', description: 'Recognizes approaching stall conditions and warning signs' },
+      { id: 'stall-recovery', name: 'Stall Recovery', description: 'Executes proper stall recovery technique promptly' },
+      { id: 'power-on-stall', name: 'Power-On Stall', description: 'Demonstrates departure stall and recovery' },
+      { id: 'power-off-stall', name: 'Power-Off Stall', description: 'Demonstrates approach-to-landing stall and recovery' }
+    ],
+    9: [
+      { id: 'emergency-descent', name: 'Emergency Descent', description: 'Executes emergency descent procedures' },
+      { id: 'engine-failure', name: 'Engine Failure Response', description: 'Responds appropriately to simulated engine failure' },
+      { id: 'forced-landing', name: 'Forced Landing Approach', description: 'Selects field and plans forced landing approach' }
+    ],
+    10: [
+      { id: 'circuit-pattern', name: 'Circuit Pattern', description: 'Flies standard circuit pattern with proper spacing' },
+      { id: 'traffic-awareness', name: 'Traffic Awareness', description: 'Maintains awareness of other aircraft in circuit' }
+    ],
+    11: [
+      { id: 'approach-control', name: 'Approach Control', description: 'Maintains stable approach airspeed and descent path' },
+      { id: 'landing-technique', name: 'Landing Technique', description: 'Executes safe landings with minimal instructor input' },
+      { id: 'go-around', name: 'Go-Around Procedure', description: 'Executes go-around when approach is unstable' }
+    ],
+    12: [
+      { id: 'solo-readiness', name: 'Solo Readiness Assessment', description: 'Demonstrates consistent safe flying without instructor assistance' },
+      { id: 'decision-making', name: 'Pilot Decision Making', description: 'Shows good judgment in flight planning and execution' }
+    ],
+    13: [
+      { id: 'solo-flight', name: 'First Solo Flight', description: 'Successfully completes first solo flight' },
+      { id: 'independent-operation', name: 'Independent Aircraft Operation', description: 'Operates aircraft safely without instructor present' }
+    ],
+    15: [
+      { id: 'map-reading', name: 'Map Reading', description: 'Navigates using topographical charts and landmarks' },
+      { id: 'pilotage', name: 'Pilotage Navigation', description: 'Uses visual landmarks for navigation' }
+    ],
+    16: [
+      { id: 'flight-planning', name: 'Flight Planning', description: 'Creates comprehensive cross-country flight plan' },
+      { id: 'weather-analysis', name: 'Weather Analysis', description: 'Interprets weather reports and makes go/no-go decisions' }
+    ],
+    17: [
+      { id: 'vor-navigation', name: 'VOR Navigation', description: 'Uses VOR stations for navigation and position fixing' },
+      { id: 'gps-navigation', name: 'GPS Navigation', description: 'Operates GPS equipment for navigation' }
+    ],
+    18: [
+      { id: 'cross-country-solo', name: 'Cross Country Solo', description: 'Completes solo cross-country flight successfully' },
+      { id: 'navigation-accuracy', name: 'Navigation Accuracy', description: 'Maintains course and arrives at checkpoints on time' }
+    ],
+    21: [
+      { id: 'instrument-scan', name: 'Instrument Scan', description: 'Develops proper instrument scan pattern' },
+      { id: 'attitude-instrument', name: 'Attitude Instrument Flying', description: 'Controls aircraft using attitude indicator' }
+    ],
+    22: [
+      { id: 'steep-turns', name: 'Steep Turns', description: 'Executes 45-degree banked turns within standards' },
+      { id: 'chandelles', name: 'Chandelles', description: 'Performs chandelle maneuvers with proper technique' }
+    ],
+    23: [
+      { id: 'unusual-attitude-recovery', name: 'Unusual Attitude Recovery', description: 'Recovers from unusual flight attitudes using instruments' },
+      { id: 'spatial-disorientation', name: 'Spatial Disorientation Recovery', description: 'Recognizes and recovers from spatial disorientation' }
+    ],
+    24: [
+      { id: 'flight-test-standards', name: 'Flight Test Standards', description: 'Performs all maneuvers to PPL test standards' },
+      { id: 'airmanship', name: 'Airmanship', description: 'Demonstrates professional airmanship throughout flight' }
+    ]
+  }
+  return lessonSkills[lessonNum] || []
 }
 
 const loadProgress = () => {
