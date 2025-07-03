@@ -62,7 +62,11 @@
               >
                 ✅ Complete This Lesson
               </button>
-              <button class="btn btn-secondary" data-testid="lesson-info-button">
+              <button 
+                @click="showLessonInfo = true"
+                class="btn btn-secondary" 
+                data-testid="lesson-info-button"
+              >
                 ℹ️ More Info
               </button>
             </div>
@@ -627,6 +631,101 @@
       </div>
     </div>
 
+    <!-- Lesson Info Modal -->
+    <div v-if="showLessonInfo" class="modal-overlay" @click="showLessonInfo = false">
+      <div class="modal-content max-w-2xl" @click.stop data-testid="lesson-info-modal">
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="text-6xl">{{ currentLessonInfo.icon }}</div>
+            <div>
+              <h3 class="text-2xl font-bold">Lesson {{ progress.currentLesson }}</h3>
+              <h4 class="text-xl text-gray-600">{{ currentLessonInfo.name }}</h4>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <!-- Lesson Description -->
+            <div class="bg-blue-50 p-4 rounded-lg" data-testid="lesson-description">
+              <h5 class="font-semibold text-blue-800 mb-2">📖 What You'll Learn</h5>
+              <p class="text-blue-700">{{ currentLessonInfo.description }}</p>
+            </div>
+            
+            <!-- Preparation Required -->
+            <div class="bg-green-50 p-4 rounded-lg" data-testid="lesson-preparation">
+              <h5 class="font-semibold text-green-800 mb-2">📋 Preparation Required</h5>
+              <p class="text-green-700">{{ currentLessonInfo.preparation }}</p>
+            </div>
+            
+            <!-- Training Phase Info -->
+            <div class="bg-purple-50 p-4 rounded-lg" data-testid="training-phase-info">
+              <h5 class="font-semibold text-purple-800 mb-2">🎯 Training Phase</h5>
+              <div class="text-purple-700">
+                <div v-if="progress.currentLesson <= 5">
+                  <strong>Foundation Phase (Lessons 1-5)</strong>
+                  <p class="text-sm mt-1">Basic controls and aircraft familiarization</p>
+                </div>
+                <div v-else-if="progress.currentLesson <= 12">
+                  <strong>Circuit Phase (Lessons 6-12)</strong>
+                  <p class="text-sm mt-1">Pattern work and landing practice leading to solo</p>
+                </div>
+                <div v-else-if="progress.currentLesson <= 20">
+                  <strong>Navigation Phase (Lessons 13-20)</strong>
+                  <p class="text-sm mt-1">Cross-country flying and navigation skills</p>
+                </div>
+                <div v-else-if="progress.currentLesson <= 25">
+                  <strong>Advanced Phase (Lessons 21-25)</strong>
+                  <p class="text-sm mt-1">Advanced maneuvers and specialized training</p>
+                </div>
+                <div v-else>
+                  <strong>Certification Phase (Lessons 26-27)</strong>
+                  <p class="text-sm mt-1">Final test preparation and checkride</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Prerequisites -->
+            <div v-if="getPrerequisites(progress.currentLesson).length > 0" class="bg-orange-50 p-4 rounded-lg" data-testid="lesson-prerequisites">
+              <h5 class="font-semibold text-orange-800 mb-2">⚠️ Prerequisites</h5>
+              <ul class="text-orange-700 text-sm space-y-1">
+                <li v-for="prereq in getPrerequisites(progress.currentLesson)" :key="prereq">
+                  • {{ prereq }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Estimated Duration & Cost -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-4 rounded-lg" data-testid="lesson-duration">
+                <h5 class="font-semibold text-gray-800 mb-2">⏱️ Typical Duration</h5>
+                <p class="text-gray-700 text-sm">
+                  {{ getLessonDuration(progress.currentLesson) }}
+                </p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-lg" data-testid="lesson-cost">
+                <h5 class="font-semibold text-gray-800 mb-2">💰 Estimated Cost</h5>
+                <p class="text-gray-700 text-sm">
+                  {{ getLessonCost(progress.currentLesson) }}
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showLessonInfo = false" class="btn btn-secondary">
+              Close
+            </button>
+            <button 
+              @click="showLessonInfo = false; showCompleteLesson = true" 
+              class="btn btn-primary flex-1"
+              data-testid="start-lesson-button"
+            >
+              🚀 Start This Lesson
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Progress Tooltip -->
     <div v-if="progressTooltipVisible" 
          class="fixed z-50 bg-blue-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
@@ -690,6 +789,7 @@ const showAchievementCelebration = ref(false)
 const showContextualHelp = ref(false)
 const showEducationCenter = ref(false)
 const showRequirementModal = ref(false)
+const showLessonInfo = ref(false)
 const newAchievements = ref<string[]>([])
 
 // Tooltip state
@@ -705,12 +805,33 @@ const lastLessonCost = ref(0)
 
 // Lesson definitions
 const lessons = [
-  { id: 1, name: 'Introductory Flight', icon: '🛫', description: 'Get familiar with the aircraft and basic controls', preparation: 'Book your first lesson with a flight instructor' },
-  { id: 2, name: 'Aircraft Familiarization', icon: '✈️', description: 'Learn aircraft systems and pre-flight inspection', preparation: 'Review aircraft manual and practice pre-flight checklist' },
-  { id: 3, name: 'Taxi and Ground Operations', icon: '🛞', description: 'Master taxiing, radio communications, and ground procedures', preparation: 'Study airport diagrams and radio phraseology' },
-  { id: 4, name: 'Straight and Level Flight', icon: '📏', description: 'Maintain altitude, heading, and speed in cruise flight', preparation: 'Practice attitude flying and instrument scanning' },
-  { id: 5, name: 'Climbing and Descending', icon: '📈', description: 'Control aircraft in climbs and descents', preparation: 'Understand power and attitude relationships' },
-  // Add more lessons as needed
+  { id: 1, name: 'Introductory Flight', icon: '🛫', description: 'Get familiar with the aircraft and basic controls', preparation: 'Book your first lesson with a flight instructor and review basic aviation theory' },
+  { id: 2, name: 'Aircraft Familiarization', icon: '✈️', description: 'Learn aircraft systems and pre-flight inspection', preparation: 'Review aircraft manual and practice pre-flight checklist items' },
+  { id: 3, name: 'Taxi Operations', icon: '🛞', description: 'Master taxiing, radio communications, and ground procedures', preparation: 'Study airport diagrams and radio phraseology for your training airport' },
+  { id: 4, name: 'Straight & Level', icon: '📏', description: 'Maintain altitude, heading, and speed in cruise flight', preparation: 'Practice attitude flying and instrument scanning techniques' },
+  { id: 5, name: 'Climbing & Descending', icon: '📈', description: 'Control aircraft in climbs and descents', preparation: 'Understand power and attitude relationships for different flight phases' },
+  { id: 6, name: 'Turns', icon: '🔄', description: 'Execute coordinated turns and maintain orientation', preparation: 'Study coordinated flight and practice rudder coordination exercises' },
+  { id: 7, name: 'Slow Flight', icon: '🐌', description: 'Fly at minimum controllable airspeeds safely', preparation: 'Review stall warning signs and slow flight configuration procedures' },
+  { id: 8, name: 'Stalls', icon: '⚠️', description: 'Recognize, enter, and recover from stalls', preparation: 'Study stall theory and practice stall recognition exercises' },
+  { id: 9, name: 'Emergency Procedures', icon: '🚨', description: 'Handle in-flight emergencies and system failures', preparation: 'Memorize emergency checklists and practice forced landing procedures' },
+  { id: 10, name: 'Circuit Pattern', icon: '🔄', description: 'Fly the airport traffic pattern safely and efficiently', preparation: 'Study circuit procedures and practice radio calls for pattern work' },
+  { id: 11, name: 'Landing Practice', icon: '🛬', description: 'Master the approach and landing phase', preparation: 'Practice approach configuration and landing sight picture visualization' },
+  { id: 12, name: 'Solo Preparation', icon: '🎯', description: 'Final preparation for first solo flight', preparation: 'Review all procedures and demonstrate consistent safe flying skills' },
+  { id: 13, name: 'First Solo', icon: '🦅', description: 'Your first solo flight - a major milestone!', preparation: 'Get instructor endorsement and mentally prepare for solo flight' },
+  { id: 14, name: 'Solo Practice', icon: '🔁', description: 'Build confidence with additional solo flights', preparation: 'Practice circuits independently and maintain proficiency standards' },
+  { id: 15, name: 'Navigation Basics', icon: '🧭', description: 'Learn map reading and basic navigation principles', preparation: 'Study topographical charts and practice pilotage techniques' },
+  { id: 16, name: 'Cross Country Planning', icon: '🗺️', description: 'Plan cross-country flights with weather and performance', preparation: 'Learn flight planning software and weather interpretation' },
+  { id: 17, name: 'Radio Navigation', icon: '📻', description: 'Use VOR, NDB and GPS navigation systems', preparation: 'Study radio navigation principles and practice with navigation aids' },
+  { id: 18, name: 'Cross Country Solo', icon: '🌄', description: 'Complete your first solo cross-country flight', preparation: 'Plan a solo cross-country flight and get instructor approval' },
+  { id: 19, name: 'Advanced Navigation', icon: '🎯', description: 'Complex navigation scenarios and lost procedures', preparation: 'Practice diversion procedures and advanced pilotage techniques' },
+  { id: 20, name: 'Night Flying', icon: '🌙', description: 'Experience flying in darkness with special procedures', preparation: 'Study night flying regulations and practice night vision techniques' },
+  { id: 21, name: 'Instrument Flying', icon: '📊', description: 'Basic instrument flying skills and attitude reference', preparation: 'Study instrument flying principles and practice scan patterns' },
+  { id: 22, name: 'Advanced Maneuvers', icon: '🎪', description: 'Steep turns, chandelles, and advanced flight maneuvers', preparation: 'Review commercial maneuver standards and practice precision flying' },
+  { id: 23, name: 'Unusual Attitudes', icon: '🌪️', description: 'Recover from unusual flight attitudes safely', preparation: 'Study unusual attitude recovery procedures and spatial disorientation' },
+  { id: 24, name: 'Flight Test Prep', icon: '📚', description: 'Intensive preparation for PPL flight test', preparation: 'Review all PPL standards and practice flight test scenarios' },
+  { id: 25, name: 'Mock Flight Test', icon: '🎭', description: 'Practice flight test with instructor evaluation', preparation: 'Complete practice flight test and address any weak areas' },
+  { id: 26, name: 'Final Flight Test', icon: '🏆', description: 'Official PPL flight test with CAA examiner', preparation: 'Schedule flight test appointment and ensure all requirements met' },
+  { id: 27, name: 'License Issue', icon: '👨‍✈️', description: 'Congratulations! Receive your PPL license', preparation: 'Complete any remaining paperwork and celebrate your achievement!' }
 ]
 
 // Computed properties
@@ -1050,6 +1171,45 @@ const showProgressTooltip = (event: MouseEvent) => {
 
 const hideProgressTooltip = () => {
   progressTooltipVisible.value = false
+}
+
+// Lesson info helper functions
+const getPrerequisites = (lessonNum: number): string[] => {
+  const prerequisites: { [key: number]: string[] } = {
+    12: ['Complete lessons 1-11', 'Pass all required theory exams'],
+    13: ['Medical certificate', 'Student pilot permit', 'Solo endorsement from instructor'],
+    15: ['Complete first solo flight'],
+    18: ['Complete navigation lessons 15-17', 'Pass navigation theory exam'],
+    20: ['Complete 15+ hours solo time', 'Night flying endorsement'],
+    21: ['Complete cross-country solo requirements'],
+    24: ['Complete all training lessons 1-23', 'Meet all PPL hour requirements'],
+    25: ['Pass final theory exam', 'Instructor recommendation'],
+    26: ['Complete mock flight test', 'CAA flight test booking'],
+    27: ['Pass PPL flight test']
+  }
+  return prerequisites[lessonNum] || []
+}
+
+const getLessonDuration = (lessonNum: number): string => {
+  if (lessonNum <= 12) return '1.0-1.5 hours dual instruction'
+  if (lessonNum === 13) return '0.5-1.0 hours solo flight'
+  if (lessonNum <= 17) return '1.5-2.0 hours dual instruction'
+  if (lessonNum === 18) return '1.5-2.5 hours solo cross-country'
+  if (lessonNum <= 23) return '1.0-2.0 hours dual instruction'
+  if (lessonNum <= 25) return '2.0-3.0 hours intensive preparation'
+  if (lessonNum === 26) return '2.0-3.0 hours flight test'
+  return '30 minutes administrative'
+}
+
+const getLessonCost = (lessonNum: number): string => {
+  if (lessonNum <= 12) return '$280-$420 (aircraft + instructor)'
+  if (lessonNum === 13) return '$140-$200 (aircraft only)'
+  if (lessonNum <= 17) return '$350-$500 (longer dual lessons)'
+  if (lessonNum === 18) return '$200-$350 (solo cross-country)'
+  if (lessonNum <= 23) return '$280-$450 (specialized training)'
+  if (lessonNum <= 25) return '$400-$600 (intensive preparation)'
+  if (lessonNum === 26) return '$500-$800 (examiner + aircraft)'
+  return '$0 (license issue only)'
 }
 
 const loadProgress = () => {
