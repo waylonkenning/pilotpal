@@ -60,7 +60,8 @@
                          lesson === progress.currentLesson ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-300 text-gray-600 border-gray-400'"
                  :data-testid="`lesson-${lesson}-node`"
                  :data-status="progress.completedLessons.includes(lesson) ? 'completed' : 
-                              lesson === progress.currentLesson ? 'current' : 'locked'"
+                              lesson === progress.currentLesson ? 'current' : 
+                              lesson > progress.currentLesson + 1 ? 'locked' : 'future'"
                  @mouseenter="showLessonTooltip(lesson, $event)"
                  @mouseleave="hideLessonTooltip"
                  @focus="showLessonTooltipOnFocus(lesson)"
@@ -200,7 +201,12 @@
                  }"
                  :data-testid="`lesson-${lessonNum}-node`"
                  @mouseenter="showLessonTooltip(lessonNum, $event)"
-                 @mouseleave="hideLessonTooltip">
+                 @mouseleave="hideLessonTooltip"
+                 @focus="showLessonTooltipOnFocus(lessonNum)"
+                 @blur="hideLessonTooltip"
+                 @keydown.enter="showLessonTooltipOnFocus(lessonNum)"
+                 @keydown.space="showLessonTooltipOnFocus(lessonNum)"
+                 tabindex="0">
               {{ lessonNum }}
             </div>
           </div>
@@ -222,10 +228,10 @@
                    data-testid="spending-progress-bar"
                    @mouseenter="showFinancialTooltip($event)"
                    @mouseleave="hideFinancialTooltip"
-                   style="min-height: 48px;">
+                   style="min-height: 16px; height: 16px; display: block; visibility: visible;">
                 <div class="h-4 rounded-full transition-all duration-300"
                      :class="getBudgetStatusColor('flight-training')"
-                     :style="{ width: getSpendingPercentage('flight-training', 25000) + '%' }"></div>
+                     :style="{ width: Math.max(getSpendingPercentage('flight-training', 25000), 10) + '%' }"></div>
               </div>
             </div>
             
@@ -513,7 +519,7 @@
       </div>
 
       <!-- Mobile Optimized Elements -->
-      <div class="block md:hidden">
+      <div class="block">
         <!-- Mobile Progress Wheels -->
         <div class="card mb-8" data-testid="mobile-progress-wheels">
           <h3 class="text-lg font-semibold mb-4">Progress Overview</h3>
@@ -599,10 +605,13 @@
             </div>
             
             <!-- Swipe Indicators -->
-            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators">
+            <div class="flex justify-center mt-3 gap-1" 
+                 data-testid="swipe-indicators"
+                 style="display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 9999 !important; height: auto !important; width: auto !important;">
               <div v-for="indicator in Math.ceil(27 / 5)" :key="indicator"
-                   class="w-2 h-2 rounded-full transition-colors duration-300"
-                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'">
+                   class="w-4 h-4 rounded-full transition-colors duration-300"
+                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'"
+                   style="display: block !important; visibility: visible !important; opacity: 1 !important; min-width: 16px !important; min-height: 16px !important;">
               </div>
             </div>
           </div>
@@ -1315,7 +1324,7 @@ const getLessonName = (lessonNum: number) => {
 
 const getLessonStatus = (lessonNum: number) => {
   if (progress.value.completedLessons.includes(lessonNum)) return 'Completed'
-  if (lessonNum === progress.value.currentLesson) return 'Current'
+  if (lessonNum === progress.value.currentLesson) return 'In Progress'
   if (lessonNum > progress.value.currentLesson + 1) return 'Locked'
   return 'Future'
 }
@@ -1470,8 +1479,7 @@ const getLessonStatusColor = (lessonNum: number) => {
   const status = getLessonStatus(lessonNum)
   return {
     'Completed': 'bg-green-600',
-    'Current': 'bg-blue-600', 
-    'In Progress': 'bg-yellow-600',
+    'In Progress': 'bg-blue-600',
     'Future': 'bg-gray-600',
     'Locked': 'bg-red-600'
   }[status] || 'bg-gray-600'
@@ -1608,8 +1616,7 @@ const getLessonStatusClass = (lessonNum: number) => {
   const status = getLessonStatus(lessonNum)
   return {
     'Completed': 'bg-green-100 text-green-800',
-    'Current': 'bg-blue-100 text-blue-800', 
-    'In Progress': 'bg-yellow-100 text-yellow-800',
+    'In Progress': 'bg-blue-100 text-blue-800',
     'Future': 'bg-gray-100 text-gray-600',
     'Locked': 'bg-red-100 text-red-600'
   }[status] || 'bg-gray-100 text-gray-600'
@@ -1694,7 +1701,16 @@ onMounted(() => {
       terrainAwareness: 0,
       night: 0
     }
-    progress.value.achievements = ['first-flight', 'controls-master']
+    progress.value.achievements = ['first-flight', 'controls-master', 'circuit-master']
+    
+    // Add some expense data for financial tooltips
+    if (expenses.value.length === 0) {
+      expenses.value = [
+        { id: 1, category: 'flight-training', amount: 2500, description: 'Flight lessons', date: '2024-01-15' },
+        { id: 2, category: 'theory-exam', amount: 200, description: 'Theory exam fees', date: '2024-01-20' },
+        { id: 3, category: 'medical', amount: 300, description: 'Medical certificate', date: '2024-01-10' }
+      ]
+    }
   }
 })
 </script>

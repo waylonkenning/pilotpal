@@ -163,8 +163,8 @@ test.describe('Lesson Node Hover Tooltips', () => {
   })
 
   test('should show theory exam progress in tooltips', async ({ page }) => {
-    // Navigate to theory exam view
-    await page.goto('/theory')
+    // Navigate to journey view where theory progress card is located
+    await page.goto('/journey')
     
     // Hover over theory exam progress element
     const theoryProgressCard = page.locator('[data-testid="theory-progress-card"]').first()
@@ -195,8 +195,8 @@ test.describe('Lesson Node Hover Tooltips', () => {
   })
 
   test('should show achievement badge tooltips', async ({ page }) => {
-    // Navigate to achievements view
-    await page.goto('/achievements')
+    // Navigate to journey view where achievement badges are located
+    await page.goto('/journey')
     
     // Hover over achievement badge
     const achievementBadge = page.locator('[data-testid*="badge"]').first()
@@ -212,8 +212,8 @@ test.describe('Lesson Node Hover Tooltips', () => {
   })
 
   test('should show financial progress tooltips', async ({ page }) => {
-    // Navigate to financial view
-    await page.goto('/finances')
+    // Navigate to journey view where spending progress bar is located
+    await page.goto('/journey')
     
     // Hover over spending progress bar
     const spendingProgress = page.locator('[data-testid="spending-progress-bar"]').first()
