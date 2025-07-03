@@ -173,6 +173,62 @@
           </div>
         </div>
 
+        <!-- Medical Certificate Warnings -->
+        <div v-if="hasMedicalWarnings" class="card mb-6" data-testid="medical-dashboard-warning">
+          <h3 class="text-lg font-semibold mb-4">🏥 Medical Certificate Alerts</h3>
+          <div class="space-y-3">
+            <div v-if="getMedicalExpiryStatus() === 'Expired'" 
+                 class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+              <div>
+                <div class="font-semibold text-red-800">Medical Certificate Expired</div>
+                <div class="text-sm text-red-600">Cannot exercise pilot privileges until renewed</div>
+              </div>
+              <router-link to="/requirements" class="btn btn-primary btn-sm">
+                Renew Now
+              </router-link>
+            </div>
+            
+            <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" 
+                 class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+              <div>
+                <div class="font-semibold text-orange-800">Medical Certificate Expiring Soon</div>
+                <div class="text-sm text-orange-600">{{ getMedicalTimeRemaining() }}</div>
+              </div>
+              <router-link to="/requirements" class="btn btn-secondary btn-sm">
+                View Details
+              </router-link>
+            </div>
+          </div>
+        </div>
+
+        <!-- BFR Currency Warnings -->
+        <div v-if="hasBfrWarnings" class="card mb-6" data-testid="bfr-dashboard-warning">
+          <h3 class="text-lg font-semibold mb-4">🛩️ BFR Currency Alerts</h3>
+          <div class="space-y-3">
+            <div v-if="getBfrStatus() === 'Overdue'" 
+                 class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+              <div>
+                <div class="font-semibold text-red-800">BFR Overdue</div>
+                <div class="text-sm text-red-600">Cannot exercise pilot privileges until BFR completed</div>
+              </div>
+              <router-link to="/requirements" class="btn btn-primary btn-sm">
+                Schedule BFR
+              </router-link>
+            </div>
+            
+            <div v-if="getBfrStatus() === 'Expiring Soon'" 
+                 class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+              <div>
+                <div class="font-semibold text-orange-800">BFR Expiring Soon</div>
+                <div class="text-sm text-orange-600">{{ getBfrTimeRemaining() }}</div>
+              </div>
+              <router-link to="/requirements" class="btn btn-secondary btn-sm">
+                View Details
+              </router-link>
+            </div>
+          </div>
+        </div>
+
         <!-- Quick Navigation -->
         <div class="grid grid-auto-fit gap-4">
           <router-link to="/journey" class="btn btn-secondary text-center" data-testid="journey-tab">
@@ -859,6 +915,90 @@ const closeCelebration = () => {
   showAchievementCelebration.value = false
   newAchievements.value = []
 }
+
+// Medical Certificate Warning Methods
+const getMedicalExpiryStatus = () => {
+  if (!progress.value.medicalCertificate) return 'No Medical'
+  
+  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const now = new Date()
+  const timeDiff = expiryDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) return 'Expired'
+  if (daysDiff <= 30) return 'Expiring Soon'
+  if (daysDiff <= 90) return 'Renewal Due'
+  return 'Current'
+}
+
+const getMedicalTimeRemaining = () => {
+  if (!progress.value.medicalCertificate) return ''
+  
+  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const now = new Date()
+  const timeDiff = expiryDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) {
+    return `Expired ${Math.abs(daysDiff)} days ago`
+  } else if (daysDiff === 0) {
+    return 'Expires today'
+  } else if (daysDiff === 1) {
+    return '1 day remaining'
+  } else if (daysDiff <= 30) {
+    return `${daysDiff} days remaining`
+  } else {
+    const monthsRemaining = Math.floor(daysDiff / 30)
+    return `${monthsRemaining} months remaining`
+  }
+}
+
+// BFR Warning Methods
+const getBfrStatus = () => {
+  const bfrRecords = JSON.parse(localStorage.getItem('ppl-quest-bfr-records') || '[]')
+  if (!bfrRecords.length) return 'No BFR Recorded'
+  
+  const latestBfr = bfrRecords.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
+  const bfrDate = new Date(latestBfr.date)
+  const now = new Date()
+  const monthsDiff = (now.getFullYear() - bfrDate.getFullYear()) * 12 + (now.getMonth() - bfrDate.getMonth())
+  
+  if (monthsDiff >= 24) return 'Overdue'
+  if (monthsDiff >= 22) return 'Expiring Soon'
+  return 'Current'
+}
+
+const getBfrTimeRemaining = () => {
+  const bfrRecords = JSON.parse(localStorage.getItem('ppl-quest-bfr-records') || '[]')
+  if (!bfrRecords.length) return ''
+  
+  const latestBfr = bfrRecords.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
+  const bfrDate = new Date(latestBfr.date)
+  const dueDate = new Date(bfrDate)
+  dueDate.setMonth(dueDate.getMonth() + 24)
+  
+  const now = new Date()
+  const timeDiff = dueDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) {
+    return `${Math.abs(daysDiff)} days overdue`
+  } else if (daysDiff === 0) {
+    return 'Due today'
+  } else {
+    return `${daysDiff} days remaining`
+  }
+}
+
+const hasMedicalWarnings = computed(() => {
+  const status = getMedicalExpiryStatus()
+  return status === 'Expired' || status === 'Expiring Soon'
+})
+
+const hasBfrWarnings = computed(() => {
+  const status = getBfrStatus()
+  return status === 'Overdue' || status === 'Expiring Soon'
+})
 
 const saveProgress = () => {
   localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))

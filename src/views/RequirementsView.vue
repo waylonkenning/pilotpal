@@ -36,21 +36,93 @@
         </div>
 
         <div v-else class="space-y-4">
-          <div class="bg-green-50 p-4 rounded-lg border border-green-200 completed" data-testid="medical-cert-status">
-            <div class="flex items-center gap-3">
-              <div class="text-2xl">✅</div>
-              <div>
-                <div class="font-semibold text-green-800">{{ progress.medicalCertificate.type === 'class2' ? 'Class 2 Medical Certificate' : 'DL9 Driver License Medical' }}</div>
-                <div class="text-green-700" data-testid="medical-expiry">
-                  Valid until {{ formatDate(progress.medicalCertificate.expiryDate) }}
+          <!-- Medical Certificate Status with Expiry Warnings -->
+          <div class="p-4 rounded-lg border" :class="getMedicalStatusClass()" data-testid="medical-cert-status">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="text-2xl">{{ getMedicalStatusIcon() }}</div>
+                <div>
+                  <div class="font-semibold" :class="getMedicalStatusTextClass()">
+                    {{ progress.medicalCertificate.type === 'class2' ? 'Class 2 Medical Certificate' : 'DL9 Driver License Medical' }}
+                  </div>
+                  <div class="text-sm text-gray-600" data-testid="medical-expiry">
+                    Valid until {{ formatDate(progress.medicalCertificate.expiryDate) }}
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-600">Status:</div>
+                <div class="font-semibold" :class="getMedicalStatusTextClass()" data-testid="medical-expiry-status">
+                  {{ getMedicalExpiryStatus() }}
                 </div>
               </div>
             </div>
+            
+            <div class="text-sm" :class="getMedicalStatusTextClass()" data-testid="medical-days-remaining">
+              {{ getMedicalTimeRemaining() }}
+            </div>
+          </div>
+
+          <!-- Medical Expiry Warnings -->
+          <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="medical-expiry-warning">
+            <div class="font-semibold text-orange-800 mb-2">⚠️ Medical Certificate Expiring Soon</div>
+            <div class="text-orange-700 mb-3">Your medical certificate expires soon. Schedule a renewal to maintain flying privileges.</div>
+            <div class="flex gap-3">
+              <button @click="showMedicalRenewalInfo = true" class="btn btn-secondary btn-sm" data-testid="medical-renewal-guidance">
+                📋 Renewal Guide
+              </button>
+              <button @click="showFindExaminer = true" class="btn btn-secondary btn-sm" data-testid="find-medical-examiner">
+                🔍 Find CAME
+              </button>
+            </div>
+          </div>
+
+          <div v-if="getMedicalExpiryStatus() === 'Expired'" class="bg-red-50 p-4 rounded-lg border border-red-200" data-testid="medical-overdue-warning">
+            <div class="font-semibold text-red-800 mb-2">🚫 Medical Certificate Expired</div>
+            <div class="text-red-700 mb-2" data-testid="medical-flight-restriction">
+              Your medical certificate has expired. You cannot exercise pilot privileges until renewed.
+            </div>
+            <button @click="showMedicalForm = true" class="btn btn-primary btn-sm" data-testid="renew-medical-cert">
+              🏥 Renew Medical Certificate
+            </button>
+          </div>
+
+          <div v-if="getMedicalExpiryStatus() === 'Renewal Due'" class="bg-yellow-50 p-4 rounded-lg border border-yellow-200" data-testid="medical-renewal-reminder">
+            <div class="font-semibold text-yellow-800 mb-2">📅 Medical Renewal Recommended</div>
+            <div class="text-yellow-700 mb-3">Consider scheduling your medical renewal now to avoid any interruption to your flying.</div>
+            <div class="text-sm text-yellow-600" data-testid="medical-renewal-cost">
+              Estimated renewal cost: {{ progress.medicalCertificate.type === 'class2' ? '$420-$1070' : '$0 (if driver license valid)' }}
+            </div>
           </div>
           
-          <div v-if="progress.medicalCertificate" class="bg-blue-50 p-4 rounded-lg" data-testid="solo-flight-unlocked">
+          <div v-if="progress.medicalCertificate && !isExpired()" class="bg-blue-50 p-4 rounded-lg" data-testid="solo-flight-unlocked">
             <div class="font-semibold text-blue-800 mb-2">🦅 Solo Flight Unlocked!</div>
             <div class="text-blue-700">You can now progress to solo flight lessons with instructor endorsement.</div>
+          </div>
+          
+          <!-- Medical Certificate Management -->
+          <div class="flex gap-3 mt-4">
+            <button 
+              @click="editMedicalCert"
+              class="btn btn-secondary flex-1"
+              data-testid="edit-medical-cert"
+            >
+              📝 Update Medical
+            </button>
+            <button 
+              @click="showMedicalRenewalInfo = true"
+              class="btn btn-secondary flex-1"
+              data-testid="view-renewal-info"
+            >
+              ℹ️ Renewal Info
+            </button>
+          </div>
+
+          <!-- Edit Medical Certificate -->
+          <div class="mt-4">
+            <button @click="editMedicalCert" class="btn btn-secondary" data-testid="edit-medical-cert">
+              ✏️ Update Medical Certificate
+            </button>
           </div>
         </div>
       </div>
@@ -138,6 +210,32 @@
             
             <div v-else class="text-xs text-green-600">
               Passed ✓
+            </div>
+          </div>
+        </div>
+        
+        <!-- Medical Certificate History -->
+        <div v-if="medicalHistory.length > 0" class="mt-6" data-testid="medical-cert-history">
+          <h3 class="text-lg font-semibold mb-3">Medical Certificate History</h3>
+          <div class="text-sm text-gray-600 mb-3" data-testid="medical-renewals-count">
+            Total renewals: {{ medicalHistory.length }}
+          </div>
+          <div class="space-y-3">
+            <div 
+              v-for="medical in medicalHistory" 
+              :key="medical.id"
+              class="p-3 bg-gray-50 rounded-lg border text-sm"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">{{ medical.type === 'class2' ? 'Class 2 Medical' : 'DL9 Medical' }}</div>
+                  <div class="text-gray-600">{{ formatDate(medical.issueDate) }} - {{ formatDate(medical.expiryDate) }}</div>
+                  <div class="text-gray-500">Cost: ${{ medical.cost || 'N/A' }}</div>
+                </div>
+                <div class="text-xs text-gray-500">
+                  {{ medical.isActive ? 'Current' : 'Expired' }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -379,7 +477,7 @@
           <div class="space-y-4">
             <div>
               <label class="form-label">Certificate Type</label>
-              <select v-model="medicalForm.type" class="form-input">
+              <select v-model="medicalForm.type" class="form-input" data-testid="medical-cert-type">
                 <option value="class2">Class 2 Medical Certificate</option>
                 <option value="dl9" data-testid="select-dl9-option">DL9 Driver License Medical</option>
               </select>
@@ -402,7 +500,11 @@
                 type="date" 
                 class="form-input"
                 data-testid="medical-expiry-date"
+                :class="{ 'border-red-500': medicalErrors.expiryDate }"
               >
+              <div v-if="medicalErrors.expiryDate" class="text-red-600 text-sm mt-1" data-testid="medical-date-error">
+                {{ medicalErrors.expiryDate }}
+              </div>
             </div>
             
             <div>
@@ -701,6 +803,105 @@
         </div>
       </div>
     </div>
+
+    <!-- Medical Renewal Information Modal -->
+    <div v-if="showMedicalRenewalInfo" class="modal-overlay" @click="showMedicalRenewalInfo = false">
+      <div class="modal-content" @click.stop data-testid="medical-renewal-info-modal">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">🏥 Medical Certificate Renewal Guide</h3>
+          
+          <div class="space-y-4">
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h4 class="font-semibold text-blue-800 mb-2">📅 When to Renew</h4>
+              <div class="text-blue-700 text-sm space-y-1">
+                <p>• Class 2 Medical: Valid for 60 months (until age 40), then 24 months</p>
+                <p>• DL9 Medical: Valid while driver license is current</p>
+                <p>• Renew 1-3 months before expiry to avoid grounding</p>
+              </div>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h4 class="font-semibold text-green-800 mb-2">🔍 What You'll Need</h4>
+              <div class="text-green-700 text-sm space-y-1">
+                <p>• Current medical certificate</p>
+                <p>• Photo identification</p>
+                <p>• Medical history since last examination</p>
+                <p>• List of current medications</p>
+                <p>• Any specialist reports if required</p>
+              </div>
+            </div>
+            
+            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="medical-renewal-cost">
+              <h4 class="font-semibold text-orange-800 mb-2">💰 Renewal Costs</h4>
+              <div class="text-orange-700 text-sm space-y-1">
+                <p><strong>Class 2 Medical:</strong> $420-$1070 (varies by location and tests)</p>
+                <p><strong>DL9 Medical:</strong> $0 (if driver license remains valid)</p>
+                <p><strong>Additional tests:</strong> $100-$300 if required (ECG, blood work)</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showMedicalRenewalInfo = false" class="btn btn-primary flex-1">
+              Got it
+            </button>
+            <button @click="showFindExaminer = true" class="btn btn-secondary">
+              Find CAME
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Find Medical Examiner Modal -->
+    <div v-if="showFindExaminer" class="modal-overlay" @click="showFindExaminer = false">
+      <div class="modal-content" @click.stop data-testid="came-information">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-4">🔍 Find a Civil Aviation Medical Examiner (CAME)</h3>
+          
+          <div class="space-y-4">
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h4 class="font-semibold text-blue-800 mb-2">📍 Major Centers</h4>
+              <div class="text-blue-700 text-sm space-y-2">
+                <div><strong>Auckland:</strong> Multiple CAMEs available - Auckland Airport area</div>
+                <div><strong>Wellington:</strong> 2-3 CAMEs - Wellington and Lower Hutt</div>
+                <div><strong>Christchurch:</strong> 2-3 CAMEs - Christchurch and Timaru</div>
+                <div><strong>Hamilton:</strong> 1-2 CAMEs - Hamilton and Tauranga region</div>
+              </div>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h4 class="font-semibold text-green-800 mb-2">📞 How to Find CAMEs</h4>
+              <div class="text-green-700 text-sm space-y-1">
+                <p>1. <strong>CAA Website:</strong> aviation.govt.nz - Medical section</p>
+                <p>2. <strong>Call CAA:</strong> 0508 4 FLY NZ (0508 435 969)</p>
+                <p>3. <strong>Flying clubs:</strong> Local clubs have CAME contacts</p>
+                <p>4. <strong>Flight schools:</strong> Training organizations maintain lists</p>
+              </div>
+            </div>
+            
+            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+              <h4 class="font-semibold text-orange-800 mb-2">⏰ Booking Tips</h4>
+              <div class="text-orange-700 text-sm space-y-1">
+                <p>• Book 2-4 weeks in advance</p>
+                <p>• Morning appointments often preferred</p>
+                <p>• Bring all required documentation</p>
+                <p>• Fast for blood tests if required</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showFindExaminer = false" class="btn btn-primary flex-1">
+              Close
+            </button>
+            <button @click="showMedicalForm = true" class="btn btn-secondary">
+              Book Renewal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -751,6 +952,8 @@ const showMedicalInfo = ref(false)
 const showMedicalForm = ref(false)
 const showFppInfo = ref(false)
 const showFppForm = ref(false)
+const showMedicalRenewalInfo = ref(false)
+const showFindExaminer = ref(false)
 
 // Form data
 const medicalForm = ref({
@@ -759,6 +962,12 @@ const medicalForm = ref({
   expiryDate: '',
   cost: ''
 })
+
+const medicalErrors = ref({
+  expiryDate: ''
+})
+
+const medicalHistory = ref<any[]>([])
 
 const fppForm = ref({
   declarationType: '24FPP',
@@ -781,6 +990,91 @@ const bfrErrors = ref({
   instructor: '',
   location: ''
 })
+
+// Medical Expiry Methods
+const getMedicalExpiryStatus = () => {
+  if (!progress.value.medicalCertificate) return 'No Medical'
+  
+  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const now = new Date()
+  const timeDiff = expiryDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) return 'Expired'
+  if (daysDiff <= 30) return 'Expiring Soon'
+  if (daysDiff <= 90) return 'Renewal Due'
+  return 'Current'
+}
+
+const getMedicalStatusClass = () => {
+  const status = getMedicalExpiryStatus()
+  return {
+    'bg-green-50 border-green-200': status === 'Current',
+    'bg-yellow-50 border-yellow-200': status === 'Renewal Due',
+    'bg-orange-50 border-orange-200': status === 'Expiring Soon',
+    'bg-red-50 border-red-200': status === 'Expired'
+  }
+}
+
+const getMedicalStatusTextClass = () => {
+  const status = getMedicalExpiryStatus()
+  return {
+    'text-green-700': status === 'Current',
+    'text-yellow-700': status === 'Renewal Due',
+    'text-orange-700': status === 'Expiring Soon',
+    'text-red-700': status === 'Expired'
+  }
+}
+
+const getMedicalStatusIcon = () => {
+  const status = getMedicalExpiryStatus()
+  return {
+    'Current': '✅',
+    'Renewal Due': '📅',
+    'Expiring Soon': '⚠️',
+    'Expired': '🚫'
+  }[status] || '❓'
+}
+
+const getMedicalTimeRemaining = () => {
+  if (!progress.value.medicalCertificate) return ''
+  
+  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const now = new Date()
+  const timeDiff = expiryDate.getTime() - now.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
+  
+  if (daysDiff < 0) {
+    return `Expired ${Math.abs(daysDiff)} days ago`
+  } else if (daysDiff === 0) {
+    return 'Expires today'
+  } else if (daysDiff === 1) {
+    return '1 day remaining'
+  } else if (daysDiff <= 30) {
+    return `${daysDiff} days remaining`
+  } else if (daysDiff <= 90) {
+    return `${daysDiff} days until renewal recommended`
+  } else {
+    const monthsRemaining = Math.floor(daysDiff / 30)
+    return `${monthsRemaining} months remaining`
+  }
+}
+
+const isExpired = () => {
+  return getMedicalExpiryStatus() === 'Expired'
+}
+
+const editMedicalCert = () => {
+  if (progress.value.medicalCertificate) {
+    medicalForm.value = {
+      type: progress.value.medicalCertificate.type,
+      issueDate: progress.value.medicalCertificate.issueDate,
+      expiryDate: progress.value.medicalCertificate.expiryDate,
+      cost: progress.value.medicalCertificate.cost?.toString() || ''
+    }
+  }
+  showMedicalForm.value = true
+}
 
 // BFR Computed Properties
 const sortedBfrRecords = computed(() => {
@@ -1016,12 +1310,34 @@ const scheduleExam = (subject: string) => {
   alert(`Scheduling ${getExamName(subject)} exam - feature coming soon!`)
 }
 
-const saveMedicalCert = () => {
-  const expiryDate = new Date(medicalForm.value.expiryDate)
-  const oneYearFromNow = new Date()
-  oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1)
+const validateMedicalCert = () => {
+  medicalErrors.value = { expiryDate: '' }
+  let isValid = true
   
-  progress.value.medicalCertificate = {
+  if (medicalForm.value.issueDate && medicalForm.value.expiryDate) {
+    const issueDate = new Date(medicalForm.value.issueDate)
+    const expiryDate = new Date(medicalForm.value.expiryDate)
+    
+    if (expiryDate <= issueDate) {
+      medicalErrors.value.expiryDate = 'Expiry date must be after issue date'
+      isValid = false
+    }
+  }
+  
+  return isValid
+}
+
+const saveMedicalCert = () => {
+  if (!validateMedicalCert()) return
+  
+  const expiryDate = new Date(medicalForm.value.expiryDate)
+  
+  // Save current medical to history if it exists
+  if (progress.value.medicalCertificate) {
+    medicalHistory.value.push({ ...progress.value.medicalCertificate })
+  }
+  
+  const newMedical = {
     id: 'med-' + Date.now(),
     type: medicalForm.value.type,
     issueDate: medicalForm.value.issueDate,
@@ -1030,7 +1346,10 @@ const saveMedicalCert = () => {
     isActive: expiryDate > new Date()
   }
   
+  progress.value.medicalCertificate = newMedical
+  
   saveProgress()
+  saveMedicalHistory()
   showMedicalForm.value = false
   
   // Reset form
@@ -1040,6 +1359,7 @@ const saveMedicalCert = () => {
     expiryDate: '',
     cost: ''
   }
+  medicalErrors.value = { expiryDate: '' }
 }
 
 const saveFppAssessment = () => {
@@ -1064,6 +1384,21 @@ const saveProgress = () => {
   localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
 }
 
+const saveMedicalHistory = () => {
+  localStorage.setItem('ppl-quest-medical-history', JSON.stringify(medicalHistory.value))
+}
+
+const loadMedicalHistory = () => {
+  const saved = localStorage.getItem('ppl-quest-medical-history')
+  if (saved) {
+    try {
+      medicalHistory.value = JSON.parse(saved)
+    } catch (error) {
+      console.error('Failed to load medical history:', error)
+    }
+  }
+}
+
 const loadProgress = () => {
   const saved = localStorage.getItem('ppl-quest-progress')
   if (saved) {
@@ -1078,5 +1413,6 @@ const loadProgress = () => {
 onMounted(() => {
   loadProgress()
   loadBfrData()
+  loadMedicalHistory()
 })
 </script>
