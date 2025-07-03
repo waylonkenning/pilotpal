@@ -111,13 +111,21 @@ export const setupGlobalErrorHandler = (app: any) => {
   app.config.errorHandler = (error: Error, instance: any, info: string) => {
     console.error('Global Vue error:', error, instance, info)
     
-    const { addError } = useErrorHandler()
-    addError({
-      title: 'Application Error',
-      message: 'An unexpected error occurred in the application',
-      type: 'error',
-      persistent: true
-    })
+    // Only show critical Vue errors that would break the user experience
+    // Minor errors like failed component renders should just be logged
+    if (error.message && 
+        (error.message.includes('Cannot read properties') ||
+         error.message.includes('is not a function') ||
+         error.message.includes('undefined is not an object'))) {
+      const { addError } = useErrorHandler()
+      addError({
+        title: 'Application Error',
+        message: 'An unexpected error occurred in the application',
+        type: 'error',
+        persistent: true
+      })
+    }
+    // All other Vue errors are just logged to console for debugging
   }
   
   // Global promise rejection handler
@@ -139,11 +147,20 @@ export const setupGlobalErrorHandler = (app: any) => {
   window.addEventListener('error', (event) => {
     console.error('Global JavaScript error:', event.error)
     
-    const { addError } = useErrorHandler()
-    addError({
-      title: 'Script Error',
-      message: 'A script error occurred in the application',
-      type: 'error'
-    })
+    // Only show user-facing errors for truly critical issues
+    // Most script errors should just be logged, not shown to users
+    // This prevents showing generic "script error" messages for minor issues
+    if (event.error && event.error.message && 
+        (event.error.message.includes('Failed to fetch') ||
+         event.error.message.includes('NetworkError') ||
+         event.error.message.includes('localStorage is not available'))) {
+      const { addError } = useErrorHandler()
+      addError({
+        title: 'Application Error',
+        message: 'An error occurred while loading the application',
+        type: 'error'
+      })
+    }
+    // All other errors are just logged to console for debugging
   })
 }
