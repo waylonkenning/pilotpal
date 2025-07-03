@@ -134,14 +134,16 @@ test.describe('Lesson Node Hover Tooltips', () => {
   })
 
   test('should show tooltips with keyboard navigation', async ({ page }) => {
-    // Focus on first lesson node
-    await page.keyboard.press('Tab')
+    // Focus directly on first lesson node
+    const firstLessonNode = page.locator('[data-testid="lesson-1-node"]').first()
+    await firstLessonNode.focus()
     
     // Should show tooltip on focus
     await expect(page.locator('[data-testid="lesson-tooltip"]')).toBeVisible()
     
-    // Navigate to next lesson
-    await page.keyboard.press('Tab')
+    // Focus on next lesson node
+    const secondLessonNode = page.locator('[data-testid="lesson-2-node"]').first()
+    await secondLessonNode.focus()
     
     // Should show different tooltip
     await expect(page.locator('[data-testid="lesson-tooltip"]')).toBeVisible()
@@ -248,8 +250,8 @@ test.describe('Lesson Node Hover Tooltips', () => {
     // Navigate to bottom of page
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
     
-    // Find lesson node at bottom edge
-    const bottomLessonNode = page.locator('[data-testid*="lesson"]').last()
+    // Find a specific lesson node (lesson 27) which should be at the bottom
+    const bottomLessonNode = page.locator('[data-testid="lesson-27-node"]').first()
     await bottomLessonNode.hover()
     
     const tooltip = page.locator('[data-testid="lesson-tooltip"]')

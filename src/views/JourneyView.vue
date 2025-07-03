@@ -1349,12 +1349,13 @@ const showLessonTooltip = (lessonNum: number, event: MouseEvent) => {
   tooltipLesson.value = lessonNum
   tooltipVisible.value = true
   
-  // Better positioning with edge detection
+  // Better positioning with edge detection using viewport coordinates
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
   const tooltipWidth = 300 // estimated tooltip width
   const tooltipHeight = 150 // estimated tooltip height
   
+  // Use clientX/Y which are relative to viewport, not page
   let left = event.clientX + 10
   let top = event.clientY - 50
   
@@ -1373,9 +1374,14 @@ const showLessonTooltip = (lessonNum: number, event: MouseEvent) => {
     top = event.clientY + 10
   }
   
+  // Ensure tooltip stays within viewport bounds
+  left = Math.max(10, Math.min(left, viewportWidth - tooltipWidth - 10))
+  top = Math.max(10, Math.min(top, viewportHeight - tooltipHeight - 10))
+  
   tooltipStyle.value = {
     left: left + 'px',
-    top: top + 'px'
+    top: top + 'px',
+    position: 'fixed' // Use fixed positioning to stay relative to viewport
   }
 }
 
@@ -1389,7 +1395,8 @@ const showLessonTooltipOnFocus = (lessonNum: number) => {
   tooltipStyle.value = {
     left: '50%',
     top: '50%',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
+    position: 'fixed' // Use fixed positioning to stay relative to viewport
   }
 }
 
