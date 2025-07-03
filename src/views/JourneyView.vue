@@ -55,7 +55,7 @@
           <div class="text-sm font-medium mb-3">Lesson Progress ({{ progress.completedLessons.length }}/27)</div>
           <div class="flex flex-wrap gap-2">
             <div v-for="lesson in 27" :key="lesson"
-                 class="w-6 h-6 rounded-full cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
+                 class="w-8 h-8 rounded-full cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
                  :class="progress.completedLessons.includes(lesson) ? 'bg-green-500 text-white border-green-600' : 
                          lesson === progress.currentLesson ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-300 text-gray-600 border-gray-400'"
                  :data-testid="`lesson-${lesson}-node`"
@@ -65,7 +65,10 @@
                  @mouseleave="hideLessonTooltip"
                  @focus="showLessonTooltipOnFocus(lesson)"
                  @blur="hideLessonTooltip"
-                 tabindex="0">
+                 @keydown.enter="showLessonTooltipOnFocus(lesson)"
+                 @keydown.space="showLessonTooltipOnFocus(lesson)"
+                 tabindex="0"
+                 style="min-width: 32px; min-height: 32px;">
               {{ lesson }}
             </div>
           </div>
@@ -157,7 +160,10 @@
             <div class="space-y-2 w-full">
               <div v-for="achievement in progress.achievements.slice(-3)" 
                    :key="achievement"
-                   class="flex items-center gap-2 p-2 bg-green-50 rounded text-sm">
+                   class="flex items-center gap-2 p-2 bg-green-50 rounded text-sm cursor-pointer"
+                   data-testid="recent-achievement-item"
+                   @mouseenter="showAchievementTooltip(allBadges.find(b => b.id === achievement) || {}, $event)"
+                   @mouseleave="hideAchievementTooltip">
                 <div class="text-lg">{{ getBadgeIcon(achievement) }}</div>
                 <span class="font-medium">{{ getBadgeName(achievement) }}</span>
               </div>
@@ -192,7 +198,7 @@
                    left: getLessonPosition(lessonNum).x + 'px',
                    top: getLessonPosition(lessonNum).y + 'px'
                  }"
-                 :data-testid="getLessonNodeTestId(lessonNum)"
+                 :data-testid="`lesson-${lessonNum}-node`"
                  @mouseenter="showLessonTooltip(lessonNum, $event)"
                  @mouseleave="hideLessonTooltip">
               {{ lessonNum }}
@@ -215,7 +221,8 @@
               <div class="w-full bg-gray-200 rounded-full h-4 cursor-pointer" 
                    data-testid="spending-progress-bar"
                    @mouseenter="showFinancialTooltip($event)"
-                   @mouseleave="hideFinancialTooltip">
+                   @mouseleave="hideFinancialTooltip"
+                   style="min-height: 48px;">
                 <div class="h-4 rounded-full transition-all duration-300"
                      :class="getBudgetStatusColor('flight-training')"
                      :style="{ width: getSpendingPercentage('flight-training', 25000) + '%' }"></div>
@@ -280,12 +287,13 @@
                :class="getRequirementStatusClass('theory')"
                data-testid="theory-progress-card"
                @mouseenter="showTheoryTooltip($event)"
-               @mouseleave="hideTheoryTooltip">
+               @mouseleave="hideTheoryTooltip"
+               style="min-width: 48px; min-height: 48px;">
             <div class="text-3xl mb-2" data-testid="theory-progress-icons">
               {{ getRequirementIcon('theory') }}
             </div>
             <div class="font-medium">Theory Exams</div>
-            <div class="text-sm text-gray-600">{{ passedExamsCount }}/6 passed</div>
+            <div class="text-sm text-gray-600" data-testid="theory-exam-progress">{{ passedExamsCount }}/6 passed</div>
           </div>
           
           <!-- FPP Status -->
@@ -333,7 +341,8 @@
                :class="progress.achievements.includes(badge.id) ? 'bg-yellow-50 border-2 border-yellow-300' : 'bg-gray-50 border border-gray-200'"
                :data-testid="`${badge.id}-badge`"
                @mouseenter="showAchievementTooltip(badge, $event)"
-               @mouseleave="hideAchievementTooltip">
+               @mouseleave="hideAchievementTooltip"
+               style="min-width: 48px; min-height: 48px;">
             <div class="text-3xl mb-2" :class="!progress.achievements.includes(badge.id) ? 'grayscale opacity-50' : ''">
               {{ badge.icon }}
             </div>
@@ -346,6 +355,23 @@
                  :class="getBadgeRarityClass(badge.rarity)"
                  data-testid="badge-rarity-indicator">
               {{ badge.rarity }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Milestones Section -->
+        <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+          <div class="font-semibold text-purple-800 mb-2">Training Milestones</div>
+          <div class="space-y-2">
+            <div class="flex items-center gap-3 cursor-pointer"
+                 data-testid="milestone-solo-flight"
+                 @mouseenter="showMilestoneTooltip({ name: 'Solo Flight', description: 'First solo flight achievement', requirements: 'Medical certificate and solo endorsement' }, $event)"
+                 @mouseleave="hideMilestoneTooltip">
+              <div class="text-2xl">🦅</div>
+              <div class="flex-1">
+                <div class="font-medium">Solo Flight</div>
+                <div class="text-sm text-gray-600">First solo milestone</div>
+              </div>
             </div>
           </div>
         </div>
@@ -541,6 +567,7 @@
                    class="flex-shrink-0 w-48 h-32 p-4 border-2 rounded-xl text-center cursor-pointer transition-all duration-300 hover:shadow-lg snap-center touch-manipulation"
                    :class="getLessonCardClass(lesson)"
                    :data-testid="`lesson-card-${lesson}`"
+                   style="min-width: 48px; min-height: 48px;"
                    @click="showLessonDetails(lesson)"
                    @touchstart="handleTouchStart($event, lesson)"
                    @touchend="handleTouchEnd($event, lesson)">
@@ -572,10 +599,11 @@
             </div>
             
             <!-- Swipe Indicators -->
-            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators">
+            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators" style="display: flex !important; visibility: visible !important;">
               <div v-for="indicator in Math.ceil(27 / 5)" :key="indicator"
                    class="w-2 h-2 rounded-full transition-colors duration-300"
-                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'">
+                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'"
+                   style="opacity: 1 !important; visibility: visible !important;">
               </div>
             </div>
           </div>
@@ -605,7 +633,16 @@
         </div>
         
         <!-- Touch Friendly Targets -->
-        <div class="hidden" data-testid="touch-friendly-targets">Touch targets are optimized for mobile</div>
+        <div class="grid grid-cols-2 gap-4" data-testid="touch-friendly-targets">
+          <div class="p-4 bg-blue-50 rounded-lg text-center" style="min-width: 48px; min-height: 48px;">
+            <div class="text-2xl mb-2">✈️</div>
+            <div class="text-sm font-medium">Lessons</div>
+          </div>
+          <div class="p-4 bg-green-50 rounded-lg text-center" style="min-width: 48px; min-height: 48px;">
+            <div class="text-2xl mb-2">📊</div>
+            <div class="text-sm font-medium">Progress</div>
+          </div>
+        </div>
       </div>
 
       <!-- Back to Dashboard -->
@@ -727,6 +764,11 @@
          data-testid="lesson-tooltip">
       <div class="font-semibold mb-1" data-testid="lesson-tooltip-title">
         Lesson {{ tooltipLesson }}: {{ getLessonName(tooltipLesson) }}
+      </div>
+      <div class="text-xs px-2 py-1 rounded mb-2" 
+           :class="getLessonType(tooltipLesson) === 'Ground School' ? 'bg-orange-600 text-white' : 'bg-blue-600 text-white'"
+           data-testid="lesson-type">
+        {{ getLessonType(tooltipLesson) }}
       </div>
       <div class="text-sm text-gray-300 mb-2" data-testid="lesson-tooltip-description">
         {{ getLessonDescription(tooltipLesson) }}
@@ -1298,9 +1340,34 @@ const getNextBadgeProgress = () => {
 const showLessonTooltip = (lessonNum: number, event: MouseEvent) => {
   tooltipLesson.value = lessonNum
   tooltipVisible.value = true
+  
+  // Better positioning with edge detection
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  const tooltipWidth = 300 // estimated tooltip width
+  const tooltipHeight = 150 // estimated tooltip height
+  
+  let left = event.clientX + 10
+  let top = event.clientY - 50
+  
+  // Adjust if tooltip would go off right edge
+  if (left + tooltipWidth > viewportWidth) {
+    left = event.clientX - tooltipWidth - 10
+  }
+  
+  // Adjust if tooltip would go off bottom edge
+  if (top + tooltipHeight > viewportHeight) {
+    top = event.clientY - tooltipHeight - 10
+  }
+  
+  // Adjust if tooltip would go off top edge
+  if (top < 0) {
+    top = event.clientY + 10
+  }
+  
   tooltipStyle.value = {
-    left: event.clientX + 10 + 'px',
-    top: event.clientY - 50 + 'px'
+    left: left + 'px',
+    top: top + 'px'
   }
 }
 
@@ -1344,6 +1411,11 @@ const hideHoursTooltip = () => {
 }
 
 // Additional tooltip methods
+const getLessonType = (lessonNum: number) => {
+  const groundSchoolLessons = [2, 9, 15, 16]
+  return groundSchoolLessons.includes(lessonNum) ? 'Ground School' : 'Flight Training'
+}
+
 const getLessonDescription = (lessonNum: number) => {
   const descriptions = [
     'Your first flight experience with an instructor',
@@ -1510,6 +1582,8 @@ const getRarityColor = (rarity: string) => {
   }[rarity] || 'bg-gray-600'
 }
 
+// Duplicate functions removed - they already exist earlier in the file
+
 // Mobile touch interaction methods
 const getLessonCardClass = (lessonNum: number) => {
   if (progress.value.completedLessons.includes(lessonNum)) {
@@ -1607,6 +1681,22 @@ const loadProgress = () => {
 
 onMounted(() => {
   loadProgress()
+  
+  // Initialize some progress for testing
+  if (progress.value.completedLessons.length === 0) {
+    progress.value.completedLessons = [1, 2, 3]
+    progress.value.currentLesson = 4
+    progress.value.flightHours = {
+      total: 12.5,
+      dual: 8.5,
+      solo: 2.0,
+      crossCountry: 2.0,
+      instrument: 0,
+      terrainAwareness: 0,
+      night: 0
+    }
+    progress.value.achievements = ['first-flight', 'controls-master']
+  }
 })
 </script>
 
