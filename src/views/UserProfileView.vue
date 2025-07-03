@@ -165,6 +165,42 @@
       </div>
 
 
+      <!-- Reset Profile Section -->
+      <div class="card mb-8 border-red-200 bg-red-50" data-testid="reset-profile-section">
+        <h2 class="text-xl font-semibold mb-6 text-red-800">🔄 Reset Training Progress</h2>
+        
+        <div class="bg-white p-4 rounded-lg border border-red-200 mb-4">
+          <div class="flex items-start gap-3 mb-4">
+            <div class="text-2xl">⚠️</div>
+            <div>
+              <h3 class="font-semibold text-red-800 mb-2">Warning: This Action Cannot Be Undone</h3>
+              <p class="text-red-700 text-sm mb-2">
+                Resetting your profile will permanently delete:
+              </p>
+              <ul class="text-red-700 text-sm space-y-1 ml-4">
+                <li>• All lesson progress and completed lessons</li>
+                <li>• Flight hours (dual, solo, cross-country)</li>
+                <li>• Achievement badges and milestones</li>
+                <li>• Theory exam history and results</li>
+                <li>• Financial expense tracking</li>
+                <li>• Demonstrated skills records</li>
+              </ul>
+              <p class="text-red-700 text-sm mt-2">
+                Your profile information (name, email, etc.) will be kept.
+              </p>
+            </div>
+          </div>
+          
+          <button 
+            @click="showResetConfirmation = true" 
+            class="btn bg-red-600 hover:bg-red-700 text-white border-red-600"
+            data-testid="reset-profile-button"
+          >
+            🔄 Reset All Training Progress
+          </button>
+        </div>
+      </div>
+
       <!-- Emergency Contacts -->
       <div class="card">
         <h2 class="text-xl font-semibold mb-6">🚨 Emergency Contacts</h2>
@@ -240,6 +276,75 @@
     </div>
 
 
+    <!-- Reset Confirmation Modal -->
+    <div v-if="showResetConfirmation" class="modal-overlay" @click="showResetConfirmation = false">
+      <div class="modal-content" @click.stop data-testid="reset-confirmation-modal">
+        <div class="p-6">
+          <div class="text-center mb-6">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h3 class="text-2xl font-bold mb-4 text-red-800">Confirm Training Reset</h3>
+          </div>
+          
+          <div class="bg-red-50 p-4 rounded-lg border border-red-200 mb-6">
+            <p class="text-red-800 font-semibold mb-2">
+              Are you absolutely sure you want to reset all training progress?
+            </p>
+            <p class="text-red-700 text-sm">
+              This will permanently delete all your lesson progress, flight hours, achievements, 
+              theory exam history, and financial tracking. Your profile information will be kept.
+            </p>
+          </div>
+
+          <div class="mb-6">
+            <label class="form-label text-red-800">Type "RESET" to confirm:</label>
+            <input 
+              v-model="resetConfirmText" 
+              type="text" 
+              class="form-input border-red-300 focus:border-red-500"
+              placeholder="Type RESET here"
+              data-testid="reset-confirmation-input"
+            >
+          </div>
+          
+          <div class="flex gap-3">
+            <button 
+              @click="showResetConfirmation = false" 
+              class="btn btn-secondary flex-1"
+              data-testid="cancel-reset-button"
+            >
+              Cancel
+            </button>
+            <button 
+              @click="confirmReset" 
+              :disabled="resetConfirmText !== 'RESET'"
+              :class="resetConfirmText === 'RESET' ? 
+                'btn bg-red-600 hover:bg-red-700 text-white border-red-600 flex-1' : 
+                'btn bg-gray-300 text-gray-500 border-gray-300 flex-1 cursor-not-allowed'"
+              data-testid="confirm-reset-button"
+            >
+              🔄 Reset Everything
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset Success Modal -->
+    <div v-if="showResetSuccess" class="modal-overlay" @click="showResetSuccess = false">
+      <div class="modal-content" @click.stop data-testid="reset-success-modal">
+        <div class="p-6 text-center">
+          <div class="text-6xl mb-4">🔄</div>
+          <h3 class="text-xl font-bold mb-4">Training Progress Reset!</h3>
+          <p class="text-gray-600 mb-6">
+            Your training progress has been successfully reset. You can now start your PPL journey fresh.
+          </p>
+          <button @click="navigateToHome" class="btn btn-primary">
+            Start Fresh Journey
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Profile Help Modal -->
     <div v-if="showProfileHelp" class="modal-overlay" @click="showProfileHelp = false">
       <div class="modal-content" @click.stop>
@@ -278,7 +383,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { handleLocalStorageError, handleFormValidationError } from '../utils/errorHandler'
+
+const router = useRouter()
 
 // Profile data
 const userProfile = ref({
@@ -305,6 +413,9 @@ const userProfile = ref({
 // Modal states
 const showSaveSuccess = ref(false)
 const showProfileHelp = ref(false)
+const showResetConfirmation = ref(false)
+const showResetSuccess = ref(false)
+const resetConfirmText = ref('')
 
 // Load profile data on mount
 onMounted(() => {
@@ -351,6 +462,32 @@ const saveProfile = () => {
     console.error('Error saving profile:', error)
     handleLocalStorageError('save', error as Error)
   }
+}
+
+const confirmReset = () => {
+  if (resetConfirmText.value !== 'RESET') {
+    return
+  }
+  
+  try {
+    // Remove all training progress data but keep profile information
+    localStorage.removeItem('ppl-quest-progress')
+    
+    // Reset confirmation text
+    resetConfirmText.value = ''
+    
+    // Close confirmation modal and show success
+    showResetConfirmation.value = false
+    showResetSuccess.value = true
+  } catch (error) {
+    console.error('Error resetting profile:', error)
+    handleLocalStorageError('reset', error as Error)
+  }
+}
+
+const navigateToHome = () => {
+  showResetSuccess.value = false
+  router.push('/')
 }
 
 </script>
