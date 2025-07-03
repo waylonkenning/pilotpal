@@ -153,7 +153,11 @@
             <h3 class="text-lg font-semibold mb-4">Next Major Milestone</h3>
             <div class="text-xl font-bold mb-2" data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
             <p class="text-gray-600 mb-4">{{ milestoneDescription }}</p>
-            <button class="btn btn-success w-full">
+            <button 
+              @click="showMilestoneRequirements = true"
+              class="btn btn-success w-full"
+              data-testid="view-milestone-requirements"
+            >
               🎯 View Requirements
             </button>
           </div>
@@ -749,6 +753,64 @@
       </div>
     </div>
 
+    <!-- Milestone Requirements Modal -->
+    <div v-if="showMilestoneRequirements" class="modal-overlay" @click="showMilestoneRequirements = false">
+      <div class="modal-content max-w-2xl" @click.stop data-testid="milestone-requirements-modal">
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="text-6xl">{{ getMilestoneRequirements().icon }}</div>
+            <div>
+              <h3 class="text-2xl font-bold">{{ getMilestoneRequirements().title }}</h3>
+              <p class="text-lg text-gray-600">{{ getMilestoneRequirements().description }}</p>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <!-- Requirements -->
+            <div class="bg-blue-50 p-4 rounded-lg" data-testid="milestone-requirements-list">
+              <h4 class="font-semibold text-blue-800 mb-3">📋 Requirements to Complete</h4>
+              <ul class="space-y-2">
+                <li v-for="req in getMilestoneRequirements().requirements" :key="req" class="text-blue-700">
+                  {{ req }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="bg-green-50 p-4 rounded-lg" data-testid="milestone-next-steps">
+              <h4 class="font-semibold text-green-800 mb-3">🚀 Next Steps</h4>
+              <ul class="space-y-2">
+                <li v-for="step in getMilestoneRequirements().nextSteps" :key="step" class="text-green-700">
+                  • {{ step }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Cost & Timeline -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-orange-50 p-4 rounded-lg" data-testid="milestone-cost">
+                <h4 class="font-semibold text-orange-800 mb-2">💰 Estimated Cost</h4>
+                <p class="text-orange-700">{{ getMilestoneRequirements().cost }}</p>
+              </div>
+              <div class="bg-purple-50 p-4 rounded-lg" data-testid="milestone-timeframe">
+                <h4 class="font-semibold text-purple-800 mb-2">⏱️ Timeframe</h4>
+                <p class="text-purple-700">{{ getMilestoneRequirements().timeframe }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showMilestoneRequirements = false" class="btn btn-secondary">
+              Close
+            </button>
+            <router-link to="/requirements" class="btn btn-primary flex-1">
+              📋 View All Requirements
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Progress Tooltip -->
     <div v-if="progressTooltipVisible" 
          class="fixed z-50 bg-blue-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
@@ -814,6 +876,7 @@ const showContextualHelp = ref(false)
 const showEducationCenter = ref(false)
 const showRequirementModal = ref(false)
 const showLessonInfo = ref(false)
+const showMilestoneRequirements = ref(false)
 const newAchievements = ref<string[]>([])
 
 // Tooltip state
@@ -1247,6 +1310,118 @@ const getLessonCost = (lessonNum: number): string => {
   if (lessonNum <= 25) return '$400-$600 (intensive preparation)'
   if (lessonNum === 26) return '$500-$800 (examiner + aircraft)'
   return '$0 (license issue only)'
+}
+
+const getMilestoneRequirements = () => {
+  const milestone = nextMajorMilestone.value
+  const currentHours = progress.value.flightHours.total
+  const currentSolo = progress.value.flightHours.solo
+  
+  const requirements = {
+    'First Flight': {
+      title: 'Complete Your First Flight',
+      icon: '🛫',
+      description: 'Take your introductory flight and begin your PPL journey',
+      requirements: [
+        '📞 Contact a flight school and schedule your first lesson',
+        '📄 Bring valid photo ID and be prepared for paperwork',
+        '👨‍✈️ Meet your flight instructor and discuss your goals',
+        '✈️ Complete 0.5-1.0 hours of dual instruction',
+        '📝 Ask questions and get familiar with the aircraft'
+      ],
+      nextSteps: [
+        'Book your next lesson within 1-2 weeks',
+        'Start studying basic aviation theory',
+        'Consider purchasing basic flight training materials'
+      ],
+      cost: '$280-$420 for introductory flight',
+      timeframe: 'Can be completed today!'
+    },
+    'Controls Master': {
+      title: 'Master Basic Aircraft Controls',
+      icon: '🎮',
+      description: 'Demonstrate proficiency in basic aircraft control and earn your Controls Master badge',
+      requirements: [
+        `✈️ Complete 5+ hours dual instruction (currently: ${currentHours.toFixed(1)}h)`,
+        '📏 Master straight and level flight within standards',
+        '📈 Demonstrate proper climbing and descending techniques',
+        '🔄 Execute coordinated turns with proper rudder usage',
+        '✅ Show consistent aircraft control without instructor assistance'
+      ],
+      nextSteps: [
+        'Continue with circuit pattern training',
+        'Focus on consistency and precision',
+        'Build confidence with aircraft handling'
+      ],
+      cost: `$${Math.round((5 - currentHours) * 350)} remaining (assuming $350/hour average)`,
+      timeframe: `${Math.max(0, 5 - currentHours).toFixed(1)} more hours needed`
+    },
+    'Solo Wings': {
+      title: 'Achieve Your First Solo Flight',
+      icon: '🦅',
+      description: 'The biggest milestone in flight training - flying solo for the first time!',
+      requirements: [
+        '🏥 Valid medical certificate (Class 2 or DL9)',
+        '📄 Student pilot permit from CAA',
+        '✈️ Demonstrate consistent safe flying (typically 10-15 hours dual)',
+        '🛬 Master circuit pattern and landing procedures',
+        '👨‍✈️ Receive solo endorsement from your instructor',
+        '📝 Pass required knowledge tests for solo flight'
+      ],
+      nextSteps: [
+        'Complete medical certificate if not done',
+        'Apply for student pilot permit',
+        'Focus on circuit consistency and landings',
+        'Study emergency procedures thoroughly'
+      ],
+      cost: '$280-$420 per lesson until solo ready',
+      timeframe: 'Typically achieved at 10-15 hours total time'
+    },
+    'Navigation Phase': {
+      title: 'Begin Cross-Country Navigation',
+      icon: '🧭',
+      description: 'Learn navigation skills and plan your first cross-country flights',
+      requirements: [
+        `🦅 Complete solo requirements (solo hours: ${currentSolo.toFixed(1)}h)`,
+        '📚 Pass navigation theory exam',
+        '🗺️ Demonstrate map reading and pilotage skills',
+        '📻 Master VOR and GPS navigation systems',
+        '✈️ Complete dual cross-country instruction',
+        '📋 Plan and execute solo cross-country flight'
+      ],
+      nextSteps: [
+        'Study navigation theory intensively',
+        'Practice flight planning procedures',
+        'Learn radio navigation equipment',
+        'Plan your first cross-country route'
+      ],
+      cost: '$350-$500 per navigation lesson',
+      timeframe: 'Typically starts around 15-20 hours total time'
+    },
+    'Licensed Pilot': {
+      title: 'Complete Your PPL License',
+      icon: '👨‍✈️',
+      description: 'Final push to become a licensed private pilot!',
+      requirements: [
+        '✈️ Complete minimum 50 hours total flight time',
+        '🦅 Complete minimum 15 hours solo time',
+        '🗺️ Complete 5+ hours cross-country time',
+        '📚 Pass all 6 theory exams with 70%+ each',
+        '🏥 Valid medical certificate',
+        '🎯 Pass PPL flight test with CAA examiner'
+      ],
+      nextSteps: [
+        'Complete any remaining flight hours',
+        'Finish outstanding theory exams',
+        'Schedule mock flight test',
+        'Book official PPL flight test'
+      ],
+      cost: '$500-$800 for flight test + examiner fees',
+      timeframe: 'Complete when all requirements met'
+    }
+  }
+  
+  return requirements[milestone] || requirements['Licensed Pilot']
 }
 
 const getLessonSkills = (lessonNum: number) => {
