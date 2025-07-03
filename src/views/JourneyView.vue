@@ -531,14 +531,51 @@
         
         <!-- Swipeable Lesson Cards -->
         <div class="card mb-8" data-testid="swipeable-lesson-cards">
-          <h3 class="text-lg font-semibold mb-4">Recent Lessons</h3>
-          <div class="flex gap-3 overflow-x-auto pb-2">
-            <div v-for="lesson in 5" :key="lesson"
-                 class="flex-shrink-0 w-32 p-3 border rounded-lg text-center">
-              <div class="text-lg mb-1">{{ lesson }}</div>
-              <div class="text-xs text-gray-600">Lesson {{ lesson }}</div>
-              <div class="text-xs" :class="lesson <= progress.completedLessons.length ? 'text-green-600' : 'text-gray-400'">
-                {{ lesson <= progress.completedLessons.length ? 'Complete' : 'Pending' }}
+          <h3 class="text-lg font-semibold mb-4">📚 Lesson Progress</h3>
+          <div class="relative">
+            <!-- Horizontal scrollable lesson cards -->
+            <div class="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
+                 style="scrollbar-width: none; -ms-overflow-style: none;"
+                 ref="lessonCardsContainer">
+              <div v-for="lesson in 27" :key="lesson"
+                   class="flex-shrink-0 w-48 h-32 p-4 border-2 rounded-xl text-center cursor-pointer transition-all duration-300 hover:shadow-lg snap-center touch-manipulation"
+                   :class="getLessonCardClass(lesson)"
+                   :data-testid="`lesson-card-${lesson}`"
+                   @click="showLessonDetails(lesson)"
+                   @touchstart="handleTouchStart($event, lesson)"
+                   @touchend="handleTouchEnd($event, lesson)">
+                
+                <!-- Lesson Number Badge -->
+                <div class="flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold mb-2 mx-auto"
+                     :class="getLessonBadgeClass(lesson)">
+                  {{ lesson }}
+                </div>
+                
+                <!-- Lesson Title -->
+                <div class="font-semibold text-sm mb-1" data-testid="lesson-card-title">
+                  {{ getLessonName(lesson) }}
+                </div>
+                
+                <!-- Lesson Status -->
+                <div class="text-xs px-2 py-1 rounded-full" 
+                     :class="getLessonStatusClass(lesson)"
+                     data-testid="lesson-card-status">
+                  {{ getLessonStatus(lesson) }}
+                </div>
+                
+                <!-- Duration and Cost -->
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                  <span>{{ getLessonDuration(lesson) }}</span>
+                  <span>${{ getLessonCost(lesson) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Swipe Indicators -->
+            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators">
+              <div v-for="indicator in Math.ceil(27 / 5)" :key="indicator"
+                   class="w-2 h-2 rounded-full transition-colors duration-300"
+                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'">
               </div>
             </div>
           </div>
@@ -834,6 +871,86 @@
         Requirements: {{ milestoneTooltipData.requirements }}
       </div>
     </div>
+
+    <!-- Lesson Details Modal -->
+    <div v-if="showLessonDetailsModal" class="modal-overlay" @click="hideLessonDetails">
+      <div class="modal-content max-w-md" @click.stop data-testid="lesson-details-modal">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold" data-testid="lesson-details-title">
+              Lesson {{ selectedLesson }}: {{ getLessonName(selectedLesson) }}
+            </h3>
+            <button @click="hideLessonDetails" class="text-gray-400 hover:text-gray-600">
+              ✕
+            </button>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Lesson Description -->
+            <div>
+              <h4 class="font-semibold text-gray-700 mb-2">Description</h4>
+              <p class="text-gray-600 text-sm" data-testid="lesson-details-description">
+                {{ getLessonDescription(selectedLesson) }}
+              </p>
+            </div>
+            
+            <!-- Lesson Details -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <h4 class="font-semibold text-gray-700 mb-1">Duration</h4>
+                <p class="text-blue-600 font-medium" data-testid="lesson-details-duration">
+                  {{ getLessonDuration(selectedLesson) }}
+                </p>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-700 mb-1">Estimated Cost</h4>
+                <p class="text-green-600 font-medium" data-testid="lesson-details-cost">
+                  ${{ getLessonCost(selectedLesson) }}
+                </p>
+              </div>
+            </div>
+            
+            <!-- Status -->
+            <div>
+              <h4 class="font-semibold text-gray-700 mb-2">Status</h4>
+              <div class="inline-block px-3 py-1 rounded-full text-sm"
+                   :class="getLessonStatusColor(selectedLesson)">
+                {{ getLessonStatus(selectedLesson) }}
+              </div>
+            </div>
+            
+            <!-- Prerequisites -->
+            <div v-if="getLessonPrerequisites(selectedLesson).length > 0">
+              <h4 class="font-semibold text-gray-700 mb-2">Prerequisites</h4>
+              <ul class="text-sm text-gray-600">
+                <li v-for="prereq in getLessonPrerequisites(selectedLesson)" :key="prereq"
+                    class="mb-1">
+                  • {{ prereq }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Action Button -->
+            <div class="pt-4">
+              <button v-if="getLessonStatus(selectedLesson) === 'Current'" 
+                      class="w-full btn btn-primary"
+                      @click="startLesson(selectedLesson)">
+                Start This Lesson
+              </button>
+              <button v-else-if="getLessonStatus(selectedLesson) === 'Future'" 
+                      class="w-full btn btn-secondary" disabled>
+                Complete Prerequisites First
+              </button>
+              <button v-else 
+                      class="w-full btn btn-secondary"
+                      @click="reviewLesson(selectedLesson)">
+                Review Lesson
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -888,6 +1005,14 @@ const financialTooltipStyle = ref({})
 const milestoneTooltipVisible = ref(false)
 const milestoneTooltipStyle = ref({})
 const milestoneTooltipData = ref<any>({})
+
+// Mobile touch interaction state
+const showLessonDetailsModal = ref(false)
+const selectedLesson = ref(1)
+const currentCardPage = ref(1)
+const lessonCardsContainer = ref<HTMLElement | null>(null)
+const touchStartTime = ref(0)
+const touchStartX = ref(0)
 
 // Training phases
 const trainingPhases = [
@@ -1372,6 +1497,79 @@ const getRarityColor = (rarity: string) => {
     'Rare': 'bg-blue-600',
     'Epic': 'bg-purple-600'
   }[rarity] || 'bg-gray-600'
+}
+
+// Mobile touch interaction methods
+const getLessonCardClass = (lessonNum: number) => {
+  if (progress.value.completedLessons.includes(lessonNum)) {
+    return 'border-green-500 bg-green-50 hover:bg-green-100'
+  }
+  if (lessonNum === progress.value.currentLesson) {
+    return 'border-blue-500 bg-blue-50 hover:bg-blue-100 ring-2 ring-blue-200'
+  }
+  return 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+}
+
+const getLessonBadgeClass = (lessonNum: number) => {
+  if (progress.value.completedLessons.includes(lessonNum)) {
+    return 'bg-green-500 text-white'
+  }
+  if (lessonNum === progress.value.currentLesson) {
+    return 'bg-blue-500 text-white'
+  }
+  return 'bg-gray-300 text-gray-700'
+}
+
+const getLessonStatusClass = (lessonNum: number) => {
+  const status = getLessonStatus(lessonNum)
+  return {
+    'Completed': 'bg-green-100 text-green-800',
+    'Current': 'bg-blue-100 text-blue-800', 
+    'In Progress': 'bg-yellow-100 text-yellow-800',
+    'Future': 'bg-gray-100 text-gray-600',
+    'Locked': 'bg-red-100 text-red-600'
+  }[status] || 'bg-gray-100 text-gray-600'
+}
+
+const showLessonDetails = (lessonNum: number) => {
+  selectedLesson.value = lessonNum
+  showLessonDetailsModal.value = true
+}
+
+const hideLessonDetails = () => {
+  showLessonDetailsModal.value = false
+}
+
+const handleTouchStart = (event: TouchEvent, lessonNum: number) => {
+  touchStartTime.value = Date.now()
+  touchStartX.value = event.touches[0].clientX
+}
+
+const handleTouchEnd = (event: TouchEvent, lessonNum: number) => {
+  const touchEndTime = Date.now()
+  const touchDuration = touchEndTime - touchStartTime.value
+  
+  // Short tap (< 300ms) - show lesson details
+  if (touchDuration < 300) {
+    showLessonDetails(lessonNum)
+  }
+  // Long press (> 500ms) - could show context menu in future
+  else if (touchDuration > 500) {
+    // Long press functionality can be added here
+    console.log('Long press detected on lesson', lessonNum)
+  }
+}
+
+const startLesson = (lessonNum: number) => {
+  // Navigate to lesson start or show lesson completion modal
+  hideLessonDetails()
+  console.log('Starting lesson', lessonNum)
+}
+
+const reviewLesson = (lessonNum: number) => {
+  // Navigate to lesson review
+  hideLessonDetails()
+  console.log('Reviewing lesson', lessonNum)
 }
 
 const loadProgress = () => {
