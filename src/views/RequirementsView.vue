@@ -1506,7 +1506,8 @@ const getMedicalStatusIcon = () => {
     'Current': '✅',
     'Renewal Due': '📅',
     'Expiring Soon': '⚠️',
-    'Expired': '🚫'
+    'Expired': '🚫',
+    'No Medical': '❌'
   }[status] || '❓'
 }
 

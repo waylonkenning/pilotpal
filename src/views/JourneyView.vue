@@ -63,7 +63,7 @@
                               lesson === progress.currentLesson ? 'current' : 'locked'"
                  @mouseenter="showLessonTooltip(lesson, $event)"
                  @mouseleave="hideLessonTooltip"
-                 @focus="showLessonTooltip(lesson, $event)"
+                 @focus="showLessonTooltipOnFocus(lesson)"
                  @blur="hideLessonTooltip"
                  tabindex="0">
               {{ lesson }}
@@ -1275,6 +1275,7 @@ const getLessonName = (lessonNum: number) => {
 const getLessonStatus = (lessonNum: number) => {
   if (progress.value.completedLessons.includes(lessonNum)) return 'Completed'
   if (lessonNum === progress.value.currentLesson) return 'Current'
+  if (lessonNum > progress.value.currentLesson + 1) return 'Locked'
   return 'Future'
 }
 
@@ -1305,6 +1306,16 @@ const showLessonTooltip = (lessonNum: number, event: MouseEvent) => {
 
 const hideLessonTooltip = () => {
   tooltipVisible.value = false
+}
+
+const showLessonTooltipOnFocus = (lessonNum: number) => {
+  tooltipLesson.value = lessonNum
+  tooltipVisible.value = true
+  tooltipStyle.value = {
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)'
+  }
 }
 
 const showPhaseTooltip = (phase: any, event: MouseEvent) => {

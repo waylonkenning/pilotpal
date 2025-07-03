@@ -701,7 +701,7 @@ const progress = ref({
   achievements: [] as string[],
   totalSpent: 0,
   expenses: [] as any[],
-  medicalCertificate: null,
+  medicalCertificate: null as { type: string; expiryDate: string } | null,
   theoryExams: {
     airLaw: { attempts: [], passed: false },
     navigation: { attempts: [], passed: false },
@@ -981,7 +981,7 @@ const closeCelebration = () => {
 const getMedicalExpiryStatus = () => {
   if (!progress.value.medicalCertificate) return 'No Medical'
   
-  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const expiryDate = new Date(progress.value.medicalCertificate!.expiryDate)
   const now = new Date()
   const timeDiff = expiryDate.getTime() - now.getTime()
   const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
@@ -995,7 +995,7 @@ const getMedicalExpiryStatus = () => {
 const getMedicalTimeRemaining = () => {
   if (!progress.value.medicalCertificate) return ''
   
-  const expiryDate = new Date(progress.value.medicalCertificate.expiryDate)
+  const expiryDate = new Date(progress.value.medicalCertificate!.expiryDate)
   const now = new Date()
   const timeDiff = expiryDate.getTime() - now.getTime()
   const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
