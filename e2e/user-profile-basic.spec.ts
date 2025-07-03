@@ -46,20 +46,4 @@ test.describe('User Profile Basic Functionality', () => {
       .toBeVisible()
   })
 
-  test('should show CAA MyAviation integration section', async ({ page }) => {
-    // Navigate to user profile section
-    await page.click('[data-testid="user-profile-tab"]')
-    
-    // Should show CAA MyAviation section
-    await expect(page.locator('[data-testid="caa-myaviation-section"]'))
-      .toBeVisible()
-    
-    // Should show connection status
-    await expect(page.locator('[data-testid="myaviation-status"]'))
-      .toContainText('Not Connected')
-    
-    // Should show setup button
-    await expect(page.locator('[data-testid="setup-myaviation-button"]'))
-      .toBeVisible()
-  })
 })

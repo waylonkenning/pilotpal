@@ -164,58 +164,6 @@
         </div>
       </div>
 
-      <!-- CAA MyAviation Integration -->
-      <div class="card mb-8" data-testid="caa-myaviation-section">
-        <h2 class="text-xl font-semibold mb-6">🇳🇿 CAA MyAviation Integration</h2>
-        
-        <div class="bg-blue-50 p-4 rounded-lg mb-6">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h3 class="font-semibold text-blue-800">Connection Status</h3>
-              <div class="text-blue-700" data-testid="myaviation-status">
-                {{ myAviationConnected ? 'Connected' : 'Not Connected' }}
-              </div>
-            </div>
-            <div class="text-3xl">
-              {{ myAviationConnected ? '✅' : '🔗' }}
-            </div>
-          </div>
-          
-          <div v-if="!myAviationConnected" data-testid="myaviation-instructions">
-            <p class="text-blue-700 mb-4">
-              Connect your CAA MyAviation account to automatically sync your medical certificates, 
-              theory exam results, and license status.
-            </p>
-            
-            <div class="bg-green-50 p-4 rounded-lg mb-4" data-testid="myaviation-benefits">
-              <h4 class="font-semibold text-green-800 mb-2">Benefits of Integration:</h4>
-              <ul class="text-green-700 space-y-1">
-                <li>• Automatic updates of medical certificate status</li>
-                <li>• Theory exam results sync</li>
-                <li>• License and endorsement tracking</li>
-                <li>• Compliance monitoring and reminders</li>
-              </ul>
-            </div>
-            
-            <button 
-              @click="showMyAviationForm = true"
-              class="btn btn-primary"
-              data-testid="setup-myaviation-button"
-            >
-              🔗 Connect MyAviation
-            </button>
-          </div>
-          
-          <div v-else>
-            <p class="text-blue-700 mb-4">
-              Your CAA MyAviation account is connected and syncing automatically.
-            </p>
-            <div class="text-sm text-blue-600">
-              Last sync: {{ lastSyncDate }}
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Emergency Contacts -->
       <div class="card">
@@ -291,76 +239,6 @@
       </div>
     </div>
 
-    <!-- MyAviation Connection Form -->
-    <div v-if="showMyAviationForm" class="modal-overlay" @click="showMyAviationForm = false">
-      <div class="modal-content" @click.stop data-testid="myaviation-connection-form">
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-4">Connect CAA MyAviation</h3>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="form-label">CAA Username</label>
-              <input 
-                v-model="myAviationForm.username" 
-                type="text" 
-                class="form-input"
-                placeholder="Your CAA MyAviation username"
-                data-testid="caa-username-input"
-              >
-            </div>
-            
-            <div>
-              <label class="form-label">Password</label>
-              <input 
-                v-model="myAviationForm.password" 
-                type="password" 
-                class="form-input"
-                placeholder="Your CAA MyAviation password"
-                data-testid="caa-password-input"
-              >
-            </div>
-            
-            <div class="bg-yellow-50 p-4 rounded-lg">
-              <p class="text-yellow-800 text-sm">
-                <strong>Security Note:</strong> Your credentials are encrypted and stored securely. 
-                We only access your public license and medical information to keep your 
-                training records up to date.
-              </p>
-            </div>
-          </div>
-          
-          <div class="flex gap-3 mt-6">
-            <button 
-              @click="connectMyAviation" 
-              class="btn btn-primary flex-1"
-              data-testid="connect-myaviation-button"
-            >
-              🔗 Connect Account
-            </button>
-            <button @click="showMyAviationForm = false" class="btn btn-secondary">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MyAviation Connection Success -->
-    <div v-if="showConnectionSuccess" class="modal-overlay" @click="showConnectionSuccess = false">
-      <div class="modal-content" @click.stop data-testid="myaviation-connection-success">
-        <div class="p-6 text-center">
-          <div class="text-6xl mb-4">🔗</div>
-          <h3 class="text-xl font-bold mb-4">Successfully Connected!</h3>
-          <p class="text-gray-600 mb-6">
-            Your CAA MyAviation account has been connected. Your medical certificates 
-            and theory exam results will now sync automatically.
-          </p>
-          <button @click="showConnectionSuccess = false" class="btn btn-primary">
-            Great!
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- Profile Help Modal -->
     <div v-if="showProfileHelp" class="modal-overlay" @click="showProfileHelp = false">
@@ -377,13 +255,6 @@
               </p>
             </div>
             
-            <div>
-              <h4 class="font-semibold text-blue-600 mb-2">🇳🇿 CAA MyAviation</h4>
-              <p class="text-gray-700">
-                Connect your official CAA account to automatically sync medical certificates, 
-                theory exam results, and license status for seamless compliance tracking.
-              </p>
-            </div>
             
             <div>
               <h4 class="font-semibold text-blue-600 mb-2">🚨 Emergency Contacts</h4>
@@ -407,6 +278,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { handleLocalStorageError, handleFormValidationError } from '../utils/errorHandler'
 
 // Profile data
 const userProfile = ref({
@@ -433,16 +305,6 @@ const userProfile = ref({
 // Modal states
 const showSaveSuccess = ref(false)
 const showProfileHelp = ref(false)
-const showMyAviationForm = ref(false)
-const showConnectionSuccess = ref(false)
-
-// MyAviation integration
-const myAviationConnected = ref(false)
-const lastSyncDate = ref('')
-const myAviationForm = ref({
-  username: '',
-  password: ''
-})
 
 // Load profile data on mount
 onMounted(() => {
@@ -450,51 +312,45 @@ onMounted(() => {
 })
 
 const loadProfile = () => {
-  const savedProfile = localStorage.getItem('ppl-quest-user-profile')
-  if (savedProfile) {
-    const parsed = JSON.parse(savedProfile)
-    userProfile.value = { ...userProfile.value, ...parsed }
-  }
-  
-  // Check MyAviation connection status
-  const myAviationData = localStorage.getItem('ppl-quest-myaviation')
-  if (myAviationData) {
-    const data = JSON.parse(myAviationData)
-    myAviationConnected.value = data.connected || false
-    lastSyncDate.value = data.lastSync || ''
+  try {
+    const savedProfile = localStorage.getItem('ppl-quest-user-profile')
+    if (savedProfile) {
+      const parsed = JSON.parse(savedProfile)
+      userProfile.value = { ...userProfile.value, ...parsed }
+    }
+  } catch (error) {
+    console.error('Error loading profile:', error)
+    handleLocalStorageError('load', error as Error)
   }
 }
 
 const saveProfile = () => {
-  // Save to localStorage
-  localStorage.setItem('ppl-quest-user-profile', JSON.stringify(userProfile.value))
-  
-  // Show success message
-  showSaveSuccess.value = true
-  
-  // Auto-hide after 3 seconds
-  setTimeout(() => {
-    showSaveSuccess.value = false
-  }, 3000)
+  try {
+    // Validate required fields
+    if (!userProfile.value.name?.trim()) {
+      handleFormValidationError('Full Name', 'This field is required')
+      return
+    }
+    
+    if (!userProfile.value.email?.trim()) {
+      handleFormValidationError('Email Address', 'This field is required')
+      return
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('ppl-quest-user-profile', JSON.stringify(userProfile.value))
+    
+    // Show success message
+    showSaveSuccess.value = true
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      showSaveSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Error saving profile:', error)
+    handleLocalStorageError('save', error as Error)
+  }
 }
 
-const connectMyAviation = () => {
-  // Simulate connection process
-  setTimeout(() => {
-    myAviationConnected.value = true
-    lastSyncDate.value = new Date().toLocaleDateString()
-    
-    // Save connection status
-    localStorage.setItem('ppl-quest-myaviation', JSON.stringify({
-      connected: true,
-      lastSync: lastSyncDate.value,
-      username: myAviationForm.value.username
-    }))
-    
-    // Reset form and show success
-    myAviationForm.value = { username: '', password: '' }
-    showMyAviationForm.value = false
-    showConnectionSuccess.value = true
-  }, 1500) // Simulate API call delay
-}
 </script>

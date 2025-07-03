@@ -175,41 +175,6 @@ test.describe('User Profile and State Management', () => {
       .toContainText('6.0') // Updated total
   })
 
-  test('should handle CAA MyAviation integration status', async ({ page }) => {
-    // Navigate to profile/integration section
-    await page.click('[data-testid="user-profile-tab"]')
-    
-    // Should show CAA MyAviation section
-    await expect(page.locator('[data-testid="caa-myaviation-section"]'))
-      .toBeVisible()
-    
-    // Should show integration status (not connected initially)
-    await expect(page.locator('[data-testid="myaviation-status"]'))
-      .toContainText('Not Connected')
-    
-    // Should provide connection instructions
-    await expect(page.locator('[data-testid="myaviation-instructions"]'))
-      .toBeVisible()
-    
-    // Should show benefits of integration
-    await expect(page.locator('[data-testid="myaviation-benefits"]'))
-      .toContainText('automatic updates')
-    
-    // Simulate connection setup
-    await page.click('[data-testid="setup-myaviation-button"]')
-    
-    // Should show connection form
-    await expect(page.locator('[data-testid="myaviation-connection-form"]'))
-      .toBeVisible()
-    
-    // Fill in CAA credentials (simulated)
-    await page.fill('[data-testid="caa-username-input"]', 'pilot123')
-    await page.click('[data-testid="connect-myaviation-button"]')
-    
-    // Should show connection success
-    await expect(page.locator('[data-testid="myaviation-connection-success"]'))
-      .toBeVisible()
-  })
 
   test('should persist state across browser sessions', async ({ page }) => {
     // Create comprehensive state data

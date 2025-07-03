@@ -232,33 +232,6 @@
           </div>
         </div>
 
-        <!-- MyAviation Integration Warnings -->
-        <div v-if="hasMyAviationWarnings" class="card mb-6" data-testid="myaviation-dashboard-alert">
-          <h3 class="text-lg font-semibold mb-4">🔗 MyAviation Integration</h3>
-          <div class="space-y-3">
-            <div v-if="getMyAviationStatus() === 'Sync Error'" 
-                 class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
-              <div>
-                <div class="font-semibold text-red-800">MyAviation Sync Failed</div>
-                <div class="text-sm text-red-600">Unable to sync license data from CAA MyAviation</div>
-              </div>
-              <router-link to="/requirements" class="btn btn-primary btn-sm">
-                Fix Connection
-              </router-link>
-            </div>
-            
-            <div v-if="getMyAviationStatus() === 'Sync Overdue'" 
-                 class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
-              <div>
-                <div class="font-semibold text-orange-800">MyAviation Sync Overdue</div>
-                <div class="text-sm text-orange-600">License data hasn't synced in over a week</div>
-              </div>
-              <router-link to="/requirements" class="btn btn-secondary btn-sm">
-                Sync Now
-              </router-link>
-            </div>
-          </div>
-        </div>
 
         <!-- Quick Navigation -->
         <div class="grid grid-auto-fit gap-4">
@@ -1061,28 +1034,6 @@ const hasBfrWarnings = computed(() => {
   return status === 'Overdue' || status === 'Expiring Soon'
 })
 
-// MyAviation Warning Methods
-const getMyAviationStatus = () => {
-  const myAviationData = JSON.parse(localStorage.getItem('ppl-quest-myaviation') || '{}')
-  const connection = myAviationData.connection
-  
-  if (!connection) return 'Disconnected'
-  
-  const lastSync = new Date(connection.lastSync)
-  const now = new Date()
-  const timeDiff = now.getTime() - lastSync.getTime()
-  const hoursDiff = timeDiff / (1000 * 3600)
-  
-  if (connection.syncError) return 'Sync Error'
-  if (hoursDiff > 168) return 'Sync Overdue' // More than 1 week
-  if (hoursDiff > 24) return 'Sync Due'
-  return 'Connected'
-}
-
-const hasMyAviationWarnings = computed(() => {
-  const status = getMyAviationStatus()
-  return status === 'Sync Error' || status === 'Sync Overdue'
-})
 
 const saveProgress = () => {
   localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
