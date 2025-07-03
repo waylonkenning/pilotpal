@@ -55,9 +55,18 @@
           <div class="text-sm font-medium mb-3">Lesson Progress ({{ progress.completedLessons.length }}/27)</div>
           <div class="flex flex-wrap gap-2">
             <div v-for="lesson in 27" :key="lesson"
-                 class="w-3 h-3 rounded-full"
-                 :class="progress.completedLessons.includes(lesson) ? 'bg-green-500' : 
-                         lesson === progress.currentLesson ? 'bg-blue-500' : 'bg-gray-300'">
+                 class="w-6 h-6 rounded-full cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
+                 :class="progress.completedLessons.includes(lesson) ? 'bg-green-500 text-white border-green-600' : 
+                         lesson === progress.currentLesson ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-300 text-gray-600 border-gray-400'"
+                 :data-testid="`lesson-${lesson}-node`"
+                 :data-status="progress.completedLessons.includes(lesson) ? 'completed' : 
+                              lesson === progress.currentLesson ? 'current' : 'locked'"
+                 @mouseenter="showLessonTooltip(lesson, $event)"
+                 @mouseleave="hideLessonTooltip"
+                 @focus="showLessonTooltip(lesson, $event)"
+                 @blur="hideLessonTooltip"
+                 tabindex="0">
+              {{ lesson }}
             </div>
           </div>
         </div>
@@ -203,7 +212,10 @@
                 <span>Flight Training</span>
                 <span>${{ getCategorySpending('flight-training') }} / $25,000</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-4" data-testid="flight-training-bar">
+              <div class="w-full bg-gray-200 rounded-full h-4 cursor-pointer" 
+                   data-testid="spending-progress-bar"
+                   @mouseenter="showFinancialTooltip($event)"
+                   @mouseleave="hideFinancialTooltip">
                 <div class="h-4 rounded-full transition-all duration-300"
                      :class="getBudgetStatusColor('flight-training')"
                      :style="{ width: getSpendingPercentage('flight-training', 25000) + '%' }"></div>
@@ -264,7 +276,11 @@
           </div>
           
           <!-- Theory Exams -->
-          <div class="text-center p-4 rounded-lg border" :class="getRequirementStatusClass('theory')">
+          <div class="text-center p-4 rounded-lg border cursor-pointer" 
+               :class="getRequirementStatusClass('theory')"
+               data-testid="theory-progress-card"
+               @mouseenter="showTheoryTooltip($event)"
+               @mouseleave="hideTheoryTooltip">
             <div class="text-3xl mb-2" data-testid="theory-progress-icons">
               {{ getRequirementIcon('theory') }}
             </div>
@@ -313,9 +329,11 @@
         <h3 class="text-lg font-semibold mb-4">Achievement Showcase</h3>
         <div class="grid grid-cols-3 md:grid-cols-6 gap-4" data-testid="earned-badges-showcase">
           <div v-for="badge in allBadges" :key="badge.id"
-               class="text-center p-3 rounded-lg transition-all duration-300"
+               class="text-center p-3 rounded-lg transition-all duration-300 cursor-pointer"
                :class="progress.achievements.includes(badge.id) ? 'bg-yellow-50 border-2 border-yellow-300' : 'bg-gray-50 border border-gray-200'"
-               :data-testid="progress.achievements.includes(badge.id) ? 'earned-badge' : 'locked-badge-display'">
+               :data-testid="`${badge.id}-badge`"
+               @mouseenter="showAchievementTooltip(badge, $event)"
+               @mouseleave="hideAchievementTooltip">
             <div class="text-3xl mb-2" :class="!progress.achievements.includes(badge.id) ? 'grayscale opacity-50' : ''">
               {{ badge.icon }}
             </div>
@@ -561,15 +579,6 @@
       </div>
     </div>
 
-    <!-- Lesson Tooltip -->
-    <div v-if="tooltipVisible" 
-         class="fixed bg-black bg-opacity-75 text-white p-3 rounded-lg text-sm pointer-events-none z-50"
-         :style="tooltipStyle"
-         data-testid="lesson-tooltip">
-      <div class="font-semibold">Lesson {{ tooltipLesson }}</div>
-      <div>{{ getLessonName(tooltipLesson) }}</div>
-      <div class="text-xs text-gray-300">{{ getLessonStatus(tooltipLesson) }}</div>
-    </div>
 
     <!-- Phase Tooltip -->
     <div v-if="phaseTooltipVisible" 
@@ -673,6 +682,158 @@
         </div>
       </div>
     </div>
+
+    <!-- Lesson Tooltip -->
+    <div v-if="tooltipVisible" 
+         class="fixed z-50 bg-gray-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         :style="tooltipStyle"
+         data-testid="lesson-tooltip">
+      <div class="font-semibold mb-1" data-testid="lesson-tooltip-title">
+        Lesson {{ tooltipLesson }}: {{ getLessonName(tooltipLesson) }}
+      </div>
+      <div class="text-sm text-gray-300 mb-2" data-testid="lesson-tooltip-description">
+        {{ getLessonDescription(tooltipLesson) }}
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="text-xs px-2 py-1 rounded" 
+             :class="getLessonStatusColor(tooltipLesson)"
+             data-testid="lesson-tooltip-status">
+          {{ getLessonStatus(tooltipLesson) }}
+        </div>
+        <div class="text-xs text-gray-400" data-testid="lesson-duration">
+          {{ getLessonDuration(tooltipLesson) }}
+        </div>
+        <div class="text-xs text-green-400" data-testid="lesson-cost">
+          ${{ getLessonCost(tooltipLesson) }}
+        </div>
+      </div>
+      <div v-if="getLessonPrerequisites(tooltipLesson).length > 0" 
+           class="mt-2 text-xs text-orange-300" 
+           data-testid="lesson-prerequisites">
+        Prerequisites: {{ getLessonPrerequisites(tooltipLesson).join(', ') }}
+      </div>
+      <div v-if="getLessonStatus(tooltipLesson) === 'Completed'" 
+           class="mt-1 text-xs text-green-300" 
+           data-testid="lesson-completion-date">
+        Completed: {{ getLessonCompletionDate(tooltipLesson) }}
+      </div>
+      <div v-if="getLessonStatus(tooltipLesson) === 'Locked'" 
+           class="mt-2 text-xs text-red-300" 
+           data-testid="lesson-unlock-requirements">
+        Unlock by: {{ getLessonUnlockRequirements(tooltipLesson) }}
+      </div>
+    </div>
+
+    <!-- Phase Tooltip -->
+    <div v-if="phaseTooltipVisible" 
+         class="fixed z-50 bg-blue-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         :style="phaseTooltipStyle"
+         data-testid="phase-tooltip">
+      <div class="font-semibold mb-1">{{ phaseTooltipPhase.name }} Phase</div>
+      <div class="text-sm text-blue-200 mb-2">{{ phaseTooltipPhase.description }}</div>
+      <div class="text-xs text-blue-300">
+        Lessons {{ phaseTooltipPhase.lessons }}
+      </div>
+    </div>
+
+    <!-- Hours Progress Tooltip -->
+    <div v-if="hoursTooltipVisible" 
+         class="fixed z-50 bg-green-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         :style="hoursTooltipStyle"
+         data-testid="progress-tooltip">
+      <div class="font-semibold mb-2" data-testid="progress-tooltip-title">Flight Hours Progress</div>
+      <div class="space-y-1 text-sm" data-testid="progress-tooltip-details">
+        <div class="flex justify-between">
+          <span>Dual Hours:</span>
+          <span class="text-blue-300">{{ progress.flightHours.dual.toFixed(1) }}h / 25h min</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Solo Hours:</span>
+          <span class="text-green-300">{{ progress.flightHours.solo.toFixed(1) }}h / 15h min</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Cross Country:</span>
+          <span class="text-yellow-300">{{ progress.flightHours.crossCountry.toFixed(1) }}h / 5h min</span>
+        </div>
+        <div class="flex justify-between font-semibold border-t border-gray-600 pt-1">
+          <span>Total Hours:</span>
+          <span class="text-white">{{ progress.flightHours.total.toFixed(1) }}h / 50h min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theory Progress Tooltip -->
+    <div v-if="theoryTooltipVisible" 
+         class="fixed z-50 bg-purple-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         :style="theoryTooltipStyle"
+         data-testid="theory-tooltip">
+      <div class="font-semibold mb-2">Theory Progress</div>
+      <div class="space-y-1 text-sm" data-testid="theory-exam-details">
+        <div class="flex justify-between">
+          <span>Passed Exams:</span>
+          <span class="text-green-300">{{ passedExamsCount }} / 6</span>
+        </div>
+        <div class="text-xs text-purple-200 mt-2">
+          Complete all 6 theory exams before flight test
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement Badge Tooltip -->
+    <div v-if="achievementTooltipVisible" 
+         class="fixed z-50 bg-yellow-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         :style="achievementTooltipStyle"
+         data-testid="achievement-tooltip">
+      <div class="font-semibold mb-1">{{ achievementTooltipBadge.name }}</div>
+      <div class="text-sm text-yellow-200 mb-2" data-testid="achievement-description">
+        {{ achievementTooltipBadge.description }}
+      </div>
+      <div class="text-xs text-yellow-300" data-testid="achievement-requirements">
+        {{ getAchievementRequirements(achievementTooltipBadge.id) }}
+      </div>
+      <div class="text-xs px-2 py-1 rounded mt-2" 
+           :class="getRarityColor(achievementTooltipBadge.rarity)">
+        {{ achievementTooltipBadge.rarity }}
+      </div>
+    </div>
+
+    <!-- Financial Progress Tooltip -->
+    <div v-if="financialTooltipVisible" 
+         class="fixed z-50 bg-orange-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         :style="financialTooltipStyle"
+         data-testid="financial-tooltip">
+      <div class="font-semibold mb-2">Budget Progress</div>
+      <div class="space-y-1 text-sm" data-testid="spending-breakdown">
+        <div class="flex justify-between">
+          <span>Flight Training:</span>
+          <span class="text-blue-300">${{ getCategorySpending('flight-training').toFixed(0) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Theory Exams:</span>
+          <span class="text-green-300">${{ getCategorySpending('theory-exam').toFixed(0) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Medical:</span>
+          <span class="text-yellow-300">${{ getCategorySpending('medical').toFixed(0) }}</span>
+        </div>
+        <div class="flex justify-between font-semibold border-t border-orange-600 pt-1">
+          <span>Total Spent:</span>
+          <span class="text-white">${{ getTotalExpenses().toFixed(0) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone Tooltip -->
+    <div v-if="milestoneTooltipVisible" 
+         class="fixed z-50 bg-indigo-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         :style="milestoneTooltipStyle"
+         data-testid="milestone-tooltip">
+      <div class="font-semibold mb-1">{{ milestoneTooltipData.name }} Milestone</div>
+      <div class="text-sm text-indigo-200 mb-2">{{ milestoneTooltipData.description }}</div>
+      <div class="text-xs text-indigo-300" data-testid="milestone-requirements">
+        Requirements: {{ milestoneTooltipData.requirements }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -715,6 +876,18 @@ const phaseTooltipStyle = ref({})
 const hoursTooltipVisible = ref(false)
 const hoursTooltipStyle = ref({})
 const showHoursEducation = ref(false)
+
+// Additional tooltip states
+const theoryTooltipVisible = ref(false)
+const theoryTooltipStyle = ref({})
+const achievementTooltipVisible = ref(false)
+const achievementTooltipStyle = ref({})
+const achievementTooltipBadge = ref<any>({})
+const financialTooltipVisible = ref(false)
+const financialTooltipStyle = ref({})
+const milestoneTooltipVisible = ref(false)
+const milestoneTooltipStyle = ref({})
+const milestoneTooltipData = ref<any>({})
 
 // Training phases
 const trainingPhases = [
@@ -1032,6 +1205,173 @@ const showHoursTooltip = (event: MouseEvent) => {
 
 const hideHoursTooltip = () => {
   hoursTooltipVisible.value = false
+}
+
+// Additional tooltip methods
+const getLessonDescription = (lessonNum: number) => {
+  const descriptions = [
+    'Your first flight experience with an instructor',
+    'Learn about aircraft systems and controls',
+    'Ground operations and taxi procedures',
+    'Basic flight attitude control',
+    'Altitude control and power management',
+    'Banking and coordinated turns',
+    'Flying at minimum controllable airspeed',
+    'Stall recognition and recovery',
+    'Emergency procedures and safety',
+    'Traffic pattern and circuit procedures',
+    'Approach and landing techniques',
+    'Final preparation for solo flight',
+    'Your first solo flight milestone',
+    'Building solo experience and confidence',
+    'Basic navigation and chart reading',
+    'Flight planning and weather analysis',
+    'VOR, GPS and radio navigation',
+    'Solo cross-country navigation',
+    'Advanced navigation techniques',
+    'Night flying operations (optional)',
+    'Basic instrument flying skills',
+    'Advanced flight maneuvers',
+    'Unusual attitude recovery',
+    'Flight test preparation',
+    'Practice flight test with instructor',
+    'Official CAA flight test',
+    'License issuance and celebration'
+  ]
+  return descriptions[lessonNum - 1] || `Training for lesson ${lessonNum}`
+}
+
+const getLessonDuration = (lessonNum: number) => {
+  const durations = [
+    '1.0h', '1.5h', '1.0h', '1.5h', '1.5h', '1.5h', '1.5h', '1.5h', '1.5h',
+    '1.5h', '1.5h', '1.5h', '1.0h', '1.0h', '2.0h', '2.0h', '2.0h', '2.5h',
+    '2.5h', '2.0h', '2.0h', '2.0h', '1.5h', '2.0h', '2.5h', '3.0h', '0.5h'
+  ]
+  return durations[lessonNum - 1] || '1.5h'
+}
+
+const getLessonCost = (lessonNum: number) => {
+  const costs = [
+    250, 300, 250, 300, 300, 300, 300, 300, 300,
+    300, 300, 300, 200, 200, 400, 400, 400, 500,
+    500, 400, 400, 400, 300, 400, 500, 600, 100
+  ]
+  return costs[lessonNum - 1] || 300
+}
+
+const getLessonStatusColor = (lessonNum: number) => {
+  const status = getLessonStatus(lessonNum)
+  return {
+    'Completed': 'bg-green-600',
+    'Current': 'bg-blue-600', 
+    'In Progress': 'bg-yellow-600',
+    'Future': 'bg-gray-600',
+    'Locked': 'bg-red-600'
+  }[status] || 'bg-gray-600'
+}
+
+const getLessonPrerequisites = (lessonNum: number) => {
+  const prerequisites: Record<number, string[]> = {
+    13: ['Medical Certificate', 'Solo endorsement'],
+    15: ['Navigation theory'],
+    18: ['Cross-country planning'],
+    20: ['Night rating (optional)'],
+    26: ['All theory exams', '50+ hours'],
+    27: ['Flight test pass']
+  }
+  return prerequisites[lessonNum] || []
+}
+
+const getLessonCompletionDate = (lessonNum: number) => {
+  // Mock completion date - in real app this would come from stored data
+  return new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString()
+}
+
+const getLessonUnlockRequirements = (lessonNum: number) => {
+  const requirements: Record<number, string> = {
+    13: 'Complete medical certificate and get solo endorsement',
+    15: 'Pass air law and navigation theory exams',
+    18: 'Complete 5 hours cross-country with instructor',
+    26: 'Pass all 6 theory exams and log 50+ flight hours',
+    27: 'Pass flight test'
+  }
+  return requirements[lessonNum] || 'Complete previous lessons'
+}
+
+const showTheoryTooltip = (event: MouseEvent) => {
+  theoryTooltipVisible.value = true
+  theoryTooltipStyle.value = {
+    left: event.clientX + 10 + 'px',
+    top: event.clientY - 50 + 'px'
+  }
+}
+
+const hideTheoryTooltip = () => {
+  theoryTooltipVisible.value = false
+}
+
+const showAchievementTooltip = (badge: any, event: MouseEvent) => {
+  achievementTooltipBadge.value = badge
+  achievementTooltipVisible.value = true
+  achievementTooltipStyle.value = {
+    left: event.clientX + 10 + 'px',
+    top: event.clientY - 50 + 'px'
+  }
+}
+
+const hideAchievementTooltip = () => {
+  achievementTooltipVisible.value = false
+}
+
+const showFinancialTooltip = (event: MouseEvent) => {
+  financialTooltipVisible.value = true
+  financialTooltipStyle.value = {
+    left: event.clientX + 10 + 'px',
+    top: event.clientY - 80 + 'px'
+  }
+}
+
+const hideFinancialTooltip = () => {
+  financialTooltipVisible.value = false
+}
+
+const showMilestoneTooltip = (milestone: any, event: MouseEvent) => {
+  milestoneTooltipData.value = milestone
+  milestoneTooltipVisible.value = true
+  milestoneTooltipStyle.value = {
+    left: event.clientX + 10 + 'px',
+    top: event.clientY - 50 + 'px'
+  }
+}
+
+const hideMilestoneTooltip = () => {
+  milestoneTooltipVisible.value = false
+}
+
+const getAchievementRequirements = (badgeId: string) => {
+  const requirements: Record<string, string> = {
+    'first-flight': 'Complete your introductory flight',
+    'controls-master': 'Master basic aircraft controls',
+    'circuit-master': 'Complete multiple circuit lessons',
+    'solo-wings': 'Complete first solo flight',
+    'navigation-pioneer': 'Complete 5 hours cross-country',
+    'theory-scholar': 'Pass your first theory exam',
+    'theory-master': 'Pass all 6 theory exams',
+    'night-flyer': 'Complete 5 hours night flying',
+    'instrument-rated': 'Complete 5 hours instrument time',
+    'terrain-master': 'Complete 5 hours terrain awareness',
+    'big-spender': 'Spend over $10,000 on training',
+    'licensed-pilot': 'Complete all PPL requirements'
+  }
+  return requirements[badgeId] || 'Requirements not specified'
+}
+
+const getRarityColor = (rarity: string) => {
+  return {
+    'Common': 'bg-gray-600',
+    'Rare': 'bg-blue-600',
+    'Epic': 'bg-purple-600'
+  }[rarity] || 'bg-gray-600'
 }
 
 const loadProgress = () => {

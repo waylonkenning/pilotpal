@@ -74,7 +74,10 @@
           <!-- Flight Hours -->
           <div class="card">
             <h3 class="text-lg font-semibold mb-2">Flight Hours</h3>
-            <div class="text-3xl font-bold text-blue-600 mb-2" data-testid="total-hours">
+            <div class="text-3xl font-bold text-blue-600 mb-2 cursor-pointer" 
+                 data-testid="total-hours"
+                 @mouseenter="showProgressTooltip($event)"
+                 @mouseleave="hideProgressTooltip">
               {{ progress.flightHours.total.toFixed(1) }}
             </div>
             <div class="text-sm text-gray-600">
@@ -650,6 +653,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Progress Tooltip -->
+    <div v-if="progressTooltipVisible" 
+         class="fixed z-50 bg-blue-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         :style="progressTooltipStyle"
+         data-testid="progress-tooltip">
+      <div class="font-semibold mb-2">Flight Hours Progress</div>
+      <div class="space-y-1 text-sm" data-testid="progress-tooltip-details">
+        <div class="flex justify-between">
+          <span>Dual Hours:</span>
+          <span class="text-blue-300">{{ progress.flightHours.dual.toFixed(1) }}h / 25h min</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Solo Hours:</span>
+          <span class="text-green-300">{{ progress.flightHours.solo.toFixed(1) }}h / 15h min</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Cross Country:</span>
+          <span class="text-yellow-300">{{ progress.flightHours.crossCountry.toFixed(1) }}h / 5h min</span>
+        </div>
+        <div class="flex justify-between font-semibold border-t border-blue-600 pt-1">
+          <span>Total Hours:</span>
+          <span class="text-white">{{ progress.flightHours.total.toFixed(1) }}h / 50h min</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -689,6 +718,10 @@ const showContextualHelp = ref(false)
 const showEducationCenter = ref(false)
 const showRequirementModal = ref(false)
 const newAchievements = ref<string[]>([])
+
+// Tooltip state
+const progressTooltipVisible = ref(false)
+const progressTooltipStyle = ref({})
 
 // Form data
 const lessonHours = ref('')
@@ -1053,6 +1086,19 @@ const hasMyAviationWarnings = computed(() => {
 
 const saveProgress = () => {
   localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
+}
+
+// Tooltip methods
+const showProgressTooltip = (event: MouseEvent) => {
+  progressTooltipVisible.value = true
+  progressTooltipStyle.value = {
+    left: event.clientX + 10 + 'px',
+    top: event.clientY - 80 + 'px'
+  }
+}
+
+const hideProgressTooltip = () => {
+  progressTooltipVisible.value = false
 }
 
 const loadProgress = () => {
