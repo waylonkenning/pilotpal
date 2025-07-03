@@ -36,17 +36,22 @@ test.describe('Lesson Info Modal', () => {
   })
 
   test('should show different training phases for different lessons', async ({ page }) => {
-    // Set lesson to 8 (Circuit phase)
+    // Set lesson to 8 (Circuit phase) and go directly to dashboard
+    await page.goto('/')
     await page.evaluate(() => {
+      localStorage.clear()
       localStorage.setItem('ppl-quest-progress', JSON.stringify({
         currentLesson: 8,
         completedLessons: [1, 2, 3, 4, 5, 6, 7],
         flightHours: { total: 10, dual: 10, solo: 0, crossCountry: 0 }
       }))
     })
-    await page.reload()
-    await page.click('[data-testid="start-journey-button"]')
-    await page.click('[data-testid="continue-to-app"]')
+    
+    // Go directly to dashboard (users with progress are redirected there)
+    await page.goto('/dashboard')
+    
+    // Wait for dashboard to load and verify lesson 8
+    await expect(page.locator('[data-testid="current-lesson-title"]')).toContainText('Lesson 8')
     
     // Click More Info for lesson 8
     await page.click('[data-testid="lesson-info-button"]')
@@ -59,17 +64,22 @@ test.describe('Lesson Info Modal', () => {
   })
 
   test('should show prerequisites for advanced lessons', async ({ page }) => {
-    // Set lesson to 13 (First Solo - has prerequisites)
+    // Set lesson to 13 (First Solo - has prerequisites) and go directly to dashboard
+    await page.goto('/')
     await page.evaluate(() => {
+      localStorage.clear()
       localStorage.setItem('ppl-quest-progress', JSON.stringify({
         currentLesson: 13,
         completedLessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         flightHours: { total: 20, dual: 20, solo: 0, crossCountry: 0 }
       }))
     })
-    await page.reload()
-    await page.click('[data-testid="start-journey-button"]')
-    await page.click('[data-testid="continue-to-app"]')
+    
+    // Go directly to dashboard (users with progress are redirected there)
+    await page.goto('/dashboard')
+    
+    // Wait for dashboard to load and verify lesson 13
+    await expect(page.locator('[data-testid="current-lesson-title"]')).toContainText('Lesson 13')
     
     // Click More Info for lesson 13
     await page.click('[data-testid="lesson-info-button"]')
@@ -142,8 +152,10 @@ test.describe('Lesson Info Modal', () => {
     ]
 
     for (const testCase of testCases) {
-      // Set lesson
+      // Go to fresh page for each test case
+      await page.goto('/')
       await page.evaluate((lesson) => {
+        localStorage.clear()
         localStorage.setItem('ppl-quest-progress', JSON.stringify({
           currentLesson: lesson,
           completedLessons: Array.from({length: lesson - 1}, (_, i) => i + 1),
@@ -151,11 +163,10 @@ test.describe('Lesson Info Modal', () => {
         }))
       }, testCase.lesson)
       
-      await page.reload()
-      await page.click('[data-testid="start-journey-button"]')
-      await page.click('[data-testid="continue-to-app"]')
+      // Go directly to dashboard (users with progress are redirected there)
+      await page.goto('/dashboard')
       
-      // Check current lesson title
+      // Wait for correct lesson to load
       await expect(page.locator('[data-testid="current-lesson-title"]')).toContainText(`Lesson ${testCase.lesson}`)
       await expect(page.locator('[data-testid="current-lesson-description"]')).toContainText(testCase.name)
       
@@ -167,6 +178,7 @@ test.describe('Lesson Info Modal', () => {
       
       // Close modal
       await page.click('button:has-text("Close")')
+      await expect(page.locator('[data-testid="lesson-info-modal"]')).not.toBeVisible()
     }
   })
 })

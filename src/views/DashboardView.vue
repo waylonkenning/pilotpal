@@ -263,7 +263,7 @@
 
     <!-- Complete Lesson Modal -->
     <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false">
-      <div class="modal-content" @click.stop>
+      <div class="modal-content" @click.stop data-testid="complete-lesson-modal">
         <div class="p-6">
           <h3 class="text-xl font-bold mb-4">Complete {{ currentLessonInfo.name }}</h3>
           
