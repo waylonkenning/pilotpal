@@ -982,7 +982,7 @@
             
             <!-- Action Button -->
             <div class="pt-4">
-              <button v-if="getLessonStatus(selectedLesson) === 'Current'" 
+              <button v-if="getLessonStatus(selectedLesson) === 'In Progress'" 
                       class="w-full btn btn-primary"
                       @click="startLesson(selectedLesson)">
                 Start This Lesson
