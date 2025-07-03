@@ -556,12 +556,12 @@
         </div>
         
         <!-- Swipeable Lesson Cards -->
-        <div class="card mb-8" data-testid="swipeable-lesson-cards">
+        <div class="card mb-8 overflow-x-auto" data-testid="swipeable-lesson-cards" style="overflow-x: auto !important;">
           <h3 class="text-lg font-semibold mb-4">📚 Lesson Progress</h3>
           <div class="relative">
             <!-- Horizontal scrollable lesson cards -->
             <div class="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
-                 style="scrollbar-width: none; -ms-overflow-style: none;"
+                 style="overflow-x: auto !important; scrollbar-width: none; -ms-overflow-style: none;"
                  ref="lessonCardsContainer">
               <div v-for="lesson in 27" :key="lesson"
                    class="flex-shrink-0 w-48 h-32 p-4 border-2 rounded-xl text-center cursor-pointer transition-all duration-300 hover:shadow-lg snap-center touch-manipulation"
@@ -599,11 +599,10 @@
             </div>
             
             <!-- Swipe Indicators -->
-            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators" style="display: flex !important; visibility: visible !important;">
+            <div class="flex justify-center mt-3 gap-1" data-testid="swipe-indicators">
               <div v-for="indicator in Math.ceil(27 / 5)" :key="indicator"
                    class="w-2 h-2 rounded-full transition-colors duration-300"
-                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'"
-                   style="opacity: 1 !important; visibility: visible !important;">
+                   :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'">
               </div>
             </div>
           </div>
