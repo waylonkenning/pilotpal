@@ -671,3 +671,291 @@ p {
 
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {\n  *,\n  *::before,\n  *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n\n/* High contrast mode support */\n@media (prefers-contrast: high) {\n  .card {\n    border-width: 2px;\n    border-color: var(--text-primary);\n  }\n  \n  .btn {\n    border: 2px solid currentColor;\n  }\n}\n\n/* Focus management for keyboard navigation */\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border: 0;\n}\n\n.focus-trap {\n  position: relative;\n}\n\n/* Skip to content link */\n.skip-link {\n  position: absolute;\n  top: -40px;\n  left: 6px;\n  background: var(--bg-primary);\n  color: var(--text-primary);\n  padding: 8px;\n  z-index: 1000;\n  text-decoration: none;\n  border-radius: var(--radius-md);\n  border: 2px solid var(--blue-500);\n}\n\n.skip-link:focus {\n  top: 6px;\n}\n\n/* Print styles */\n@media print {\n  .no-print {\n    display: none !important;\n  }\n  \n  .card {\n    break-inside: avoid;\n    box-shadow: none;\n    border: 1px solid #000;\n  }\n  \n  .btn {\n    border: 1px solid #000;\n    background: white !important;\n    color: black !important;\n  }\n}
+/* Metro/Windows Phone Style Design System */
+
+/* Metro Color Palette - Aviation Themed */
+:root {
+  /* Metro Aviation Colors */
+  --metro-sky-blue: #0078d4;        /* Primary aviation blue */
+  --metro-runway-orange: #ff8c00;   /* Warning/alert orange */
+  --metro-ground-green: #107c10;    /* Success/completed green */
+  --metro-altitude-purple: #5c2d91; /* Advanced/expert purple */
+  --metro-cloud-gray: #69797e;      /* Secondary/info gray */
+  --metro-danger-red: #d13438;      /* Emergency/danger red */
+  --metro-night-black: #000000;     /* High contrast black */
+  --metro-cockpit-white: #ffffff;   /* Pure white for text */
+  
+  /* Metro spacing for tiles */
+  --metro-tile-gap: 0.5rem;
+  --metro-tile-padding: 1.5rem;
+}
+
+/* Metro Grid Container */
+.metro-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--metro-tile-gap);
+  padding: var(--metro-tile-gap);
+}
+
+/* Base Metro Tile */
+.metro-tile {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  padding: var(--metro-tile-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.metro-tile:hover {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.metro-tile:active {
+  transform: scale(0.95);
+}
+
+/* Metro Tile Sizes */
+.metro-tile-1x1 {
+  min-height: 120px;
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.metro-tile-2x1 {
+  min-height: 120px;
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.metro-tile-2x2 {
+  min-height: 250px;
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Metro Tile Color Variants */
+.metro-tile-progress {
+  background-color: var(--metro-sky-blue);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-achievements {
+  background-color: var(--metro-ground-green);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-financial {
+  background-color: var(--metro-runway-orange);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-requirements {
+  background-color: var(--metro-altitude-purple);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-journey {
+  background-color: var(--metro-cloud-gray);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-danger {
+  background-color: var(--metro-danger-red);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-neutral {
+  background-color: var(--metro-cloud-gray);
+  color: var(--metro-cockpit-white);
+}
+
+/* Metro Typography */
+.metro-tile-title {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metro-tile-subtitle {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.metro-tile-value {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.metro-tile-label {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* Metro Buttons */
+.metro-button {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.1s ease;
+  cursor: pointer;
+}
+
+.metro-button-primary {
+  background-color: var(--metro-sky-blue);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-button-primary:hover {
+  background-color: #106ebe;
+}
+
+.metro-button-secondary {
+  background-color: var(--metro-cloud-gray);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-button-secondary:hover {
+  background-color: #5a6a70;
+}
+
+/* Metro Input Fields */
+.metro-input {
+  border-radius: 0 \!important;
+  border: 2px solid var(--metro-cloud-gray);
+  padding: 0.75rem;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  background-color: var(--metro-cockpit-white);
+  color: var(--metro-night-black);
+}
+
+.metro-input:focus {
+  border-color: var(--metro-sky-blue);
+  outline: none;
+  box-shadow: none;
+}
+
+/* Metro Cards (replacing rounded cards) */
+.metro-card {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  background-color: var(--metro-cockpit-white);
+  padding: var(--metro-tile-padding);
+  margin-bottom: 1rem;
+}
+
+/* Metro Training Phases */
+.metro-training-phases {
+  display: flex;
+  gap: var(--metro-tile-gap);
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.metro-phase-tile {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  padding: 1rem;
+  min-width: 120px;
+  text-align: center;
+  color: var(--metro-cockpit-white);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: transform 0.1s ease;
+}
+
+.metro-phase-tile:hover {
+  transform: scale(0.98);
+}
+
+/* Metro Achievement Badges */
+.metro-achievement-badge {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  padding: 1rem;
+  background-color: var(--metro-ground-green);
+  color: var(--metro-cockpit-white);
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Metro Financial Tiles */
+.metro-financial-tile {
+  border-radius: 0 \!important;
+  box-shadow: none \!important;
+  border: none;
+  padding: var(--metro-tile-padding);
+  background-color: var(--metro-runway-orange);
+  color: var(--metro-cockpit-white);
+}
+
+/* Remove all rounded corners globally for Metro style */
+.metro-style * {
+  border-radius: 0 \!important;
+}
+
+/* Metro-specific responsive adjustments */
+@media (max-width: 768px) {
+  .metro-grid-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+  
+  .metro-tile-2x1,
+  .metro-tile-2x2 {
+    grid-column: span 2;
+  }
+  
+  .metro-tile-padding {
+    --metro-tile-padding: 1rem;
+  }
+}
+
+/* Dark mode support for Metro */
+@media (prefers-color-scheme: dark) {
+  .metro-card {
+    background-color: var(--metro-night-black);
+    border: 1px solid var(--metro-cloud-gray);
+  }
+  
+  .metro-input {
+    background-color: var(--metro-night-black);
+    color: var(--metro-cockpit-white);
+    border-color: var(--metro-cloud-gray);
+  }
+}
+EOF < /dev/null

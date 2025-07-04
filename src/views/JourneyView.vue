@@ -493,13 +493,13 @@
       </div>
 
       <!-- Interactive NZ Aviation Map -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">New Zealand Aviation Training Map</h3>
-        <div class="relative bg-blue-50 rounded-lg p-4 h-96" data-testid="nz-aviation-map">
+        <div class="metro-card relative bg-blue-50 p-4 h-96" data-testid="nz-aviation-map">
           <!-- Interactive Map Container -->
           <div 
             ref="mapContainer" 
-            class="w-full h-full rounded-lg overflow-hidden border-2 border-gray-200"
+            class="w-full h-full overflow-hidden border-2 border-gray-200"
             data-testid="leaflet-map-container"
           >
             <!-- Map will be initialized here -->
@@ -518,7 +518,7 @@
           </div>
           
           <!-- Map Legend -->
-          <div class="absolute bottom-4 left-4 bg-white rounded-lg p-3 shadow-md z-10" data-testid="map-legend">
+          <div class="absolute bottom-4 left-4 bg-white p-3 border-2 border-gray-200 z-10" data-testid="map-legend">
             <h4 class="font-semibold text-sm mb-2">Legend</h4>
             <div class="space-y-1 text-xs">
               <div class="flex items-center">

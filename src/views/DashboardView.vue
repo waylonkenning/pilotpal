@@ -12,15 +12,15 @@
           <div class="flex gap-3">
             <button 
               @click="showContextualHelp = true"
-              class="btn btn-secondary text-sm"
-              data-testid="contextual-help-trigger"
+              class="metro-button metro-button-secondary"
+              data-testid="contextual-help-trigger metro-button"
             >
               ❓ Help
             </button>
             <button 
               @click="showEducationCenter = true"
-              class="btn btn-primary text-sm"
-              data-testid="education-center-button"
+              class="metro-button metro-button-primary"
+              data-testid="education-center-button metro-button"
             >
               📚 Education Center
             </button>
@@ -28,7 +28,7 @@
         </div>
         
         <!-- Today's Focus - Primary lesson display -->
-        <div class="card mb-6" data-testid="todays-focus">
+        <div class="metro-card mb-6" data-testid="todays-focus">
           <div class="text-center mb-4">
             <h1 class="text-2xl font-bold mb-2">Today's Focus</h1>
             <div class="text-sm text-gray-600">Your next step in the PPL journey</div>
@@ -73,98 +73,108 @@
           </div>
         </div>
 
-        <!-- Progress Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <!-- Flight Hours -->
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-2">Flight Hours</h3>
-            <div class="text-3xl font-bold text-blue-600 mb-2 cursor-pointer" 
-                 data-testid="total-hours"
-                 @mouseenter="showProgressTooltip($event)"
-                 @mouseleave="hideProgressTooltip">
-              {{ progress.flightHours.total.toFixed(1) }}
+        <!-- Metro Progress Overview -->
+        <div class="metro-grid-container" data-testid="metro-grid-container">
+          <!-- Flight Hours Metro Tile -->
+          <div class="metro-tile metro-tile-progress metro-tile-1x1" data-testid="metro-tile metro-tile-progress">
+            <div>
+              <div class="metro-tile-title" data-testid="metro-tile-title">Flight Hours</div>
+              <div class="metro-tile-value cursor-pointer" 
+                   data-testid="total-hours"
+                   @mouseenter="showProgressTooltip($event)"
+                   @mouseleave="hideProgressTooltip">
+                {{ progress.flightHours.total.toFixed(1) }}
+              </div>
+              <div class="metro-tile-label">Total Hours</div>
             </div>
-            <div class="text-sm text-gray-600">
+            <div class="metro-tile-subtitle">
               <div data-testid="dual-hours">Dual: {{ progress.flightHours.dual.toFixed(1) }}h</div>
               <div>Solo: {{ progress.flightHours.solo.toFixed(1) }}h</div>
-              <div>Cross Country: {{ progress.flightHours.crossCountry.toFixed(1) }}h</div>
+              <div>X-Country: {{ progress.flightHours.crossCountry.toFixed(1) }}h</div>
             </div>
           </div>
           
-          <!-- Lesson Progress -->
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-2">Lesson Progress</h3>
-            <div class="text-xl font-bold mb-2" data-testid="lesson-progress">
-              {{ progress.completedLessons.length }} of 27
+          <!-- Lesson Progress Metro Tile -->
+          <div class="metro-tile metro-tile-progress metro-tile-2x1" data-testid="metro-tile metro-tile-progress">
+            <div>
+              <div class="metro-tile-title" data-testid="metro-tile-title">Lesson Progress</div>
+              <div class="metro-tile-value" data-testid="lesson-progress">
+                {{ progress.completedLessons.length }}<span class="metro-tile-subtitle">/27</span>
+              </div>
+              <div class="metro-tile-label">Lessons Completed</div>
             </div>
-            <div class="text-sm text-gray-600 mb-3">lessons completed</div>
-            <div class="w-full bg-gray-200 rounded-full h-3" data-testid="progress-bar">
+            <div class="w-full bg-white bg-opacity-30 h-2 mt-4" data-testid="progress-bar">
               <div 
-                class="bg-blue-600 h-3 rounded-full transition-all duration-300" 
+                class="bg-white h-2 transition-all duration-300" 
                 :style="{ width: lessonProgress + '%' }"
                 data-testid="progress-bar-fill"
               ></div>
             </div>
           </div>
           
-          <!-- Achievements -->
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-2">Achievements</h3>
-            <div class="text-3xl font-bold text-green-600 mb-2" data-testid="badges-earned">
-              {{ progress.achievements.length }} of 12
-            </div>
-            <div class="text-sm text-gray-600 mb-3">
-              {{ progress.achievements.length === 0 ? 'Start flying to unlock badges!' : 'Great progress!' }}
+          <!-- Achievements Metro Tile -->
+          <div class="metro-tile metro-tile-achievements metro-tile-1x1" data-testid="metro-tile metro-tile-achievements">
+            <div>
+              <div class="metro-tile-title" data-testid="metro-tile-title">Achievements</div>
+              <div class="metro-tile-value" data-testid="badges-earned">
+                {{ progress.achievements.length }}<span class="metro-tile-subtitle">/12</span>
+              </div>
+              <div class="metro-tile-label">
+                {{ progress.achievements.length === 0 ? 'Start Flying!' : 'Badges Earned' }}
+              </div>
             </div>
             
-            <!-- Recent badges -->
-            <div v-if="progress.achievements.length > 0" class="space-y-2">
-              <div v-for="achievement in progress.achievements.slice(-3)" 
+            <!-- Recent badges for Metro -->
+            <div v-if="progress.achievements.length > 0" class="mt-2">
+              <div v-for="achievement in progress.achievements.slice(-2)" 
                    :key="achievement" 
-                   class="flex items-center gap-2 p-2 bg-green-50 rounded unlocked"
+                   class="flex items-center gap-1 mb-1"
                    :data-testid="achievement + '-badge'">
-                <div class="text-2xl">{{ getBadgeIcon(achievement) }}</div>
-                <div>
-                  <div class="font-semibold text-sm">{{ getBadgeName(achievement) }}</div>
-                  <div class="text-xs text-gray-600" :data-testid="achievement + '-badge-description'">
-                    {{ getBadgeDescription(achievement) }}
-                  </div>
-                </div>
+                <div class="text-sm">{{ getBadgeIcon(achievement) }}</div>
+                <div class="text-xs opacity-90">{{ getBadgeName(achievement) }}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Financial Tracking -->
-        <div class="grid grid-cols-1 md:grid-cols-2 mb-6">
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-4">Training Costs</h3>
-            <div class="text-2xl font-bold text-orange-600 mb-2" data-testid="total-spent">
-              ${{ progress.totalSpent.toFixed(0) }}
+        <!-- Metro Financial & Milestone Tiles -->
+        <div class="metro-grid-container mb-6">
+          <!-- Training Costs Metro Tile -->
+          <div class="metro-tile metro-tile-financial metro-tile-1x1" data-testid="metro-tile metro-tile-financial">
+            <div>
+              <div class="metro-tile-title" data-testid="metro-tile-title">Training Costs</div>
+              <div class="metro-tile-value" data-testid="total-spent">
+                ${{ progress.totalSpent.toFixed(0) }}
+              </div>
+              <div class="metro-tile-label">Total Spent</div>
             </div>
-            <div class="text-sm text-gray-600 mb-3">total spent</div>
-            <div v-if="progress.flightHours.total > 0" class="text-sm text-gray-600" data-testid="cost-per-hour">
+            <div v-if="progress.flightHours.total > 0" class="metro-tile-subtitle" data-testid="cost-per-hour">
               ${{ (progress.totalSpent / progress.flightHours.total).toFixed(0) }}/hour average
             </div>
           </div>
           
-          <!-- Next Major Milestone -->
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-4">Next Major Milestone</h3>
-            <div class="text-xl font-bold mb-2" data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
-            <p class="text-gray-600 mb-4">{{ milestoneDescription }}</p>
-            <button 
-              @click="showMilestoneRequirements = true"
-              class="btn btn-success w-full"
-              data-testid="view-milestone-requirements"
-            >
-              🎯 View Requirements
-            </button>
+          <!-- Next Major Milestone Metro Tile -->
+          <div class="metro-tile metro-tile-requirements metro-tile-2x1 metro-tile-interactive" 
+               data-testid="metro-tile metro-tile-requirements"
+               @click="showMilestoneRequirements = true">
+            <div>
+              <div class="metro-tile-title" data-testid="metro-tile-title">Next Milestone</div>
+              <div class="metro-tile-subtitle" data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
+              <div class="metro-tile-label">{{ milestoneDescription }}</div>
+            </div>
+            <div class="flex items-center justify-between mt-4">
+              <button 
+                class="metro-button metro-button-primary"
+                data-testid="view-milestone-requirements"
+              >
+                🎯 View Requirements
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Upcoming Requirements -->
-        <div class="card mb-6" data-testid="upcoming-requirements">
+        <div class="metro-card mb-6" data-testid="upcoming-requirements">
           <h3 class="text-lg font-semibold mb-4">📋 Upcoming Requirements</h3>
           <div class="space-y-3">
             <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
@@ -529,7 +539,7 @@
           <!-- Timeline and Cost Information -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <!-- Typical Timeline -->
-            <div class="card" data-testid="typical-timeline-info">
+            <div class="metro-card" data-testid="typical-timeline-info">
               <h3 class="text-lg font-semibold mb-4">⏳ Typical Training Timeline</h3>
               <div class="space-y-3">
                 <div class="flex justify-between">
@@ -548,7 +558,7 @@
             </div>
 
             <!-- Cost Breakdown Education -->
-            <div class="card" data-testid="cost-breakdown-education">
+            <div class="metro-card" data-testid="cost-breakdown-education">
               <h3 class="text-lg font-semibold mb-4">💰 Comprehensive Cost Guide</h3>
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
@@ -1201,23 +1211,6 @@ const getBadgeIcon = (badgeId: string) => {
   return badgeIcons[badgeId] || '🏆'
 }
 
-const getBadgeDescription = (badgeId: string) => {
-  const badgeDescriptions: Record<string, string> = {
-    'first-flight': 'Complete your introductory flight',
-    'controls-master': 'Master basic aircraft controls',
-    'circuit-master': 'Complete multiple circuit lessons',
-    'solo-wings': 'Your first solo flight milestone',
-    'navigation-pioneer': 'Navigate cross-country flights',
-    'theory-scholar': 'Pass your first theory exam',
-    'theory-master': 'Pass all required theory exams',
-    'night-flyer': 'Optional night flying qualification',
-    'instrument-rated': 'Master instrument flying',
-    'terrain-master': 'NZ terrain awareness training',
-    'big-spender': 'Invest significantly in training',
-    'licensed-pilot': 'Complete your PPL requirements'
-  }
-  return badgeDescriptions[badgeId] || 'Achievement unlocked'
-}
 
 
 const closeCelebration = () => {
