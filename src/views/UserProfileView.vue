@@ -24,7 +24,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Basic Information -->
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Full Name</label>
             <input 
               v-model="userProfile.name" 
@@ -35,7 +35,7 @@
             >
           </div>
           
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Email Address</label>
             <input 
               v-model="userProfile.email" 
@@ -46,7 +46,7 @@
             >
           </div>
           
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Phone Number</label>
             <input 
               v-model="userProfile.phone" 
@@ -57,7 +57,7 @@
             >
           </div>
           
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Training Start Date</label>
             <input 
               v-model="userProfile.trainingStartDate" 
@@ -67,7 +67,7 @@
             >
           </div>
           
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Date of Birth</label>
             <input 
               v-model="userProfile.dateOfBirth" 
@@ -77,7 +77,7 @@
             >
           </div>
           
-          <div>
+          <div class="space-y-1">
             <label class="form-label">Preferred Flight School</label>
             <select 
               v-model="userProfile.flightSchool" 
@@ -99,7 +99,7 @@
           <h3 class="text-lg font-semibold mb-4">Training Preferences</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
+            <div class="space-y-2">
               <label class="form-label">Preferred Training Days</label>
               <div class="space-y-2">
                 <label class="flex items-center">
@@ -133,7 +133,7 @@
               </div>
             </div>
             
-            <div>
+            <div class="space-y-1">
               <label class="form-label">Training Pace</label>
               <select 
                 v-model="userProfile.trainingPace" 
@@ -150,7 +150,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="mt-8 flex gap-3">
+        <div class="mt-8 flex gap-4">
           <button 
             @click="saveProfile" 
             class="btn btn-primary flex-1"
@@ -306,7 +306,7 @@
             >
           </div>
           
-          <div class="flex gap-3">
+          <div class="flex gap-4">
             <button 
               @click="showResetConfirmation = false" 
               class="btn btn-secondary flex-1"
