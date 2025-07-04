@@ -670,7 +670,81 @@ p {
 }
 
 /* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {\n  *,\n  *::before,\n  *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n\n/* High contrast mode support */\n@media (prefers-contrast: high) {\n  .card {\n    border-width: 2px;\n    border-color: var(--text-primary);\n  }\n  \n  .btn {\n    border: 2px solid currentColor;\n  }\n}\n\n/* Focus management for keyboard navigation */\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border: 0;\n}\n\n.focus-trap {\n  position: relative;\n}\n\n/* Skip to content link */\n.skip-link {\n  position: absolute;\n  top: -40px;\n  left: 6px;\n  background: var(--bg-primary);\n  color: var(--text-primary);\n  padding: 8px;\n  z-index: 1000;\n  text-decoration: none;\n  border-radius: var(--radius-md);\n  border: 2px solid var(--blue-500);\n}\n\n.skip-link:focus {\n  top: 6px;\n}\n\n/* Print styles */\n@media print {\n  .no-print {\n    display: none !important;\n  }\n  \n  .card {\n    break-inside: avoid;\n    box-shadow: none;\n    border: 1px solid #000;\n  }\n  \n  .btn {\n    border: 1px solid #000;\n    background: white !important;\n    color: black !important;\n  }\n}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+    border-color: var(--text-primary);
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Focus management for keyboard navigation */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus-trap {
+  position: relative;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 8px;
+  z-index: 1000;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--blue-500);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .btn {
+    border: 1px solid #000;
+    background: white !important;
+    color: black !important;
+  }
+}
 /* Metro/Windows Phone Style Design System */
 
 /* Metro Color Palette - Aviation Themed */
@@ -855,6 +929,13 @@ p {
   background-color: #5a6a70;
 }
 
+/* Metro Button Sizes */
+.metro-button-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.25px;
+}
+
 /* Metro Input Fields */
 .metro-input {
   border-radius: 0 \!important;
@@ -970,4 +1051,3 @@ p {
     border-color: var(--metro-cloud-gray);
   }
 }
-EOF < /dev/null

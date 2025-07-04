@@ -34,7 +34,7 @@
             <div class="text-sm text-gray-600">Your next step in the PPL journey</div>
           </div>
           
-          <div class="bg-blue-50 rounded-lg p-6" data-testid="current-lesson">
+          <div class="bg-blue-50 p-6" data-testid="current-lesson">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <h2 class="text-3xl font-bold" data-testid="current-lesson-title">
@@ -49,7 +49,7 @@
             
             <p class="text-gray-700 mb-4">{{ currentLessonInfo.description }}</p>
             
-            <div class="bg-blue-100 p-4 rounded-lg mb-4" data-testid="preparation-needed">
+            <div class="bg-blue-100 p-4 mb-4" data-testid="preparation-needed">
               <div class="font-semibold text-blue-800 mb-2">📋 What you need to do:</div>
               <div class="text-blue-700">{{ currentLessonInfo.preparation }}</div>
             </div>
@@ -57,14 +57,14 @@
             <div class="flex gap-3">
               <button 
                 @click="showCompleteLesson = true" 
-                class="btn btn-primary flex-1"
+                class="metro-button metro-button-primary flex-1"
                 data-testid="complete-lesson-button"
               >
                 ✅ Complete This Lesson
               </button>
               <button 
                 @click="showLessonInfo = true"
-                class="btn btn-secondary" 
+                class="metro-button metro-button-secondary" 
                 data-testid="lesson-info-button"
               >
                 ℹ️ More Info
@@ -178,14 +178,14 @@
           <h3 class="text-lg font-semibold mb-4">📋 Upcoming Requirements</h3>
           <div class="space-y-3">
             <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
-                 class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                 class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200">
               <div>
                 <div class="font-semibold">{{ requirement.title }}</div>
                 <div class="text-sm text-gray-600">{{ requirement.description }}</div>
               </div>
               <button 
                 @click="openRequirementInfoModal(requirement.id)"
-                class="btn btn-secondary btn-sm" 
+                class="metro-button metro-button-secondary metro-button-sm" 
                 :data-testid="requirement.id + '-info'"
               >
                 Info
@@ -195,27 +195,27 @@
         </div>
 
         <!-- Medical Certificate Warnings -->
-        <div v-if="hasMedicalWarnings" class="card mb-6" data-testid="medical-dashboard-warning">
+        <div v-if="hasMedicalWarnings" class="metro-card mb-6" data-testid="medical-dashboard-warning">
           <h3 class="text-lg font-semibold mb-4">🏥 Medical Certificate Alerts</h3>
           <div class="space-y-3">
             <div v-if="getMedicalExpiryStatus() === 'Expired'" 
-                 class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                 class="flex items-center justify-between p-3 bg-red-50 border border-red-200">
               <div>
                 <div class="font-semibold text-red-800">Medical Certificate Expired</div>
                 <div class="text-sm text-red-600">Cannot exercise pilot privileges until renewed</div>
               </div>
-              <router-link to="/requirements" class="btn btn-primary btn-sm">
+              <router-link to="/requirements" class="metro-button metro-button-primary metro-button-sm">
                 Renew Now
               </router-link>
             </div>
             
             <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" 
-                 class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                 class="flex items-center justify-between p-3 bg-orange-50 border border-orange-200">
               <div>
                 <div class="font-semibold text-orange-800">Medical Certificate Expiring Soon</div>
                 <div class="text-sm text-orange-600">{{ getMedicalTimeRemaining() }}</div>
               </div>
-              <router-link to="/requirements" class="btn btn-secondary btn-sm">
+              <router-link to="/requirements" class="metro-button metro-button-secondary metro-button-sm">
                 View Details
               </router-link>
             </div>
@@ -223,27 +223,27 @@
         </div>
 
         <!-- BFR Currency Warnings -->
-        <div v-if="hasBfrWarnings" class="card mb-6" data-testid="bfr-dashboard-warning">
+        <div v-if="hasBfrWarnings" class="metro-card mb-6" data-testid="bfr-dashboard-warning">
           <h3 class="text-lg font-semibold mb-4">🛩️ BFR Currency Alerts</h3>
           <div class="space-y-3">
             <div v-if="getBfrStatus() === 'Overdue'" 
-                 class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                 class="flex items-center justify-between p-3 bg-red-50 border border-red-200">
               <div>
                 <div class="font-semibold text-red-800">BFR Overdue</div>
                 <div class="text-sm text-red-600">Cannot exercise pilot privileges until BFR completed</div>
               </div>
-              <router-link to="/requirements" class="btn btn-primary btn-sm">
+              <router-link to="/requirements" class="metro-button metro-button-primary metro-button-sm">
                 Schedule BFR
               </router-link>
             </div>
             
             <div v-if="getBfrStatus() === 'Expiring Soon'" 
-                 class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                 class="flex items-center justify-between p-3 bg-orange-50 border border-orange-200">
               <div>
                 <div class="font-semibold text-orange-800">BFR Expiring Soon</div>
                 <div class="text-sm text-orange-600">{{ getBfrTimeRemaining() }}</div>
               </div>
-              <router-link to="/requirements" class="btn btn-secondary btn-sm">
+              <router-link to="/requirements" class="metro-button metro-button-secondary metro-button-sm">
                 View Details
               </router-link>
             </div>
@@ -253,22 +253,22 @@
 
         <!-- Quick Navigation -->
         <div class="grid grid-auto-fit gap-4">
-          <router-link to="/journey" class="btn btn-secondary text-center" data-testid="journey-tab">
+          <router-link to="/journey" class="metro-button metro-button-secondary text-center" data-testid="journey-tab">
             🗺️ View Journey
           </router-link>
-          <router-link to="/achievements" class="btn btn-secondary" data-testid="achievements-tab">
+          <router-link to="/achievements" class="metro-button metro-button-secondary" data-testid="achievements-tab">
             🏆 Achievements
           </router-link>
-          <router-link to="/theory" class="btn btn-secondary" data-testid="theory-tab">
+          <router-link to="/theory" class="metro-button metro-button-secondary" data-testid="theory-tab">
             📚 Theory Exams
           </router-link>
-          <router-link to="/requirements" class="btn btn-secondary" data-testid="requirements-tab">
+          <router-link to="/requirements" class="metro-button metro-button-secondary" data-testid="requirements-tab">
             📋 Requirements
           </router-link>
-          <router-link to="/finances" class="btn btn-secondary" data-testid="finances-tab">
+          <router-link to="/finances" class="metro-button metro-button-secondary" data-testid="finances-tab">
             💰 Finances
           </router-link>
-          <router-link to="/profile" class="btn btn-secondary" data-testid="user-profile-tab">
+          <router-link to="/profile" class="metro-button metro-button-secondary" data-testid="user-profile-tab">
             👤 Profile
           </router-link>
         </div>
@@ -290,7 +290,7 @@
                 step="0.1" 
                 min="0" 
                 max="10"
-                class="form-input" 
+                class="metro-input" 
                 placeholder="1.5"
                 data-testid="lesson-hours-input"
               >
@@ -303,14 +303,14 @@
                 type="number" 
                 step="1" 
                 min="0"
-                class="form-input" 
+                class="metro-input" 
                 placeholder="180"
                 data-testid="lesson-cost-input"
               >
             </div>
             
             <!-- Skill Demonstrations for Current Lesson -->
-            <div v-if="getLessonSkills(progress.currentLesson).length > 0" class="bg-blue-50 p-4 rounded-lg" data-testid="skill-demonstrations">
+            <div v-if="getLessonSkills(progress.currentLesson).length > 0" class="bg-blue-50 p-4" data-testid="skill-demonstrations">
               <h4 class="font-semibold text-blue-800 mb-3">🎯 Skills Demonstrated This Lesson</h4>
               <div class="space-y-2">
                 <label 
@@ -336,7 +336,7 @@
               <label class="form-label">Notes (optional)</label>
               <textarea 
                 v-model="lessonNotes" 
-                class="form-input" 
+                class="metro-input" 
                 rows="3"
                 placeholder="How did the lesson go?"
               ></textarea>
@@ -344,10 +344,10 @@
           </div>
           
           <div class="flex gap-3">
-            <button @click="completeLesson" class="btn btn-primary flex-1" data-testid="save-hours-button">
+            <button @click="completeLesson" class="metro-button metro-button-primary flex-1" data-testid="save-hours-button">
               ✅ Complete Lesson
             </button>
-            <button @click="showCompleteLesson = false; demonstratedSkills = {}" class="btn btn-secondary">
+            <button @click="showCompleteLesson = false; demonstratedSkills = {}" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -394,7 +394,7 @@
             </div>
           </div>
           
-          <button @click="closeCelebration" class="btn btn-primary" data-testid="continue-to-next-lesson">
+          <button @click="closeCelebration" class="metro-button metro-button-primary" data-testid="continue-to-next-lesson">
             {{ progress.currentLesson <= 27 ? 'Continue to Next Lesson' : 'View Progress' }} 🚀
           </button>
         </div>
@@ -434,10 +434,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showRequirementModal = false" class="btn btn-primary flex-1">
+            <button @click="showRequirementModal = false" class="metro-button metro-button-primary flex-1">
               Got it
             </button>
-            <router-link to="/requirements" class="btn btn-secondary">
+            <router-link to="/requirements" class="metro-button metro-button-secondary">
               View All Requirements
             </router-link>
           </div>
@@ -482,10 +482,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showContextualHelp = false" class="btn btn-primary flex-1">
+            <button @click="showContextualHelp = false" class="metro-button metro-button-primary flex-1">
               Got it!
             </button>
-            <router-link to="/education" class="btn btn-secondary">
+            <router-link to="/education" class="metro-button metro-button-secondary">
               Education Center
             </router-link>
           </div>
@@ -503,22 +503,22 @@
           <div class="card mb-8" data-testid="ppl-pathway-overview">
             <h2 class="text-xl font-semibold mb-4">🎯 Complete PPL Pathway</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div class="text-center p-4 bg-blue-50 rounded-lg">
+              <div class="text-center p-4 bg-blue-50">
                 <div class="text-3xl mb-2">📋</div>
                 <div class="font-semibold">Medical Certificate</div>
                 <div class="text-sm text-gray-600">Class 2 or DL9</div>
               </div>
-              <div class="text-center p-4 bg-green-50 rounded-lg">
+              <div class="text-center p-4 bg-green-50">
                 <div class="text-3xl mb-2">✈️</div>
                 <div class="font-semibold">Flight Training</div>
                 <div class="text-sm text-gray-600">50+ hours</div>
               </div>
-              <div class="text-center p-4 bg-purple-50 rounded-lg">
+              <div class="text-center p-4 bg-purple-50">
                 <div class="text-3xl mb-2">📚</div>
                 <div class="font-semibold">Theory Exams</div>
                 <div class="text-sm text-gray-600">6 subjects</div>
               </div>
-              <div class="text-center p-4 bg-orange-50 rounded-lg">
+              <div class="text-center p-4 bg-orange-50">
                 <div class="text-3xl mb-2">🎯</div>
                 <div class="font-semibold">Flight Test</div>
                 <div class="text-sm text-gray-600">FPP Practical</div>
@@ -526,7 +526,7 @@
             </div>
             
             <!-- CAA Part 61 Explanation -->
-            <div class="bg-blue-50 p-4 rounded-lg" data-testid="part-61-explanation">
+            <div class="bg-blue-50 p-4" data-testid="part-61-explanation">
               <h3 class="font-semibold text-blue-800 mb-2">📜 CAA Part 61 Requirements</h3>
               <p class="text-blue-700 text-sm">
                 New Zealand Private Pilot Licence requirements are governed by CAA Part 61. 
@@ -657,10 +657,10 @@
           </div>
           
           <div class="flex gap-3">
-            <button @click="showEducationCenter = false" class="btn btn-primary flex-1">
+            <button @click="showEducationCenter = false" class="metro-button metro-button-primary flex-1">
               Close
             </button>
-            <router-link to="/education" class="btn btn-secondary">
+            <router-link to="/education" class="metro-button metro-button-secondary">
               Full Education Center
             </router-link>
           </div>
@@ -682,19 +682,19 @@
           
           <div class="space-y-6">
             <!-- Lesson Description -->
-            <div class="bg-blue-50 p-4 rounded-lg" data-testid="lesson-description">
+            <div class="bg-blue-50 p-4" data-testid="lesson-description">
               <h5 class="font-semibold text-blue-800 mb-2">📖 What You'll Learn</h5>
               <p class="text-blue-700">{{ currentLessonInfo.description }}</p>
             </div>
             
             <!-- Preparation Required -->
-            <div class="bg-green-50 p-4 rounded-lg" data-testid="lesson-preparation">
+            <div class="bg-green-50 p-4" data-testid="lesson-preparation">
               <h5 class="font-semibold text-green-800 mb-2">📋 Preparation Required</h5>
               <p class="text-green-700">{{ currentLessonInfo.preparation }}</p>
             </div>
             
             <!-- Training Phase Info -->
-            <div class="bg-purple-50 p-4 rounded-lg" data-testid="training-phase-info">
+            <div class="bg-purple-50 p-4" data-testid="training-phase-info">
               <h5 class="font-semibold text-purple-800 mb-2">🎯 Training Phase</h5>
               <div class="text-purple-700">
                 <div v-if="progress.currentLesson <= 5">
@@ -721,7 +721,7 @@
             </div>
             
             <!-- Prerequisites -->
-            <div v-if="getPrerequisites(progress.currentLesson).length > 0" class="bg-orange-50 p-4 rounded-lg" data-testid="lesson-prerequisites">
+            <div v-if="getPrerequisites(progress.currentLesson).length > 0" class="bg-orange-50 p-4" data-testid="lesson-prerequisites">
               <h5 class="font-semibold text-orange-800 mb-2">⚠️ Prerequisites</h5>
               <ul class="text-orange-700 text-sm space-y-1">
                 <li v-for="prereq in getPrerequisites(progress.currentLesson)" :key="prereq">
@@ -732,13 +732,13 @@
             
             <!-- Estimated Duration & Cost -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-gray-50 p-4 rounded-lg" data-testid="lesson-duration">
+              <div class="bg-gray-50 p-4" data-testid="lesson-duration">
                 <h5 class="font-semibold text-gray-800 mb-2">⏱️ Typical Duration</h5>
                 <p class="text-gray-700 text-sm">
                   {{ getLessonDuration(progress.currentLesson) }}
                 </p>
               </div>
-              <div class="bg-gray-50 p-4 rounded-lg" data-testid="lesson-cost">
+              <div class="bg-gray-50 p-4" data-testid="lesson-cost">
                 <h5 class="font-semibold text-gray-800 mb-2">💰 Estimated Cost</h5>
                 <p class="text-gray-700 text-sm">
                   {{ getLessonCost(progress.currentLesson) }}
@@ -748,12 +748,12 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showLessonInfo = false" class="btn btn-secondary">
+            <button @click="showLessonInfo = false" class="metro-button metro-button-secondary">
               Close
             </button>
             <button 
               @click="showLessonInfo = false; showCompleteLesson = true" 
-              class="btn btn-primary flex-1"
+              class="metro-button metro-button-primary flex-1"
               data-testid="start-lesson-button"
             >
               🚀 Start This Lesson
@@ -777,7 +777,7 @@
           
           <div class="space-y-6">
             <!-- Requirements -->
-            <div class="bg-blue-50 p-4 rounded-lg" data-testid="milestone-requirements-list">
+            <div class="bg-blue-50 p-4" data-testid="milestone-requirements-list">
               <h4 class="font-semibold text-blue-800 mb-3">📋 Requirements to Complete</h4>
               <ul class="space-y-2">
                 <li v-for="req in getMilestoneRequirements().requirements" :key="req" class="text-blue-700">
@@ -787,7 +787,7 @@
             </div>
             
             <!-- Next Steps -->
-            <div class="bg-green-50 p-4 rounded-lg" data-testid="milestone-next-steps">
+            <div class="bg-green-50 p-4" data-testid="milestone-next-steps">
               <h4 class="font-semibold text-green-800 mb-3">🚀 Next Steps</h4>
               <ul class="space-y-2">
                 <li v-for="step in getMilestoneRequirements().nextSteps" :key="step" class="text-green-700">
@@ -798,11 +798,11 @@
             
             <!-- Cost & Timeline -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-orange-50 p-4 rounded-lg" data-testid="milestone-cost">
+              <div class="bg-orange-50 p-4" data-testid="milestone-cost">
                 <h4 class="font-semibold text-orange-800 mb-2">💰 Estimated Cost</h4>
                 <p class="text-orange-700">{{ getMilestoneRequirements().cost }}</p>
               </div>
-              <div class="bg-purple-50 p-4 rounded-lg" data-testid="milestone-timeframe">
+              <div class="bg-purple-50 p-4" data-testid="milestone-timeframe">
                 <h4 class="font-semibold text-purple-800 mb-2">⏱️ Timeframe</h4>
                 <p class="text-purple-700">{{ getMilestoneRequirements().timeframe }}</p>
               </div>
@@ -810,10 +810,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showMilestoneRequirements = false" class="btn btn-secondary">
+            <button @click="showMilestoneRequirements = false" class="metro-button metro-button-secondary">
               Close
             </button>
-            <router-link to="/requirements" class="btn btn-primary flex-1">
+            <router-link to="/requirements" class="metro-button metro-button-primary flex-1">
               📋 View All Requirements
             </router-link>
           </div>
@@ -835,7 +835,7 @@
           
           <div class="space-y-6">
             <!-- Requirements -->
-            <div class="bg-blue-50 p-4 rounded-lg" data-testid="requirement-details-list">
+            <div class="bg-blue-50 p-4" data-testid="requirement-details-list">
               <h4 class="font-semibold text-blue-800 mb-3">📋 What You Need to Do</h4>
               <ul class="space-y-2">
                 <li v-for="req in selectedRequirement.requirements" :key="req" class="text-blue-700">
@@ -845,7 +845,7 @@
             </div>
             
             <!-- Next Steps -->
-            <div class="bg-green-50 p-4 rounded-lg" data-testid="requirement-next-steps">
+            <div class="bg-green-50 p-4" data-testid="requirement-next-steps">
               <h4 class="font-semibold text-green-800 mb-3">🚀 Next Steps</h4>
               <ul class="space-y-2">
                 <li v-for="step in selectedRequirement.nextSteps" :key="step" class="text-green-700">
@@ -856,11 +856,11 @@
             
             <!-- Cost & Timeline -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-orange-50 p-4 rounded-lg" data-testid="requirement-cost">
+              <div class="bg-orange-50 p-4" data-testid="requirement-cost">
                 <h4 class="font-semibold text-orange-800 mb-2">💰 Estimated Cost</h4>
                 <p class="text-orange-700">{{ selectedRequirement.cost }}</p>
               </div>
-              <div class="bg-purple-50 p-4 rounded-lg" data-testid="requirement-timeframe">
+              <div class="bg-purple-50 p-4" data-testid="requirement-timeframe">
                 <h4 class="font-semibold text-purple-800 mb-2">⏱️ Timeframe</h4>
                 <p class="text-purple-700">{{ selectedRequirement.timeframe }}</p>
               </div>
@@ -868,10 +868,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showRequirementInfoModal = false" class="btn btn-secondary">
+            <button @click="showRequirementInfoModal = false" class="metro-button metro-button-secondary">
               Close
             </button>
-            <router-link to="/requirements" class="btn btn-primary flex-1">
+            <router-link to="/requirements" class="metro-button metro-button-primary flex-1">
               📋 View All Requirements
             </router-link>
           </div>
@@ -881,7 +881,7 @@
 
     <!-- Progress Tooltip -->
     <div v-if="progressTooltipVisible" 
-         class="fixed z-50 bg-blue-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-blue-900 text-white p-4 shadow-lg pointer-events-none"
          :style="progressTooltipStyle"
          data-testid="progress-tooltip">
       <div class="font-semibold mb-2">Flight Hours Progress</div>

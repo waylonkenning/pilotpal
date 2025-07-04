@@ -11,7 +11,7 @@
         </div>
         <button 
           @click="showHoursEducation = true"
-          class="btn btn-secondary text-sm"
+          class="metro-button metro-button-secondary metro-button-sm"
           data-testid="flight-hours-education-button"
         >
           ⏱️ Hours Guide
@@ -19,7 +19,7 @@
       </div>
 
       <!-- Journey Timeline -->
-      <div class="card mb-8" data-testid="journey-timeline">
+      <div class="metro-card mb-8" data-testid="journey-timeline">
         <h2 class="text-xl font-semibold mb-6">Training Phase Timeline</h2>
         <div class="relative">
           <!-- Timeline Line -->
@@ -45,7 +45,7 @@
         </div>
         
         <!-- Current Phase Indicator -->
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg" data-testid="current-phase-indicator">
+        <div class="mt-6 p-4 bg-blue-50" data-testid="current-phase-indicator">
           <div class="font-semibold text-blue-800">Current Phase: {{ currentPhase.name }}</div>
           <div class="text-blue-700">{{ currentPhase.description }}</div>
         </div>
@@ -79,7 +79,7 @@
       <!-- Progress Wheels Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <!-- Flight Hours Progress Wheel -->
-        <div class="card">
+        <div class="metro-card">
           <h3 class="text-lg font-semibold mb-4">Flight Hours Progress</h3>
           <div class="flex flex-col items-center">
             <div class="relative w-48 h-48 mb-4 cursor-pointer" 
@@ -138,7 +138,7 @@
         </div>
 
         <!-- Achievement Progress Wheel -->
-        <div class="card">
+        <div class="metro-card">
           <h3 class="text-lg font-semibold mb-4">Achievement Progress</h3>
           <div class="flex flex-col items-center">
             <div class="relative w-48 h-48 mb-4" data-testid="achievement-progress-wheel">
@@ -161,7 +161,7 @@
             <div class="space-y-2 w-full">
               <div v-for="achievement in progress.achievements.slice(-3)" 
                    :key="achievement"
-                   class="flex items-center gap-2 p-2 bg-green-50 rounded text-sm cursor-pointer"
+                   class="flex items-center gap-2 p-2 bg-green-50 text-sm cursor-pointer"
                    data-testid="recent-achievement-item"
                    @mouseenter="showAchievementTooltip(allBadges.find(b => b.id === achievement) || {}, $event)"
                    @mouseleave="hideAchievementTooltip">
@@ -174,30 +174,30 @@
       </div>
 
       <!-- Lesson Progress Map -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">🗺️ Lesson Completion Map</h3>
         <p class="text-sm text-gray-600 mb-6">Track your individual lesson progress through the PPL journey</p>
         
         <!-- Phase Indicators -->
         <div class="mb-6" data-testid="lesson-phase-indicators">
           <div class="flex flex-wrap gap-2 mb-4">
-            <div class="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full text-sm" data-testid="foundation-phase-indicator">
+            <div class="flex items-center gap-2 px-3 py-1 bg-blue-100 text-sm" data-testid="foundation-phase-indicator">
               <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
               <span>Foundation (1-5)</span>
             </div>
-            <div class="flex items-center gap-2 px-3 py-1 bg-purple-100 rounded-full text-sm">
+            <div class="flex items-center gap-2 px-3 py-1 bg-purple-100 text-sm">
               <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
               <span>Circuit (6-12)</span>
             </div>
-            <div class="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full text-sm">
+            <div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-sm">
               <span class="w-2 h-2 bg-green-500 rounded-full"></span>
               <span>Navigation (13-20)</span>
             </div>
-            <div class="flex items-center gap-2 px-3 py-1 bg-orange-100 rounded-full text-sm">
+            <div class="flex items-center gap-2 px-3 py-1 bg-orange-100 text-sm">
               <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
               <span>Advanced (21-25)</span>
             </div>
-            <div class="flex items-center gap-2 px-3 py-1 bg-red-100 rounded-full text-sm">
+            <div class="flex items-center gap-2 px-3 py-1 bg-red-100 text-sm">
               <span class="w-2 h-2 bg-red-500 rounded-full"></span>
               <span>Test (26-27)</span>
             </div>
@@ -258,7 +258,7 @@
       
       <!-- Lesson Details Modal -->
       <div v-if="showLessonModal && selectedLesson" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-testid="lesson-details-modal" @click="closeLessonModal">
-        <div class="bg-white rounded-lg max-w-md w-full p-6" @click.stop>
+        <div class="bg-white max-w-md w-full p-6" @click.stop>
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-xl font-bold">{{ getLessonTitle(selectedLesson) }}</h3>
             <button @click="closeLessonModal" class="text-gray-400 hover:text-gray-600">
@@ -301,7 +301,7 @@
       </div>
 
       <!-- Budget vs Spending Comparison -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">Budget vs Spending</h3>
         <div data-testid="budget-comparison-chart">
           <div class="space-y-4">
@@ -363,7 +363,7 @@
       </div>
 
       <!-- Requirements Status Grid -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">Requirements Status</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="requirements-status-grid">
           <!-- Medical Certificate -->
@@ -426,7 +426,7 @@
       </div>
 
       <!-- Earned Badges Showcase -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">Achievement Showcase</h3>
         <div class="grid grid-cols-3 md:grid-cols-6 gap-4" data-testid="earned-badges-showcase">
           <div v-for="badge in allBadges" :key="badge.id"
@@ -543,7 +543,7 @@
       </div>
 
       <!-- Time-based Progress Animations -->
-      <div class="card mb-8">
+      <div class="metro-card mb-8">
         <h3 class="text-lg font-semibold mb-4">Training Timeline Projections</h3>
         
         <!-- Completion Timeline Visual -->
@@ -760,7 +760,7 @@
 
       <!-- Back to Dashboard -->
       <div class="text-center mt-16 mb-8 pt-8" style="margin-top: 4rem; padding-top: 2rem; margin-bottom: 2rem;">
-        <router-link to="/dashboard" class="btn btn-primary">
+        <router-link to="/dashboard" class="metro-button metro-button-primary">
           ← Back to Dashboard
         </router-link>
       </div>
@@ -769,7 +769,7 @@
 
     <!-- Phase Tooltip -->
     <div v-if="phaseTooltipVisible" 
-         class="fixed bg-black bg-opacity-75 text-white p-3 rounded-lg text-sm pointer-events-none z-50"
+         class="fixed bg-black bg-opacity-75 text-white p-3 text-sm pointer-events-none z-50"
          :style="phaseTooltipStyle"
          data-testid="phase-tooltip">
       <div class="font-semibold">{{ phaseTooltipPhase.name }}</div>
@@ -779,7 +779,7 @@
 
     <!-- Hours Breakdown Tooltip -->
     <div v-if="hoursTooltipVisible" 
-         class="fixed bg-black bg-opacity-75 text-white p-3 rounded-lg text-sm pointer-events-none z-50"
+         class="fixed bg-black bg-opacity-75 text-white p-3 text-sm pointer-events-none z-50"
          :style="hoursTooltipStyle"
          data-testid="hours-breakdown-tooltip">
       <div class="font-semibold">Flight Hours Breakdown</div>
@@ -799,7 +799,7 @@
           <h3 class="text-xl font-bold mb-4">⏱️ Flight Hours Requirements</h3>
           
           <!-- Minimum Hours -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="minimum-hours-explanation">
+          <div class="bg-blue-50 p-4 mb-6" data-testid="minimum-hours-explanation">
             <h4 class="font-semibold text-blue-800 mb-2">📊 Minimum Hour Requirements</h4>
             <div class="text-blue-700">
               <p class="mb-2"><strong>Total Minimum:</strong> 50 hours flight time</p>
@@ -809,7 +809,7 @@
 
           <!-- Hour Types Breakdown -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border rounded-lg p-4" data-testid="dual-hours-explanation">
+            <div class="border p-4" data-testid="dual-hours-explanation">
               <h4 class="font-semibold text-green-600 mb-2">👨‍✈️ Dual Instruction Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 25 hours with instructor</p>
@@ -817,7 +817,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="solo-hours-explanation">
+            <div class="border p-4" data-testid="solo-hours-explanation">
               <h4 class="font-semibold text-purple-600 mb-2">🦅 Solo Flight Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 15 hours solo</p>
@@ -825,7 +825,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4 md:col-span-2" data-testid="cross-country-explanation">
+            <div class="border p-4 md:col-span-2" data-testid="cross-country-explanation">
               <h4 class="font-semibold text-orange-600 mb-2">🗺️ Cross-Country Requirements</h4>
               <div class="text-sm">
                 <p><strong>Solo Cross-Country:</strong> 5 hours minimum including at least one flight over 150nm with 2 intermediate stops.</p>
@@ -835,14 +835,14 @@
 
           <!-- NZ-Specific Requirements -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-green-50 p-4 rounded-lg" data-testid="nz-terrain-awareness-info">
+            <div class="bg-green-50 p-4" data-testid="nz-terrain-awareness-info">
               <h4 class="font-semibold text-green-800 mb-2">🏔️ NZ Terrain Awareness</h4>
               <div class="text-green-700 text-sm">
                 <p>New Zealand's mountainous terrain requires specific training in mountain flying techniques and weather recognition.</p>
               </div>
             </div>
 
-            <div class="bg-purple-50 p-4 rounded-lg" data-testid="controlled-airspace-info">
+            <div class="bg-purple-50 p-4" data-testid="controlled-airspace-info">
               <h4 class="font-semibold text-purple-800 mb-2">🛂 Controlled Airspace</h4>
               <div class="text-purple-700 text-sm">
                 <p>Training must include controlled airspace operations and ATC communication procedures.</p>
@@ -859,10 +859,10 @@
           </div>
 
           <div class="flex gap-3">
-            <button @click="showHoursEducation = false" class="btn btn-primary flex-1">
+            <button @click="showHoursEducation = false" class="metro-button metro-button-primary flex-1">
               Start Logging Hours
             </button>
-            <router-link to="/education" class="btn btn-secondary">
+            <router-link to="/education" class="metro-button metro-button-secondary">
               Education Center
             </router-link>
           </div>
@@ -872,7 +872,7 @@
 
     <!-- Lesson Tooltip -->
     <div v-if="tooltipVisible" 
-         class="fixed z-50 bg-gray-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-gray-900 text-white p-3 shadow-lg pointer-events-none"
          :style="tooltipStyle"
          data-testid="lesson-tooltip">
       <div class="font-semibold mb-1" data-testid="lesson-tooltip-title">
@@ -918,7 +918,7 @@
 
     <!-- Phase Tooltip -->
     <div v-if="phaseTooltipVisible" 
-         class="fixed z-50 bg-blue-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-blue-900 text-white p-3 shadow-lg pointer-events-none"
          :style="phaseTooltipStyle"
          data-testid="phase-tooltip">
       <div class="font-semibold mb-1">{{ phaseTooltipPhase.name }} Phase</div>
@@ -930,7 +930,7 @@
 
     <!-- Hours Progress Tooltip -->
     <div v-if="hoursTooltipVisible" 
-         class="fixed z-50 bg-green-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-green-900 text-white p-4 shadow-lg pointer-events-none"
          :style="hoursTooltipStyle"
          data-testid="progress-tooltip">
       <div class="font-semibold mb-2" data-testid="progress-tooltip-title">Flight Hours Progress</div>
@@ -956,7 +956,7 @@
 
     <!-- Theory Progress Tooltip -->
     <div v-if="theoryTooltipVisible" 
-         class="fixed z-50 bg-purple-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-purple-900 text-white p-3 shadow-lg pointer-events-none"
          :style="theoryTooltipStyle"
          data-testid="theory-tooltip">
       <div class="font-semibold mb-2">Theory Progress</div>
@@ -973,7 +973,7 @@
 
     <!-- Achievement Badge Tooltip -->
     <div v-if="achievementTooltipVisible" 
-         class="fixed z-50 bg-yellow-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-yellow-900 text-white p-3 shadow-lg pointer-events-none"
          :style="achievementTooltipStyle"
          data-testid="achievement-tooltip">
       <div class="font-semibold mb-1">{{ achievementTooltipBadge.name }}</div>
@@ -991,7 +991,7 @@
 
     <!-- Financial Progress Tooltip -->
     <div v-if="financialTooltipVisible" 
-         class="fixed z-50 bg-orange-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-orange-900 text-white p-4 shadow-lg pointer-events-none"
          :style="financialTooltipStyle"
          data-testid="financial-tooltip">
       <div class="font-semibold mb-2">Budget Progress</div>
@@ -1017,7 +1017,7 @@
 
     <!-- Milestone Tooltip -->
     <div v-if="milestoneTooltipVisible" 
-         class="fixed z-50 bg-indigo-900 text-white p-3 rounded-lg shadow-lg pointer-events-none"
+         class="fixed z-50 bg-indigo-900 text-white p-3 shadow-lg pointer-events-none"
          :style="milestoneTooltipStyle"
          data-testid="milestone-tooltip">
       <div class="font-semibold mb-1">{{ milestoneTooltipData.name }} Milestone</div>
