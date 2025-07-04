@@ -229,9 +229,14 @@ test.describe('Visual Progress Visualization', () => {
     await expect(page.locator('[data-testid="training-area-auckland"]'))
       .toBeAttached()
     
-    // Should show flight paths for cross-country requirements
+    // Should show flight paths for cross-country requirements (canvas-based)
     await expect(page.locator('[data-testid="cross-country-routes"]'))
       .toBeVisible()
+    
+    // Verify canvas has been drawn with routes
+    const canvas = page.locator('[data-testid="cross-country-routes"]')
+    await expect(canvas).toHaveAttribute('width', '256')
+    await expect(canvas).toHaveAttribute('height', '192')
     
     // Should highlight terrain awareness areas
     await expect(page.locator('[data-testid="terrain-awareness-zones"]'))

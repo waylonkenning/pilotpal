@@ -507,11 +507,13 @@
             <div class="absolute bottom-8 right-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-christchurch" title="Christchurch"></div>
             
             <!-- Cross Country Routes -->
-            <svg class="absolute inset-0 w-full h-full" data-testid="cross-country-routes">
-              <line x1="32" y1="16" x2="80" y2="48" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
-              <line x1="80" y1="48" x2="64" y2="128" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
-              <line x1="64" y1="128" x2="160" y2="160" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
-            </svg>
+            <canvas 
+              ref="flightRoutesCanvas" 
+              class="absolute inset-0 w-full h-full pointer-events-none" 
+              data-testid="cross-country-routes"
+              :width="256" 
+              :height="192"
+            ></canvas>
             
             <!-- Terrain Awareness Zones -->
             <div class="absolute top-8 left-12 w-16 h-12 bg-orange-200 border border-orange-400 rounded opacity-60" data-testid="terrain-awareness-zones" title="Mountain Region"></div>
@@ -1143,6 +1145,9 @@ const milestoneTooltipVisible = ref(false)
 const milestoneTooltipStyle = ref({})
 const milestoneTooltipData = ref<any>({})
 
+// Canvas reference for flight routes
+const flightRoutesCanvas = ref<HTMLCanvasElement | null>(null)
+
 // Mobile touch interaction state
 const showLessonDetailsModal = ref(false)
 const showLessonModal = ref(false)
@@ -1681,7 +1686,7 @@ const getLessonPrerequisites = (lessonNum: number) => {
   return prerequisites[lessonNum] || []
 }
 
-const getLessonCompletionDate = (lessonNum: number) => {
+const getLessonCompletionDate = (_lessonNum: number) => {
   // Mock completion date - in real app this would come from stored data
   return new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString()
 }
@@ -1897,12 +1902,59 @@ onMounted(() => {
     }
   }
   
+  // Initialize canvas for flight routes
+  drawFlightRoutes()
+  
   // Add resize listener for responsive design
   window.addEventListener('resize', () => {
     // Force re-render of lesson map when viewport changes
     // The reactive functions will automatically use the new window size
+    drawFlightRoutes()
   })
 })
+
+// Function to draw flight routes on canvas
+const drawFlightRoutes = () => {
+  if (!flightRoutesCanvas.value) return
+  
+  const canvas = flightRoutesCanvas.value
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  
+  // Define training area positions (relative to container)
+  const areas = [
+    { name: 'Auckland', x: 32, y: 16 },      // top-4 left-8
+    { name: 'Hamilton', x: 192, y: 48 },     // top-12 right-12  
+    { name: 'Wellington', x: 64, y: 128 },   // bottom-16 left-16
+    { name: 'Christchurch', x: 192, y: 160 } // bottom-8 right-8
+  ]
+  
+  // Draw dashed lines connecting training areas
+  ctx.strokeStyle = '#3b82f6'
+  ctx.lineWidth = 2
+  ctx.setLineDash([5, 5])
+  
+  // Auckland to Hamilton
+  ctx.beginPath()
+  ctx.moveTo(areas[0].x, areas[0].y)
+  ctx.lineTo(areas[1].x, areas[1].y)
+  ctx.stroke()
+  
+  // Hamilton to Wellington
+  ctx.beginPath()
+  ctx.moveTo(areas[1].x, areas[1].y)
+  ctx.lineTo(areas[2].x, areas[2].y)
+  ctx.stroke()
+  
+  // Wellington to Christchurch
+  ctx.beginPath()
+  ctx.moveTo(areas[2].x, areas[2].y)
+  ctx.lineTo(areas[3].x, areas[3].y)
+  ctx.stroke()
+}
 </script>
 
 <style scoped>
