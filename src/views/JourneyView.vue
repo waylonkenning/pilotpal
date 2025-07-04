@@ -1806,7 +1806,7 @@ const getLessonStatusClass = (lessonNum: number) => {
   }[status] || 'bg-gray-100 text-gray-600'
 }
 
-const showLessonDetails = (_lessonNum: number) => {
+const showLessonDetails = (lessonNum: number) => {
   selectedLesson.value = lessonNum
   showLessonDetailsModal.value = true
 }
@@ -1815,12 +1815,12 @@ const hideLessonDetails = () => {
   showLessonDetailsModal.value = false
 }
 
-const handleTouchStart = (event: TouchEvent, lessonNum: number) => {
+const handleTouchStart = (event: TouchEvent, _lessonNum: number) => {
   touchStartTime.value = Date.now()
   touchStartX.value = event.touches[0].clientX
 }
 
-const handleTouchEnd = (event: TouchEvent, _lessonNum: number) => {
+const handleTouchEnd = (event: TouchEvent, lessonNum: number) => {
   const touchEndTime = Date.now()
   const touchDuration = touchEndTime - touchStartTime.value
   
