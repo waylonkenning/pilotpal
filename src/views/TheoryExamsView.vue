@@ -158,7 +158,7 @@
       </div>
 
       <!-- Back to Dashboard -->
-      <div class="text-center mt-12 mb-8">
+      <div class="text-center mt-16 mb-8 pt-8" style="margin-top: 4rem; padding-top: 2rem; margin-bottom: 2rem;">
         <router-link to="/dashboard" class="btn btn-primary">
           ← Back to Dashboard
         </router-link>
