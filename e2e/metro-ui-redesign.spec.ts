@@ -179,6 +179,70 @@ test.describe('Metro/Windows Phone Style UI Redesign', () => {
     }
   })
 
+  test('should display full-width edge-to-edge Metro grid layout', async ({ page }) => {
+    await page.click('[data-testid="dashboard-tab"]')
+    
+    // Check that Metro grid container fills complete width
+    const gridContainer = page.locator('[data-testid="metro-grid-container"]')
+    await expect(gridContainer).toBeVisible()
+    
+    // Verify grid container spans full viewport width (no side margins)
+    const gridBounds = await gridContainer.boundingBox()
+    const viewportSize = await page.viewportSize()
+    
+    if (gridBounds && viewportSize) {
+      // Grid should start at x=0 (no left margin)
+      expect(gridBounds.x).toBeLessThan(10) // Allow small tolerance for borders
+      
+      // Grid should extend close to viewport width (no right margin)
+      expect(gridBounds.width).toBeGreaterThan(viewportSize.width * 0.95)
+    }
+  })
+
+  test('should have edge-to-edge layout on mobile devices', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.click('[data-testid="dashboard-tab"]')
+    
+    // Check Metro grid fills mobile width completely
+    const gridContainer = page.locator('[data-testid="metro-grid-container"]')
+    await expect(gridContainer).toBeVisible()
+    
+    const gridBounds = await gridContainer.boundingBox()
+    const viewportSize = await page.viewportSize()
+    
+    if (gridBounds && viewportSize) {
+      // On mobile, grid should be completely edge-to-edge
+      expect(gridBounds.x).toBeLessThan(5)
+      expect(gridBounds.width).toBeGreaterThan(viewportSize.width * 0.98)
+    }
+  })
+
+  test('should maintain full-width layout across different screen sizes', async ({ page }) => {
+    const screenSizes = [
+      { width: 320, height: 568 },  // iPhone SE
+      { width: 768, height: 1024 }, // iPad
+      { width: 1024, height: 768 }, // iPad Landscape
+      { width: 1920, height: 1080 } // Desktop
+    ]
+    
+    for (const size of screenSizes) {
+      await page.setViewportSize(size)
+      await page.click('[data-testid="dashboard-tab"]')
+      
+      const gridContainer = page.locator('[data-testid="metro-grid-container"]')
+      const gridBounds = await gridContainer.boundingBox()
+      
+      if (gridBounds) {
+        // Grid should always start near edge (x close to 0)
+        expect(gridBounds.x).toBeLessThan(10)
+        
+        // Grid should fill most of the width
+        expect(gridBounds.width).toBeGreaterThan(size.width * 0.95)
+      }
+    }
+  })
+
   test('should have high contrast Metro color scheme', async ({ page }) => {
     await page.click('[data-testid="dashboard-tab"]')
     

@@ -690,12 +690,22 @@ p {
   --metro-tile-padding: 1.5rem;
 }
 
-/* Metro Grid Container */
+/* Metro Grid Container - Full Width Edge-to-Edge */
 .metro-grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--metro-tile-gap);
-  padding: var(--metro-tile-gap);
+  padding: 0;
+  margin: 0 calc(-100vw / 2 + 50%); /* Force full viewport width */
+  width: 100vw; /* Full viewport width */
+}
+
+/* Alternative full-width class for Metro sections */
+.metro-full-width {
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
+  position: relative;
 }
 
 /* Base Metro Tile */
@@ -932,7 +942,9 @@ p {
   .metro-grid-container {
     grid-template-columns: 1fr 1fr;
     gap: 0.25rem;
-    padding: 0.25rem;
+    margin: 0 calc(-100vw / 2 + 50%);
+    width: 100vw;
+    padding: 0;
   }
   
   .metro-tile-2x1,

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen gradient-sky" data-testid="main-dashboard">
-    <div class="container">
-      <div class="p-6">
+    <div class="w-full">
+      <div class="px-4 py-6">
         
         <!-- Header with Help and Education -->
         <div class="flex justify-between items-center mb-6">
