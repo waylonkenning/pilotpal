@@ -401,7 +401,7 @@
       </div>
 
       <!-- Back to Dashboard -->
-      <div class="text-center">
+      <div class="text-center mt-12 mb-8">
         <router-link to="/dashboard" class="btn btn-primary">
           ← Back to Dashboard
         </router-link>
