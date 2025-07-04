@@ -175,40 +175,127 @@
 
       <!-- Lesson Progress Map -->
       <div class="card mb-8">
-        <h3 class="text-lg font-semibold mb-4">Lesson Completion Map</h3>
-        <div class="relative" data-testid="lesson-map">
+        <h3 class="text-lg font-semibold mb-4">🗺️ Lesson Completion Map</h3>
+        <p class="text-sm text-gray-600 mb-6">Track your individual lesson progress through the PPL journey</p>
+        
+        <!-- Phase Indicators -->
+        <div class="mb-6" data-testid="lesson-phase-indicators">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <div class="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full text-sm" data-testid="foundation-phase-indicator">
+              <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span>Foundation (1-5)</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-purple-100 rounded-full text-sm">
+              <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span>Circuit (6-12)</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full text-sm">
+              <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span>Navigation (13-20)</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-orange-100 rounded-full text-sm">
+              <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+              <span>Advanced (21-25)</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-red-100 rounded-full text-sm">
+              <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+              <span>Test (26-27)</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative" data-testid="lesson-map" role="region" aria-label="Lesson completion map showing progress through 27 flight lessons">
           <!-- Connection Lines -->
           <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;" data-testid="lesson-connection-lines">
             <g v-for="i in 26" :key="'line-' + i">
-              <line :x1="getLessonPosition(i).x + 20" 
-                    :y1="getLessonPosition(i).y + 20"
-                    :x2="getLessonPosition(i + 1).x + 20" 
-                    :y2="getLessonPosition(i + 1).y + 20"
-                    stroke="#d1d5db" 
-                    stroke-width="2"
+              <line :x1="getResponsiveLessonPosition(i).x + getNodeSize() / 2" 
+                    :y1="getResponsiveLessonPosition(i).y + getNodeSize() / 2"
+                    :x2="getResponsiveLessonPosition(i + 1).x + getNodeSize() / 2" 
+                    :y2="getResponsiveLessonPosition(i + 1).y + getNodeSize() / 2"
+                    :stroke="getConnectionLineColor(i)"
+                    :stroke-width="getConnectionLineWidth()"
                     :data-testid="'lesson-connection-line-' + i"/>
             </g>
           </svg>
           
           <!-- Lesson Nodes -->
-          <div class="relative" style="z-index: 2; height: 400px;">
+          <div class="relative" :style="{ 'z-index': 2, height: getMapHeight() + 'px' }">
             <div v-for="lessonNum in 27" :key="lessonNum"
-                 class="absolute w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 cursor-pointer"
-                 :class="getLessonNodeClass(lessonNum)"
-                 :style="{ 
-                   left: getLessonPosition(lessonNum).x + 'px',
-                   top: getLessonPosition(lessonNum).y + 'px'
-                 }"
+                 class="absolute rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 cursor-pointer hover:scale-110 focus:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                 :class="getResponsiveLessonNodeClass(lessonNum)"
+                 :style="getNodeStyle(lessonNum)"
                  :data-testid="`lesson-${lessonNum}-node`"
+                 :aria-label="`Lesson ${lessonNum}: ${getLessonTitle(lessonNum)}. Status: ${getLessonStatus(lessonNum)}`"
                  @mouseenter="showLessonTooltip(lessonNum, $event)"
                  @mouseleave="hideLessonTooltip"
                  @focus="showLessonTooltipOnFocus(lessonNum)"
                  @blur="hideLessonTooltip"
-                 @keydown.enter="showLessonTooltipOnFocus(lessonNum)"
-                 @keydown.space="showLessonTooltipOnFocus(lessonNum)"
+                 @keydown.enter="openLessonDetailsModal(lessonNum)"
+                 @keydown.space="openLessonDetailsModal(lessonNum)"
+                 @click="openLessonDetailsModal(lessonNum)"
                  tabindex="0">
               {{ lessonNum }}
             </div>
+          </div>
+        </div>
+        
+        <!-- Mobile Legend -->
+        <div class="mt-4 grid grid-cols-3 gap-2 text-xs" data-testid="lesson-status-legend">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+            <span>Completed</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-blue-500 rounded-full ring-2 ring-blue-400"></div>
+            <span>Current</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-gray-200 rounded-full"></div>
+            <span>Upcoming</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lesson Details Modal -->
+      <div v-if="showLessonModal && selectedLesson" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-testid="lesson-details-modal" @click="closeLessonModal">
+        <div class="bg-white rounded-lg max-w-md w-full p-6" @click.stop>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold">{{ getLessonTitle(selectedLesson) }}</h3>
+            <button @click="closeLessonModal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-gray-700">Description</h4>
+              <p class="text-gray-600">{{ getLessonDescription(selectedLesson) }}</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <h4 class="font-semibold text-gray-700">Duration</h4>
+                <p class="text-gray-600">{{ getLessonDuration(selectedLesson) }}</p>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-700">Cost</h4>
+                <p class="text-gray-600">{{ getLessonCost(selectedLesson) }}</p>
+              </div>
+            </div>
+            <div v-if="getLessonPrerequisites(selectedLesson).length > 0">
+              <h4 class="font-semibold text-gray-700">Prerequisites</h4>
+              <ul class="text-gray-600 text-sm space-y-1">
+                <li v-for="prereq in getLessonPrerequisites(selectedLesson)" :key="prereq" class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  {{ prereq }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button @click="closeLessonModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -1058,6 +1145,7 @@ const milestoneTooltipData = ref<any>({})
 
 // Mobile touch interaction state
 const showLessonDetailsModal = ref(false)
+const showLessonModal = ref(false)
 const selectedLesson = ref(1)
 const currentCardPage = ref(1)
 const lessonCardsContainer = ref<HTMLElement | null>(null)
@@ -1193,16 +1281,27 @@ const getPhaseIconClass = (index: number) => {
   return 'bg-gray-100 text-gray-400 border-2 border-gray-300'
 }
 
-const getLessonPosition = (lessonNum: number) => {
-  // Create a serpentine path for lessons
-  const cols = 9
-  const rowHeight = 60
-  const colWidth = 60
+// Responsive grid configuration
+const getGridConfig = () => {
+  const width = window.innerWidth
+  if (width < 768) {
+    return { cols: 3, nodeSize: 44, rowHeight: 60, colWidth: 80 }
+  } else if (width < 1024) {
+    return { cols: 6, nodeSize: 44, rowHeight: 60, colWidth: 70 }
+  } else {
+    return { cols: 9, nodeSize: 44, rowHeight: 60, colWidth: 60 }
+  }
+}
+
+// Responsive lesson positioning
+const getResponsiveLessonPosition = (lessonNum: number) => {
+  const config = getGridConfig()
+  const { cols, rowHeight, colWidth } = config
   
   const row = Math.floor((lessonNum - 1) / cols)
   let col = (lessonNum - 1) % cols
   
-  // Reverse direction on odd rows
+  // Reverse direction on odd rows for serpentine pattern
   if (row % 2 === 1) {
     col = cols - 1 - col
   }
@@ -1213,21 +1312,80 @@ const getLessonPosition = (lessonNum: number) => {
   }
 }
 
-const getLessonNodeClass = (lessonNum: number) => {
-  if (progress.value.completedLessons.includes(lessonNum)) {
-    return 'bg-green-500 text-white border-green-600'
-  }
-  if (lessonNum === progress.value.currentLesson) {
-    return 'bg-blue-500 text-white border-blue-600 ring-2 ring-blue-400'
-  }
-  return 'bg-gray-200 text-gray-600 border-gray-300'
+
+// Get responsive node size
+const getNodeSize = () => {
+  return getGridConfig().nodeSize
 }
 
-const getLessonNodeTestId = (lessonNum: number) => {
-  if (progress.value.completedLessons.includes(lessonNum)) return 'completed-lesson-node'
-  if (lessonNum === progress.value.currentLesson) return 'current-lesson-node'
-  return 'future-lesson-node'
+// Get responsive map height
+const getMapHeight = () => {
+  const config = getGridConfig()
+  const totalRows = Math.ceil(27 / config.cols)
+  return totalRows * config.rowHeight + 40
 }
+
+// Get node style with responsive sizing
+const getNodeStyle = (lessonNum: number) => {
+  const position = getResponsiveLessonPosition(lessonNum)
+  const size = getNodeSize()
+  
+  return {
+    left: position.x + 'px',
+    top: position.y + 'px',
+    width: size + 'px',
+    height: size + 'px',
+    'min-width': size + 'px',
+    'min-height': size + 'px',
+    'font-size': size < 44 ? '12px' : '14px'
+  }
+}
+
+// Enhanced lesson node classes with phase colors
+const getResponsiveLessonNodeClass = (lessonNum: number) => {
+  const baseClasses = 'text-white border-2'
+  
+  if (progress.value.completedLessons.includes(lessonNum)) {
+    return `${baseClasses} bg-green-500 border-green-600 shadow-lg`
+  }
+  if (lessonNum === progress.value.currentLesson) {
+    return `${baseClasses} bg-blue-500 border-blue-600 ring-2 ring-blue-400 shadow-lg`
+  }
+  
+  // Phase-based coloring for upcoming lessons
+  if (lessonNum <= 5) {
+    return `${baseClasses} bg-blue-200 text-blue-700 border-blue-300`
+  } else if (lessonNum <= 12) {
+    return `${baseClasses} bg-purple-200 text-purple-700 border-purple-300`
+  } else if (lessonNum <= 20) {
+    return `${baseClasses} bg-green-200 text-green-700 border-green-300`
+  } else if (lessonNum <= 25) {
+    return `${baseClasses} bg-orange-200 text-orange-700 border-orange-300`
+  } else {
+    return `${baseClasses} bg-red-200 text-red-700 border-red-300`
+  }
+}
+
+
+// Connection line styling
+const getConnectionLineColor = (lineIndex: number) => {
+  const lesson1 = lineIndex
+  const lesson2 = lineIndex + 1
+  
+  if (progress.value.completedLessons.includes(lesson1) && progress.value.completedLessons.includes(lesson2)) {
+    return '#10b981' // Green for completed path
+  }
+  if (lesson1 === progress.value.currentLesson || lesson2 === progress.value.currentLesson) {
+    return '#3b82f6' // Blue for current path
+  }
+  return '#d1d5db' // Gray for future path
+}
+
+const getConnectionLineWidth = () => {
+  const width = window.innerWidth
+  return width < 768 ? 3 : 2
+}
+
 
 const getBadgeIcon = (badgeId: string) => {
   const badge = allBadges.find(b => b.id === badgeId)
@@ -1320,6 +1478,42 @@ const getLessonName = (lessonNum: number) => {
     'Unusual Attitudes', 'Flight Test Prep', 'Mock Flight Test', 'Final Flight Test', 'License Issue'
   ]
   return lessons[lessonNum - 1] || `Lesson ${lessonNum}`
+}
+
+// Helper functions for modal
+const getLessonTitle = (lessonNum: number) => {
+  return `Lesson ${lessonNum}: ${getLessonName(lessonNum)}`
+}
+
+const getLessonDuration = (lessonNum: number) => {
+  const durations = [
+    '1.0 hour', '0.5 hour', '0.5 hour', '1.5 hours', '1.5 hours',
+    '1.5 hours', '1.5 hours', '1.5 hours', '1.0 hour', '1.5 hours',
+    '2.0 hours', '1.0 hour', '1.0 hour', '1.5 hours', '1.0 hour',
+    '2.0 hours', '1.5 hours', '2.5 hours', '2.0 hours', '2.0 hours',
+    '2.0 hours', '2.0 hours', '1.5 hours', '2.0 hours', '1.5 hours',
+    '2.0 hours', '0.5 hour'
+  ]
+  return durations[lessonNum - 1] || '1.5 hours'
+}
+
+const getLessonCost = (lessonNum: number) => {
+  const costs = [
+    '250', '125', '125', '375', '375', '375', '375', '375', '250', '375',
+    '500', '250', '250', '375', '250', '500', '375', '625', '500', '500',
+    '500', '500', '375', '500', '375', '500', '125'
+  ]
+  return '$' + (costs[lessonNum - 1] || '375')
+}
+
+const openLessonDetailsModal = (lessonNum: number) => {
+  selectedLesson.value = lessonNum
+  showLessonModal.value = true
+}
+
+const closeLessonModal = () => {
+  showLessonModal.value = false
+  selectedLesson.value = 1
 }
 
 const getLessonStatus = (lessonNum: number) => {
@@ -1464,23 +1658,6 @@ const getLessonDescription = (lessonNum: number) => {
   return descriptions[lessonNum - 1] || `Training for lesson ${lessonNum}`
 }
 
-const getLessonDuration = (lessonNum: number) => {
-  const durations = [
-    '1.0h', '1.5h', '1.0h', '1.5h', '1.5h', '1.5h', '1.5h', '1.5h', '1.5h',
-    '1.5h', '1.5h', '1.5h', '1.0h', '1.0h', '2.0h', '2.0h', '2.0h', '2.5h',
-    '2.5h', '2.0h', '2.0h', '2.0h', '1.5h', '2.0h', '2.5h', '3.0h', '0.5h'
-  ]
-  return durations[lessonNum - 1] || '1.5h'
-}
-
-const getLessonCost = (lessonNum: number) => {
-  const costs = [
-    250, 300, 250, 300, 300, 300, 300, 300, 300,
-    300, 300, 300, 200, 200, 400, 400, 400, 500,
-    500, 400, 400, 400, 300, 400, 500, 600, 100
-  ]
-  return costs[lessonNum - 1] || 300
-}
 
 const getLessonStatusColor = (lessonNum: number) => {
   const status = getLessonStatus(lessonNum)
@@ -1629,7 +1806,7 @@ const getLessonStatusClass = (lessonNum: number) => {
   }[status] || 'bg-gray-100 text-gray-600'
 }
 
-const showLessonDetails = (lessonNum: number) => {
+const showLessonDetails = (_lessonNum: number) => {
   selectedLesson.value = lessonNum
   showLessonDetailsModal.value = true
 }
@@ -1643,7 +1820,7 @@ const handleTouchStart = (event: TouchEvent, lessonNum: number) => {
   touchStartX.value = event.touches[0].clientX
 }
 
-const handleTouchEnd = (event: TouchEvent, lessonNum: number) => {
+const handleTouchEnd = (event: TouchEvent, _lessonNum: number) => {
   const touchEndTime = Date.now()
   const touchDuration = touchEndTime - touchStartTime.value
   
@@ -1719,6 +1896,12 @@ onMounted(() => {
       ]
     }
   }
+  
+  // Add resize listener for responsive design
+  window.addEventListener('resize', () => {
+    // Force re-render of lesson map when viewport changes
+    // The reactive functions will automatically use the new window size
+  })
 })
 </script>
 
