@@ -218,33 +218,58 @@ test.describe('Visual Progress Visualization', () => {
       .toContainText('%')
   })
 
-  test('should show flight path visualization on map', async ({ page }) => {
+  test('should show interactive NZ aviation map with real geographic data', async ({ page }) => {
     await page.click('[data-testid="journey-tab"]')
     
-    // Should show NZ map with flight training areas
-    await expect(page.locator('[data-testid="nz-flight-map"]'))
+    // Should show interactive map container
+    await expect(page.locator('[data-testid="nz-aviation-map"]'))
       .toBeVisible()
     
-    // Should show training area markers (check that they are attached, not necessarily visible due to CSS positioning)
-    await expect(page.locator('[data-testid="training-area-auckland"]'))
-      .toBeAttached()
+    // Should initialize map with New Zealand bounds
+    const mapContainer = page.locator('[data-testid="nz-aviation-map"]')
+    await expect(mapContainer).toBeVisible()
     
-    // Should show flight paths for cross-country requirements (canvas-based)
-    await expect(page.locator('[data-testid="cross-country-routes"]'))
+    // Should show real airport markers with proper data
+    await expect(page.locator('[data-testid="airport-auckland"]'))
+      .toBeVisible()
+    await expect(page.locator('[data-testid="airport-hamilton"]'))
+      .toBeVisible()
+    await expect(page.locator('[data-testid="airport-wellington"]'))
+      .toBeVisible()
+    await expect(page.locator('[data-testid="airport-christchurch"]'))
       .toBeVisible()
     
-    // Verify canvas has been drawn with routes
-    const canvas = page.locator('[data-testid="cross-country-routes"]')
-    await expect(canvas).toHaveAttribute('width', '256')
-    await expect(canvas).toHaveAttribute('height', '192')
-    
-    // Should highlight terrain awareness areas
-    await expect(page.locator('[data-testid="terrain-awareness-zones"]'))
+    // Should display controlled airspace boundaries
+    await expect(page.locator('[data-testid="controlled-airspace-overlay"]'))
       .toBeVisible()
     
-    // Should show controlled airspace visually
-    await expect(page.locator('[data-testid="controlled-airspace"]'))
+    // Should show terrain awareness overlays
+    await expect(page.locator('[data-testid="terrain-overlay"]'))
       .toBeVisible()
+    
+    // Should display VFR training routes
+    await expect(page.locator('[data-testid="vfr-routes"]'))
+      .toBeVisible()
+    
+    // Should be interactive (zoomable and pannable)
+    await expect(page.locator('[data-testid="map-zoom-controls"]'))
+      .toBeVisible()
+    
+    // Should show airport info on click
+    await page.click('[data-testid="airport-auckland"]')
+    await expect(page.locator('[data-testid="airport-info-popup"]'))
+      .toBeVisible()
+    await expect(page.locator('[data-testid="airport-info-popup"]'))
+      .toContainText('Auckland Airport')
+    await expect(page.locator('[data-testid="airport-info-popup"]'))
+      .toContainText('NZAA')
+    
+    // Should show training area information
+    await page.click('[data-testid="training-area-manukau"]')
+    await expect(page.locator('[data-testid="training-area-popup"]'))
+      .toBeVisible()
+    await expect(page.locator('[data-testid="training-area-popup"]'))
+      .toContainText('Manukau Training Area')
   })
 
   test('should display time-based progress animations', async ({ page }) => {

@@ -492,36 +492,52 @@
         </div>
       </div>
 
-      <!-- Flight Path Visualization on Map -->
+      <!-- Interactive NZ Aviation Map -->
       <div class="card mb-8">
-        <h3 class="text-lg font-semibold mb-4">New Zealand Flight Training Areas</h3>
-        <div class="relative bg-blue-50 rounded-lg p-4 h-64" data-testid="nz-flight-map">
-          <!-- Simplified NZ Map Outline -->
-          <div class="absolute inset-4 bg-green-100 rounded-lg border-2 border-green-300">
-            <div class="text-center pt-8 text-sm text-green-700">New Zealand Flight Training Areas</div>
-            
-            <!-- Training Area Markers -->
-            <div class="absolute top-4 left-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-auckland" title="Auckland"></div>
-            <div class="absolute top-12 right-12 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-hamilton" title="Hamilton"></div>
-            <div class="absolute bottom-16 left-16 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-wellington" title="Wellington"></div>
-            <div class="absolute bottom-8 right-8 w-3 h-3 bg-red-500 rounded-full" data-testid="training-area-christchurch" title="Christchurch"></div>
-            
-            <!-- Cross Country Routes -->
-            <canvas 
-              ref="flightRoutesCanvas" 
-              class="absolute inset-0 w-full h-full pointer-events-none" 
-              data-testid="cross-country-routes"
-              :width="256" 
-              :height="192"
-            ></canvas>
-            
-            <!-- Terrain Awareness Zones -->
-            <div class="absolute top-8 left-12 w-16 h-12 bg-orange-200 border border-orange-400 rounded opacity-60" data-testid="terrain-awareness-zones" title="Mountain Region"></div>
-            <div class="absolute bottom-12 right-16 w-12 h-8 bg-orange-200 border border-orange-400 rounded opacity-60" data-testid="terrain-awareness-zones" title="Alps Region"></div>
-            
-            <!-- Controlled Airspace -->
-            <div class="absolute top-6 right-6 w-20 h-16 border-2 border-purple-400 rounded-full opacity-50" data-testid="controlled-airspace" title="Controlled Zone"></div>
-            <div class="absolute bottom-20 left-8 w-16 h-12 border-2 border-purple-400 rounded-full opacity-50" data-testid="controlled-airspace" title="Terminal Area"></div>
+        <h3 class="text-lg font-semibold mb-4">New Zealand Aviation Training Map</h3>
+        <div class="relative bg-blue-50 rounded-lg p-4 h-96" data-testid="nz-aviation-map">
+          <!-- Interactive Map Container -->
+          <div 
+            ref="mapContainer" 
+            class="w-full h-full rounded-lg overflow-hidden border-2 border-gray-200"
+            data-testid="leaflet-map-container"
+          >
+            <!-- Map will be initialized here -->
+          </div>
+          
+          <!-- Map Loading State -->
+          <div 
+            v-if="mapLoading" 
+            class="absolute inset-0 flex items-center justify-center bg-blue-50 rounded-lg"
+            data-testid="map-loading"
+          >
+            <div class="text-center">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+              <p class="text-gray-600">Loading aviation map...</p>
+            </div>
+          </div>
+          
+          <!-- Map Legend -->
+          <div class="absolute bottom-4 left-4 bg-white rounded-lg p-3 shadow-md z-10" data-testid="map-legend">
+            <h4 class="font-semibold text-sm mb-2">Legend</h4>
+            <div class="space-y-1 text-xs">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-blue-600 rounded-full mr-2"></div>
+                <span>Airports</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <span>Training Areas</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-1 bg-purple-500 mr-2"></div>
+                <span>Controlled Airspace</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-1 bg-orange-500 mr-2"></div>
+                <span>Terrain Awareness</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1094,7 +1110,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import * as L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 // State
 const progress = ref({
@@ -1145,8 +1163,82 @@ const milestoneTooltipVisible = ref(false)
 const milestoneTooltipStyle = ref({})
 const milestoneTooltipData = ref<any>({})
 
-// Canvas reference for flight routes
-const flightRoutesCanvas = ref<HTMLCanvasElement | null>(null)
+// Map references and state
+const mapContainer = ref<HTMLElement | null>(null)
+const leafletMap = ref<L.Map | null>(null)
+const mapLoading = ref(true)
+
+// New Zealand Aviation Data
+const nzAirports = [
+  {
+    name: 'Auckland Airport',
+    icao: 'NZAA',
+    coords: [-36.8485, 174.7633] as [number, number],
+    type: 'international',
+    testId: 'airport-auckland'
+  },
+  {
+    name: 'Hamilton Airport',
+    icao: 'NZHN',
+    coords: [-37.8667, 175.3323] as [number, number],
+    type: 'regional',
+    testId: 'airport-hamilton'
+  },
+  {
+    name: 'Wellington Airport',
+    icao: 'NZWN',
+    coords: [-41.3276, 174.8056] as [number, number],
+    type: 'international',
+    testId: 'airport-wellington'
+  },
+  {
+    name: 'Christchurch Airport',
+    icao: 'NZCH',
+    coords: [-43.4894, 172.5320] as [number, number],
+    type: 'international',
+    testId: 'airport-christchurch'
+  }
+]
+
+const nzTrainingAreas = [
+  {
+    name: 'Manukau Training Area',
+    coords: [-37.0000, 174.8000] as [number, number],
+    description: 'Primary training area for Auckland-based flight schools',
+    testId: 'training-area-manukau'
+  },
+  {
+    name: 'Waikato Training Area',
+    coords: [-37.7000, 175.2000] as [number, number],
+    description: 'Training area around Hamilton for cross-country flights',
+    testId: 'training-area-waikato'
+  },
+  {
+    name: 'Cook Strait Training Area',
+    coords: [-41.2000, 174.9000] as [number, number],
+    description: 'Wellington area training with terrain awareness focus',
+    testId: 'training-area-cook-strait'
+  },
+  {
+    name: 'Canterbury Training Area',
+    coords: [-43.5000, 172.5000] as [number, number],
+    description: 'Christchurch area with Southern Alps terrain awareness',
+    testId: 'training-area-canterbury'
+  }
+]
+
+const vfrRoutes = [
+  {
+    name: 'Auckland-Hamilton',
+    coords: [[-36.8485, 174.7633], [-37.8667, 175.3323]] as [number, number][],
+    description: 'Common training route for navigation exercises'
+  },
+  {
+    name: 'Wellington-Christchurch',
+    coords: [[-41.3276, 174.8056], [-43.4894, 172.5320]] as [number, number][],
+    description: 'Cross-country route over Cook Strait'
+  }
+]
 
 // Mobile touch interaction state
 const showLessonDetailsModal = ref(false)
@@ -1874,7 +1966,7 @@ const loadProgress = () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   loadProgress()
   
   // Initialize some progress for testing
@@ -1902,58 +1994,185 @@ onMounted(() => {
     }
   }
   
-  // Initialize canvas for flight routes
-  drawFlightRoutes()
+  // Initialize interactive map
+  await initializeMap()
   
   // Add resize listener for responsive design
   window.addEventListener('resize', () => {
     // Force re-render of lesson map when viewport changes
     // The reactive functions will automatically use the new window size
-    drawFlightRoutes()
+    if (leafletMap.value) {
+      leafletMap.value.invalidateSize()
+    }
   })
 })
 
-// Function to draw flight routes on canvas
-const drawFlightRoutes = () => {
-  if (!flightRoutesCanvas.value) return
+onUnmounted(() => {
+  // Clean up map instance
+  if (leafletMap.value) {
+    leafletMap.value.remove()
+  }
+})
+
+// Initialize Leaflet map with NZ aviation data
+const initializeMap = async () => {
+  await nextTick() // Ensure DOM is ready
   
-  const canvas = flightRoutesCanvas.value
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
+  if (!mapContainer.value) return
   
-  // Clear canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  
-  // Define training area positions (relative to container)
-  const areas = [
-    { name: 'Auckland', x: 32, y: 16 },      // top-4 left-8
-    { name: 'Hamilton', x: 192, y: 48 },     // top-12 right-12  
-    { name: 'Wellington', x: 64, y: 128 },   // bottom-16 left-16
-    { name: 'Christchurch', x: 192, y: 160 } // bottom-8 right-8
-  ]
-  
-  // Draw dashed lines connecting training areas
-  ctx.strokeStyle = '#3b82f6'
-  ctx.lineWidth = 2
-  ctx.setLineDash([5, 5])
-  
-  // Auckland to Hamilton
-  ctx.beginPath()
-  ctx.moveTo(areas[0].x, areas[0].y)
-  ctx.lineTo(areas[1].x, areas[1].y)
-  ctx.stroke()
-  
-  // Hamilton to Wellington
-  ctx.beginPath()
-  ctx.moveTo(areas[1].x, areas[1].y)
-  ctx.lineTo(areas[2].x, areas[2].y)
-  ctx.stroke()
-  
-  // Wellington to Christchurch
-  ctx.beginPath()
-  ctx.moveTo(areas[2].x, areas[2].y)
-  ctx.lineTo(areas[3].x, areas[3].y)
-  ctx.stroke()
+  try {
+    // Create map centered on New Zealand
+    const map = L.map(mapContainer.value, {
+      center: [-40.9006, 174.8860], // Center of New Zealand
+      zoom: 6,
+      zoomControl: true
+    })
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 18
+    }).addTo(map)
+    
+    // Add custom zoom controls with test IDs
+    const zoomControl = map.zoomControl
+    const zoomContainer = zoomControl.getContainer()
+    if (zoomContainer) {
+      zoomContainer.setAttribute('data-testid', 'map-zoom-controls')
+    }
+    
+    // Add airports
+    nzAirports.forEach(airport => {
+      const marker = L.marker(airport.coords, {
+        icon: L.divIcon({
+          className: 'airport-marker',
+          html: '<div class="w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-md"></div>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        })
+      }).addTo(map)
+      
+      // Add test ID to marker
+      const markerElement = marker.getElement()
+      if (markerElement) {
+        markerElement.setAttribute('data-testid', airport.testId)
+      }
+      
+      // Add popup with airport info
+      marker.bindPopup(`
+        <div data-testid="airport-info-popup">
+          <h4 class="font-semibold">${airport.name}</h4>
+          <p class="text-sm text-gray-600">ICAO: ${airport.icao}</p>
+          <p class="text-xs text-gray-500">Type: ${airport.type}</p>
+        </div>
+      `)
+    })
+    
+    // Add training areas
+    nzTrainingAreas.forEach(area => {
+      const marker = L.marker(area.coords, {
+        icon: L.divIcon({
+          className: 'training-area-marker',
+          html: '<div class="w-4 h-4 bg-red-500 rounded-full border-2 border-white shadow-md"></div>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        })
+      }).addTo(map)
+      
+      // Add test ID to marker
+      const markerElement = marker.getElement()
+      if (markerElement) {
+        markerElement.setAttribute('data-testid', area.testId)
+      }
+      
+      // Add popup with training area info
+      marker.bindPopup(`
+        <div data-testid="training-area-popup">
+          <h4 class="font-semibold">${area.name}</h4>
+          <p class="text-sm text-gray-600">${area.description}</p>
+        </div>
+      `)
+    })
+    
+    // Add VFR routes
+    const routesGroup = L.layerGroup().addTo(map)
+    vfrRoutes.forEach(route => {
+      L.polyline(route.coords, {
+        color: '#3b82f6',
+        weight: 3,
+        opacity: 0.7,
+        dashArray: '10, 10'
+      }).addTo(routesGroup)
+    })
+    
+    // Add test ID to routes group
+    routesGroup.getPane = () => {
+      const pane = document.createElement('div')
+      pane.setAttribute('data-testid', 'vfr-routes')
+      return pane
+    }
+    
+    // Add controlled airspace overlay (simplified)
+    const controlledAirspace = L.layerGroup().addTo(map)
+    
+    // Auckland CTA
+    L.circle([-36.8485, 174.7633], {
+      radius: 50000, // 50km radius
+      fillColor: '#8b5cf6',
+      color: '#8b5cf6',
+      weight: 2,
+      opacity: 0.6,
+      fillOpacity: 0.1
+    }).addTo(controlledAirspace)
+    
+    // Wellington CTA  
+    L.circle([-41.3276, 174.8056], {
+      radius: 40000, // 40km radius
+      fillColor: '#8b5cf6',
+      color: '#8b5cf6',
+      weight: 2,
+      opacity: 0.6,
+      fillOpacity: 0.1
+    }).addTo(controlledAirspace)
+    
+    // Add test ID to controlled airspace
+    controlledAirspace.getPane = () => {
+      const pane = document.createElement('div')
+      pane.setAttribute('data-testid', 'controlled-airspace-overlay')
+      return pane
+    }
+    
+    // Add terrain awareness overlay (simplified)
+    const terrainOverlay = L.layerGroup().addTo(map)
+    
+    // Southern Alps terrain awareness zone
+    L.polygon([
+      [-43.0, 170.0],
+      [-43.0, 171.5],
+      [-44.5, 171.5],
+      [-44.5, 170.0]
+    ], {
+      fillColor: '#f97316',
+      color: '#f97316',
+      weight: 2,
+      opacity: 0.6,
+      fillOpacity: 0.2
+    }).addTo(terrainOverlay)
+    
+    // Add test ID to terrain overlay
+    terrainOverlay.getPane = () => {
+      const pane = document.createElement('div')
+      pane.setAttribute('data-testid', 'terrain-overlay')
+      return pane
+    }
+    
+    leafletMap.value = map
+    mapLoading.value = false
+    
+  } catch (error) {
+    console.error('Failed to initialize map:', error)
+    mapLoading.value = false
+  }
 }
 </script>
 
