@@ -28,10 +28,10 @@
         </div>
         
         <!-- Today's Focus - Primary lesson display -->
-        <div class="metro-card mb-6" data-testid="todays-focus">
+        <div class="metro-tile metro-tile-progress metro-tile-2x2 mb-6" data-testid="todays-focus">
           <div class="text-center mb-4">
-            <h1 class="text-2xl font-bold mb-2">Today's Focus</h1>
-            <div class="text-sm text-gray-600">Your next step in the PPL journey</div>
+            <h1 class="metro-tile-title">Today's Focus</h1>
+            <div class="metro-tile-subtitle">Your next step in the PPL journey</div>
           </div>
           
           <div class="bg-blue-50 p-6" data-testid="current-lesson">
@@ -174,8 +174,8 @@
         </div>
 
         <!-- Upcoming Requirements -->
-        <div class="metro-card mb-6" data-testid="upcoming-requirements">
-          <h3 class="text-lg font-semibold mb-4">📋 Upcoming Requirements</h3>
+        <div class="metro-tile metro-tile-requirements metro-tile-2x1 mb-6" data-testid="upcoming-requirements">
+          <h3 class="metro-tile-title">📋 Upcoming Requirements</h3>
           <div class="space-y-3">
             <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
                  class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200">
@@ -500,7 +500,7 @@
           <h3 class="text-xl font-bold mb-4">📚 Education Center</h3>
           
           <!-- PPL Pathway Overview -->
-          <div class="card mb-8" data-testid="ppl-pathway-overview">
+          <div class="metro-card mb-8" data-testid="ppl-pathway-overview">
             <h2 class="text-xl font-semibold mb-4">🎯 Complete PPL Pathway</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div class="text-center p-4 bg-blue-50">
@@ -592,7 +592,7 @@
           </div>
 
           <!-- Study Resources -->
-          <div class="card mb-8" data-testid="study-resources-section">
+          <div class="metro-card mb-8" data-testid="study-resources-section">
             <h3 class="text-lg font-semibold mb-4">📖 Study Resources & Links</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -632,7 +632,7 @@
           </div>
 
           <!-- School Selection Tips -->
-          <div class="card mb-8" data-testid="school-selection-tips">
+          <div class="metro-card mb-8" data-testid="school-selection-tips">
             <h3 class="text-lg font-semibold mb-4">🏫 Choosing a Flight School</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
