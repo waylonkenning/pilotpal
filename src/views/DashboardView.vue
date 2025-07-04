@@ -174,7 +174,7 @@
                 <div class="text-sm text-gray-600">{{ requirement.description }}</div>
               </div>
               <button 
-                @click="showRequirementInfo(requirement.id)"
+                @click="openRequirementInfoModal(requirement.id)"
                 class="btn btn-secondary btn-sm" 
                 :data-testid="requirement.id + '-info'"
               >
@@ -811,6 +811,64 @@
       </div>
     </div>
 
+    <!-- Requirement Information Modal -->
+    <div v-if="showRequirementInfoModal && selectedRequirement" class="modal-overlay" @click="showRequirementInfoModal = false">
+      <div class="modal-content max-w-2xl" @click.stop data-testid="requirement-info-modal">
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="text-6xl">{{ selectedRequirement.icon }}</div>
+            <div>
+              <h3 class="text-2xl font-bold">{{ selectedRequirement.title }}</h3>
+              <p class="text-lg text-gray-600">{{ selectedRequirement.fullDescription }}</p>
+            </div>
+          </div>
+          
+          <div class="space-y-6">
+            <!-- Requirements -->
+            <div class="bg-blue-50 p-4 rounded-lg" data-testid="requirement-details-list">
+              <h4 class="font-semibold text-blue-800 mb-3">📋 What You Need to Do</h4>
+              <ul class="space-y-2">
+                <li v-for="req in selectedRequirement.requirements" :key="req" class="text-blue-700">
+                  {{ req }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="bg-green-50 p-4 rounded-lg" data-testid="requirement-next-steps">
+              <h4 class="font-semibold text-green-800 mb-3">🚀 Next Steps</h4>
+              <ul class="space-y-2">
+                <li v-for="step in selectedRequirement.nextSteps" :key="step" class="text-green-700">
+                  • {{ step }}
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Cost & Timeline -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-orange-50 p-4 rounded-lg" data-testid="requirement-cost">
+                <h4 class="font-semibold text-orange-800 mb-2">💰 Estimated Cost</h4>
+                <p class="text-orange-700">{{ selectedRequirement.cost }}</p>
+              </div>
+              <div class="bg-purple-50 p-4 rounded-lg" data-testid="requirement-timeframe">
+                <h4 class="font-semibold text-purple-800 mb-2">⏱️ Timeframe</h4>
+                <p class="text-purple-700">{{ selectedRequirement.timeframe }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-6">
+            <button @click="showRequirementInfoModal = false" class="btn btn-secondary">
+              Close
+            </button>
+            <router-link to="/requirements" class="btn btn-primary flex-1">
+              📋 View All Requirements
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Progress Tooltip -->
     <div v-if="progressTooltipVisible" 
          class="fixed z-50 bg-blue-900 text-white p-4 rounded-lg shadow-lg pointer-events-none"
@@ -877,6 +935,8 @@ const showEducationCenter = ref(false)
 const showRequirementModal = ref(false)
 const showLessonInfo = ref(false)
 const showMilestoneRequirements = ref(false)
+const showRequirementInfoModal = ref(false)
+const selectedRequirement = ref<any>(null)
 const newAchievements = ref<string[]>([])
 
 // Tooltip state
@@ -1159,12 +1219,6 @@ const getBadgeDescription = (badgeId: string) => {
   return badgeDescriptions[badgeId] || 'Achievement unlocked'
 }
 
-const showRequirementInfo = (requirementId: string) => {
-  if (requirementId === 'medical-cert') {
-    showRequirementModal.value = true
-  }
-  // Add other requirement types as needed
-}
 
 const closeCelebration = () => {
   showAchievementCelebration.value = false
@@ -1516,6 +1570,92 @@ const getLessonSkills = (lessonNum: number) => {
     ]
   }
   return lessonSkills[lessonNum] || []
+}
+
+// Function to show requirement information
+const openRequirementInfoModal = (requirementId: string) => {
+  const requirement = upcomingRequirements.value.find(req => req.id === requirementId)
+  if (requirement) {
+    selectedRequirement.value = getRequirementDetails(requirement)
+    showRequirementInfoModal.value = true
+  }
+}
+
+// Function to get detailed requirement information
+const getRequirementDetails = (requirement: any) => {
+  const details = {
+    'medical-cert': {
+      ...requirement,
+      icon: '🏥',
+      fullDescription: 'A medical certificate is required before you can fly solo. You have two options in New Zealand.',
+      requirements: [
+        '📋 Choose between Class 2 Medical or DL9 Self-Declaration',
+        '🏥 Class 2: Full medical examination by CAA-approved doctor ($420-$1,070)',
+        '📄 DL9: Self-declaration if you hold valid NZ driver license (free)',
+        '⏱️ Class 2 valid for 5 years (under 40) or 2 years (over 40)',
+        '🔄 DL9 must be renewed annually'
+      ],
+      nextSteps: [
+        'Decide which medical option suits your budget and situation',
+        'If Class 2: Find CAA-approved Aviation Medical Examiner',
+        'If DL9: Download form from CAA website and complete',
+        'Submit application and wait for approval'
+      ],
+      cost: 'Class 2: $420-$1,070 | DL9: Free',
+      timeframe: 'Class 2: 2-4 weeks processing | DL9: 1-2 weeks'
+    },
+    'solo-endorsement': {
+      ...requirement,
+      icon: '🦅',
+      fullDescription: 'Your instructor must provide a solo endorsement before your first solo flight.',
+      requirements: [
+        '✈️ Demonstrate consistent safe flying in training area',
+        '🛬 Master circuit pattern and landing procedures',
+        '📋 Pass pre-solo knowledge test with instructor',
+        '🎯 Show proficiency in emergency procedures',
+        '📄 Complete required paperwork and endorsements'
+      ],
+      nextSteps: [
+        'Focus on consistency during dual instruction',
+        'Study emergency procedures thoroughly',
+        'Ask instructor about solo readiness requirements',
+        'Complete any additional practice as recommended'
+      ],
+      cost: 'No additional cost - part of regular instruction',
+      timeframe: 'Typically at 10-15 hours dual instruction'
+    },
+    'theory-exams': {
+      ...requirement,
+      icon: '📚',
+      fullDescription: 'Complete all six CAA theory examinations required for PPL.',
+      requirements: [
+        '📖 Air Law: Aviation regulations and procedures (70% required)',
+        '🧭 Navigation: Chart reading, flight planning, radio aids (70% required)',
+        '⚙️ Technical Knowledge: Aircraft systems and performance (70% required)',
+        '🧠 Human Factors: Decision making and physiology (70% required)',
+        '🌤️ Meteorology: Weather theory and interpretation (70% required)',
+        '📻 Radio Telephony: Communication procedures and phraseology (70% required)'
+      ],
+      nextSteps: [
+        'Purchase official CAA study materials',
+        'Schedule theory training with flight school',
+        'Book exams through CAA when ready',
+        'Study consistently - each exam requires 20-40 hours preparation'
+      ],
+      cost: '$65 per exam × 6 exams = $390 total',
+      timeframe: '6-12 months depending on study pace'
+    }
+  }
+
+  return details[requirement.id as keyof typeof details] || {
+    ...requirement,
+    icon: 'ℹ️',
+    fullDescription: requirement.description,
+    requirements: ['Contact your flight instructor for more information'],
+    nextSteps: ['Discuss this requirement with your instructor'],
+    cost: 'Varies',
+    timeframe: 'Consult with instructor'
+  }
 }
 
 const loadProgress = () => {
