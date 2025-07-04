@@ -226,4 +226,4 @@ This project follows a strict development workflow documented in `CLAUDE.md`:
 
 ## 🤝 Contributing
 
-Built with modern web technologies following Vue 3 best practices, TypeScript standards, and mobile-first responsive design principles. All contributions must pass the comprehensive test suite including TypeScript validation, ESLint checks, unit tests, and E2E tests.
+Built with modern web technologies following Vue 3 best practices, TypeScript standards, and mobile-first responsive design principles. All contributions must pass the comprehensive test suite including TypeScript validation, ESLint checks, unit tests, and E2E tests.# Trigger deployment Fri Jul  4 19:56:37 NZST 2025
