@@ -75,11 +75,11 @@ body {
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  /* Border Radius - Metro Design (All Sharp Corners) */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -272,13 +272,13 @@ p {
 
 /* Components */
 
-/* Card - Enhanced with premium design */
+/* Card - Metro Design (Sharp Corners) */
 .card {
   background: var(--bg-primary);
-  border-radius: var(--radius-xl);
+  border-radius: 0;
   border: 1px solid var(--border-light);
   padding: var(--space-5);
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -306,7 +306,7 @@ p {
   }
 }
 
-/* Button - Enhanced with better touch targets */
+/* Button - Metro Design (Sharp Corners) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -314,7 +314,7 @@ p {
   padding: var(--space-3) var(--space-5);
   font-size: var(--text-sm);
   font-weight: 500;
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   border: none;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -386,12 +386,12 @@ p {
   background: var(--green-500);
 }
 
-/* Form Elements - Enhanced accessibility */
+/* Form Elements - Metro Design (Sharp Corners) */
 .form-input {
   width: 100%;
   padding: var(--space-3) var(--space-4);
   border: 2px solid var(--border-medium);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   font-size: var(--text-base);
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -567,13 +567,18 @@ p {
 .border-blue-200 { border-color: #bfdbfe; }
 .border-yellow-200 { border-color: #fde047; }
 
-.rounded-full { border-radius: 50%; }
-.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: 0 !important; }
+.rounded-lg { border-radius: 0 !important; }
+.rounded-md { border-radius: 0 !important; }
+.rounded-sm { border-radius: 0 !important; }
+.rounded-xl { border-radius: 0 !important; }
+.rounded { border-radius: 0 !important; }
+.rounded-t-lg { border-radius: 0 !important; }
 
 .transition-all { transition: all 0.3s ease; }
 .duration-300 { transition-duration: 300ms; }
 
-/* Modal styling - Enhanced */
+/* Modal styling - Metro Design */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -591,12 +596,12 @@ p {
 
 .modal-content {
   background: var(--bg-primary);
-  border-radius: var(--radius-xl);
+  border-radius: 0;
   max-width: min(90vw, 600px);
   max-height: 90vh;
   overflow-y: auto;
   padding: var(--space-6);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: none;
   border: 1px solid var(--border-light);
   animation: modalSlideIn 0.3s ease-out;
   margin: var(--space-4);
@@ -622,7 +627,7 @@ p {
 .btn-lg {
   padding: var(--space-4) var(--space-6);
   font-size: var(--text-lg);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
 }
 
 .btn-icon {
@@ -631,7 +636,7 @@ p {
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -661,7 +666,7 @@ p {
   margin: -0.5rem 0 0 -0.5rem;
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
-  border-radius: 50%;
+  border-radius: 0;
   animation: spin 1s linear infinite;
 }
 
@@ -719,7 +724,7 @@ p {
   padding: 8px;
   z-index: 1000;
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   border: 2px solid var(--blue-500);
 }
 
