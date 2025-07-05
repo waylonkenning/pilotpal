@@ -1,56 +1,54 @@
 <template>
-  <div class="min-h-screen gradient-sky" data-testid="main-dashboard">
-    <div class="w-full">
-      <div class="px-4 py-6">
+  <div data-testid="main-dashboard">
+    <div>
+      <div>
         
-        <!-- Dashboard Header Metro Tile -->
-        <div class="metro-grid-container mb-6">
-          <div class="metro-tile metro-tile-header metro-tile-full">
-            <div class="text-center">
-              <h1 class="metro-tile-title">PPL Quest Dashboard</h1>
-              <div class="metro-tile-subtitle">Track your pilot training progress</div>
+        <!-- Dashboard Header -->
+        <div>
+          <div>
+            <div>
+              <h1>PPL Quest Dashboard</h1>
+              <div>Track your pilot training progress</div>
             </div>
           </div>
         </div>
         
-        <!-- Today's Focus - Primary lesson display -->
-        <div class="metro-tile metro-tile-progress metro-tile-2x2" data-testid="todays-focus">
-          <div class="text-center mb-4">
-            <h1 class="metro-tile-title">Today's Focus</h1>
-            <div class="metro-tile-subtitle">Your next step in the PPL journey</div>
+        <!-- Today's Focus -->
+        <div data-testid="todays-focus">
+          <div>
+            <h2>Today's Focus</h2>
+            <div>Your next step in the PPL journey</div>
           </div>
           
           <div data-testid="current-lesson">
-            <div class="flex items-center justify-between mb-4">
+            <div>
               <div>
-                <h2 class="text-2xl font-bold text-white" data-testid="current-lesson-title">
+                <h3 data-testid="current-lesson-title">
                   Lesson {{ progress.currentLesson }}
-                </h2>
-                <div class="text-lg text-white opacity-90" data-testid="current-lesson-description">
+                </h3>
+                <div data-testid="current-lesson-description">
                   {{ currentLessonInfo.name }}
                 </div>
               </div>
-              <div class="text-5xl">{{ currentLessonInfo.icon }}</div>
+              <div>{{ currentLessonInfo.icon }}</div>
             </div>
             
-            <p class="text-white opacity-90 mb-4">{{ currentLessonInfo.description }}</p>
+            <p>{{ currentLessonInfo.description }}</p>
             
-            <div class="p-4 mb-4 bg-white bg-opacity-20 border-l-4 border-white" data-testid="preparation-needed">
-              <div class="font-semibold text-white mb-2">📋 What you need to do:</div>
-              <div class="text-white opacity-90">{{ currentLessonInfo.preparation }}</div>
+            <div data-testid="preparation-needed">
+              <div>📋 What you need to do:</div>
+              <div>{{ currentLessonInfo.preparation }}</div>
             </div>
             
-            <div class="flex gap-3">
+            <div>
               <button 
                 @click="showCompleteLesson = true" 
-                class="metro-button metro-button-on-colored flex-1"
                 data-testid="complete-lesson-button"
               >
                 ✅ Complete This Lesson
               </button>
               <button 
                 @click="showLessonInfo = true"
-                class="metro-button metro-button-on-colored" 
                 data-testid="lesson-info-button"
               >
                 ℹ️ More Info
@@ -59,39 +57,37 @@
           </div>
         </div>
 
-        <!-- Metro Progress Overview -->
-        <div class="metro-grid-container" data-testid="metro-grid-container">
-          <!-- Flight Hours Metro Tile -->
-          <div class="metro-tile metro-tile-progress metro-tile-third" data-testid="metro-tile metro-tile-progress">
+        <!-- Progress Overview -->
+        <div data-testid="metro-grid-container">
+          <!-- Flight Hours -->
+          <div data-testid="metro-tile metro-tile-progress">
             <div>
-              <div class="metro-tile-title" data-testid="metro-tile-title">Flight Hours</div>
-              <div class="metro-tile-value cursor-pointer" 
-                   data-testid="total-hours"
+              <h3 data-testid="metro-tile-title">Flight Hours</h3>
+              <div data-testid="total-hours"
                    @mouseenter="showProgressTooltip($event)"
                    @mouseleave="hideProgressTooltip">
                 {{ progress.flightHours.total.toFixed(1) }}
               </div>
-              <div class="metro-tile-label">Total Hours</div>
+              <div>Total Hours</div>
             </div>
-            <div class="metro-tile-subtitle">
+            <div>
               <div data-testid="dual-hours">Dual: {{ progress.flightHours.dual.toFixed(1) }}h</div>
               <div>Solo: {{ progress.flightHours.solo.toFixed(1) }}h</div>
               <div>X-Country: {{ progress.flightHours.crossCountry.toFixed(1) }}h</div>
             </div>
           </div>
           
-          <!-- Lesson Progress Metro Tile -->
-          <div class="metro-tile metro-tile-teal metro-tile-half" data-testid="metro-tile metro-tile-progress">
+          <!-- Lesson Progress -->
+          <div data-testid="metro-tile metro-tile-progress">
             <div>
-              <div class="metro-tile-title" data-testid="metro-tile-title">Lesson Progress</div>
-              <div class="metro-tile-value" data-testid="lesson-progress">
-                {{ progress.completedLessons.length }}<span class="metro-tile-subtitle">/27</span>
+              <h3 data-testid="metro-tile-title">Lesson Progress</h3>
+              <div data-testid="lesson-progress">
+                {{ progress.completedLessons.length }}<span>/27</span>
               </div>
-              <div class="metro-tile-label">Lessons Completed</div>
+              <div>Lessons Completed</div>
             </div>
-            <div class="w-full bg-white bg-opacity-30 h-2 mt-4" data-testid="progress-bar">
+            <div data-testid="progress-bar">
               <div 
-                class="bg-white h-2 transition-all duration-300" 
                 :style="{ width: lessonProgress + '%' }"
                 data-testid="progress-bar-fill"
               ></div>
@@ -99,58 +95,55 @@
           </div>
           
           <!-- Achievements Metro Tile -->
-          <div class="metro-tile metro-tile-achievements metro-tile-third" data-testid="metro-tile metro-tile-achievements">
+          <div data-testid="metro-tile metro-tile-achievements">
             <div>
-              <div class="metro-tile-title" data-testid="metro-tile-title">Achievements</div>
-              <div class="metro-tile-value" data-testid="badges-earned">
-                {{ progress.achievements.length }}<span class="metro-tile-subtitle">/12</span>
+              <div data-testid="metro-tile-title">Achievements</div>
+              <div data-testid="badges-earned">
+                {{ progress.achievements.length }}<span>/12</span>
               </div>
-              <div class="metro-tile-label">
+              <div>
                 {{ progress.achievements.length === 0 ? 'Start Flying!' : 'Badges Earned' }}
               </div>
             </div>
             
             <!-- Recent badges for Metro -->
-            <div v-if="progress.achievements.length > 0" class="mt-2">
+            <div v-if="progress.achievements.length > 0">
               <div v-for="achievement in progress.achievements.slice(-2)" 
                    :key="achievement" 
-                   class="flex items-center gap-1 mb-1"
                    :data-testid="achievement + '-badge'">
-                <div class="text-sm">{{ getBadgeIcon(achievement) }}</div>
-                <div class="text-xs opacity-90">{{ getBadgeName(achievement) }}</div>
+                <div>{{ getBadgeIcon(achievement) }}</div>
+                <div>{{ getBadgeName(achievement) }}</div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Metro Financial & Milestone Tiles -->
-        <div class="metro-grid-container mb-6">
+        <div>
           <!-- Training Costs Metro Tile -->
-          <div class="metro-tile metro-tile-financial metro-tile-third" data-testid="metro-tile metro-tile-financial">
+          <div data-testid="metro-tile metro-tile-financial">
             <div>
-              <div class="metro-tile-title" data-testid="metro-tile-title">Training Costs</div>
-              <div class="metro-tile-value" data-testid="total-spent">
+              <div data-testid="metro-tile-title">Training Costs</div>
+              <div data-testid="total-spent">
                 ${{ progress.totalSpent.toFixed(0) }}
               </div>
-              <div class="metro-tile-label">Total Spent</div>
+              <div>Total Spent</div>
             </div>
-            <div v-if="progress.flightHours.total > 0" class="metro-tile-subtitle" data-testid="cost-per-hour">
+            <div v-if="progress.flightHours.total > 0" data-testid="cost-per-hour">
               ${{ (progress.totalSpent / progress.flightHours.total).toFixed(0) }}/hour average
             </div>
           </div>
           
           <!-- Next Major Milestone Metro Tile -->
-          <div class="metro-tile metro-tile-amber metro-tile-half metro-tile-interactive" 
-               data-testid="metro-tile metro-tile-requirements"
+          <div data-testid="metro-tile metro-tile-requirements"
                @click="showMilestoneRequirements = true">
             <div>
-              <div class="metro-tile-title" data-testid="metro-tile-title">Next Milestone</div>
-              <div class="metro-tile-subtitle" data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
-              <div class="metro-tile-label">{{ milestoneDescription }}</div>
+              <div data-testid="metro-tile-title">Next Milestone</div>
+              <div data-testid="next-major-milestone">{{ nextMajorMilestone }}</div>
+              <div>{{ milestoneDescription }}</div>
             </div>
-            <div class="flex items-center justify-between mt-4">
+            <div>
               <button 
-                class="metro-button metro-button-primary"
                 data-testid="view-milestone-requirements"
               >
                 🎯 View Requirements
@@ -160,18 +153,16 @@
         </div>
 
         <!-- Upcoming Requirements -->
-        <div class="metro-tile metro-tile-forest metro-tile-full" data-testid="upcoming-requirements">
-          <h3 class="metro-tile-title">📋 Upcoming Requirements</h3>
-          <div class="space-y-3">
-            <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
-                 class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200">
+        <div data-testid="upcoming-requirements">
+          <h3>📋 Upcoming Requirements</h3>
+          <div>
+            <div v-for="requirement in upcomingRequirements" :key="requirement.id">
               <div>
-                <div class="font-semibold">{{ requirement.title }}</div>
-                <div class="text-sm text-gray-600">{{ requirement.description }}</div>
+                <div>{{ requirement.title }}</div>
+                <div>{{ requirement.description }}</div>
               </div>
               <button 
                 @click="openRequirementInfoModal(requirement.id)"
-                class="metro-button metro-button-secondary metro-button-sm" 
                 :data-testid="requirement.id + '-info'"
               >
                 Info
@@ -181,27 +172,25 @@
         </div>
 
         <!-- Medical Certificate Warnings -->
-        <div v-if="hasMedicalWarnings" class="metro-card mb-6" data-testid="medical-dashboard-warning">
-          <h3 class="text-lg font-semibold mb-4">🏥 Medical Certificate Alerts</h3>
-          <div class="space-y-3">
-            <div v-if="getMedicalExpiryStatus() === 'Expired'" 
-                 class="flex items-center justify-between p-3 bg-red-50 border border-red-200">
+        <div v-if="hasMedicalWarnings" data-testid="medical-dashboard-warning">
+          <h3>🏥 Medical Certificate Alerts</h3>
+          <div>
+            <div v-if="getMedicalExpiryStatus() === 'Expired'">
               <div>
-                <div class="font-semibold text-red-800">Medical Certificate Expired</div>
-                <div class="text-sm text-red-600">Cannot exercise pilot privileges until renewed</div>
+                <div>Medical Certificate Expired</div>
+                <div>Cannot exercise pilot privileges until renewed</div>
               </div>
-              <router-link to="/requirements" class="metro-button metro-button-primary metro-button-sm">
+              <router-link to="/requirements">
                 Renew Now
               </router-link>
             </div>
             
-            <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" 
-                 class="flex items-center justify-between p-3 bg-orange-50 border border-orange-200">
+            <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'">
               <div>
-                <div class="font-semibold text-orange-800">Medical Certificate Expiring Soon</div>
-                <div class="text-sm text-orange-600">{{ getMedicalTimeRemaining() }}</div>
+                <div>Medical Certificate Expiring Soon</div>
+                <div>{{ getMedicalTimeRemaining() }}</div>
               </div>
-              <router-link to="/requirements" class="metro-button metro-button-secondary metro-button-sm">
+              <router-link to="/requirements">
                 View Details
               </router-link>
             </div>
@@ -209,27 +198,25 @@
         </div>
 
         <!-- BFR Currency Warnings -->
-        <div v-if="hasBfrWarnings" class="metro-card mb-6" data-testid="bfr-dashboard-warning">
-          <h3 class="text-lg font-semibold mb-4">🛩️ BFR Currency Alerts</h3>
-          <div class="space-y-3">
-            <div v-if="getBfrStatus() === 'Overdue'" 
-                 class="flex items-center justify-between p-3 bg-red-50 border border-red-200">
+        <div v-if="hasBfrWarnings" data-testid="bfr-dashboard-warning">
+          <h3>🛩️ BFR Currency Alerts</h3>
+          <div>
+            <div v-if="getBfrStatus() === 'Overdue'">
               <div>
-                <div class="font-semibold text-red-800">BFR Overdue</div>
-                <div class="text-sm text-red-600">Cannot exercise pilot privileges until BFR completed</div>
+                <div>BFR Overdue</div>
+                <div>Cannot exercise pilot privileges until BFR completed</div>
               </div>
-              <router-link to="/requirements" class="metro-button metro-button-primary metro-button-sm">
+              <router-link to="/requirements">
                 Schedule BFR
               </router-link>
             </div>
             
-            <div v-if="getBfrStatus() === 'Expiring Soon'" 
-                 class="flex items-center justify-between p-3 bg-orange-50 border border-orange-200">
+            <div v-if="getBfrStatus() === 'Expiring Soon'">
               <div>
-                <div class="font-semibold text-orange-800">BFR Expiring Soon</div>
-                <div class="text-sm text-orange-600">{{ getBfrTimeRemaining() }}</div>
+                <div>BFR Expiring Soon</div>
+                <div>{{ getBfrTimeRemaining() }}</div>
               </div>
-              <router-link to="/requirements" class="metro-button metro-button-secondary metro-button-sm">
+              <router-link to="/requirements">
                 View Details
               </router-link>
             </div>
@@ -238,73 +225,71 @@
 
 
         <!-- Quick Navigation Metro Tiles -->
-        <div class="metro-grid-container">
-          <router-link to="/journey" class="metro-tile metro-tile-journey metro-tile-third" data-testid="journey-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">🗺️</div>
-              <div class="metro-tile-title">Journey</div>
-              <div class="metro-tile-subtitle">Track Progress</div>
+        <div>
+          <router-link to="/journey" data-testid="journey-tab">
+            <div>
+              <div>🗺️</div>
+              <div>Journey</div>
+              <div>Track Progress</div>
             </div>
           </router-link>
-          <router-link to="/achievements" class="metro-tile metro-tile-achievements metro-tile-third" data-testid="achievements-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">🏆</div>
-              <div class="metro-tile-title">Achievements</div>
-              <div class="metro-tile-subtitle">View Badges</div>
+          <router-link to="/achievements" data-testid="achievements-tab">
+            <div>
+              <div>🏆</div>
+              <div>Achievements</div>
+              <div>View Badges</div>
             </div>
           </router-link>
-          <router-link to="/theory" class="metro-tile metro-tile-navy metro-tile-third" data-testid="theory-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">📚</div>
-              <div class="metro-tile-title">Theory</div>
-              <div class="metro-tile-subtitle">Exam Progress</div>
+          <router-link to="/theory" data-testid="theory-tab">
+            <div>
+              <div>📚</div>
+              <div>Theory</div>
+              <div>Exam Progress</div>
             </div>
           </router-link>
-          <router-link to="/requirements" class="metro-tile metro-tile-requirements metro-tile-third" data-testid="requirements-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">📋</div>
-              <div class="metro-tile-title">Requirements</div>
-              <div class="metro-tile-subtitle">Check Status</div>
+          <router-link to="/requirements" data-testid="requirements-tab">
+            <div>
+              <div>📋</div>
+              <div>Requirements</div>
+              <div>Check Status</div>
             </div>
           </router-link>
-          <router-link to="/finances" class="metro-tile metro-tile-financial metro-tile-third" data-testid="finances-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">💰</div>
-              <div class="metro-tile-title">Finances</div>
-              <div class="metro-tile-subtitle">Track Costs</div>
+          <router-link to="/finances" data-testid="finances-tab">
+            <div>
+              <div>💰</div>
+              <div>Finances</div>
+              <div>Track Costs</div>
             </div>
           </router-link>
-          <router-link to="/profile" class="metro-tile metro-tile-maroon metro-tile-third" data-testid="user-profile-tab">
-            <div class="text-center">
-              <div class="text-4xl mb-2">👤</div>
-              <div class="metro-tile-title">Profile</div>
-              <div class="metro-tile-subtitle">Settings</div>
+          <router-link to="/profile" data-testid="user-profile-tab">
+            <div>
+              <div>👤</div>
+              <div>Profile</div>
+              <div>Settings</div>
             </div>
           </router-link>
         </div>
 
         <!-- Help and Education Center Metro Tiles -->
-        <div class="metro-grid-container mt-6">
+        <div>
           <button 
             @click="showContextualHelp = true"
-            class="metro-tile metro-tile-help metro-tile-half"
             data-testid="contextual-help-trigger metro-button"
           >
-            <div class="text-center">
-              <div class="text-4xl mb-2">❓</div>
-              <div class="metro-tile-title">Help</div>
-              <div class="metro-tile-subtitle">Get Support</div>
+            <div>
+              <div>❓</div>
+              <div>Help</div>
+              <div>Get Support</div>
             </div>
           </button>
           <button 
             @click="showEducationCenter = true"
-            class="metro-tile metro-tile-education metro-tile-half"
             data-testid="education-center-button metro-button"
           >
-            <div class="text-center">
-              <div class="text-4xl mb-2">📚</div>
-              <div class="metro-tile-title">Education Center</div>
-              <div class="metro-tile-subtitle">Learn & Study</div>
+            <div>
+              <div>📚</div>
+              <div>Education Center</div>
+              <div>Learn & Study</div>
             </div>
           </button>
         </div>

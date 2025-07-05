@@ -1,17 +1,16 @@
 <template>
-  <div class="min-h-screen gradient-sky">
-    <div class="container p-6">
+  <div>
+    <div>
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <div class="text-center flex-1">
-          <h1 class="text-3xl font-bold mb-4">🗺️ Your PPL Journey</h1>
-          <p class="text-lg text-gray-600">
+      <div>
+        <div>
+          <h1>🗺️ Your PPL Journey</h1>
+          <p>
             Visual progress tracking with interactive charts and timelines
           </p>
         </div>
         <button 
           @click="showHoursEducation = true"
-          class="metro-button metro-button-secondary metro-button-sm"
           data-testid="flight-hours-education-button"
         >
           ⏱️ Hours Guide
@@ -19,45 +18,38 @@
       </div>
 
       <!-- Journey Timeline -->
-      <div class="metro-card mb-8" data-testid="journey-timeline">
-        <h2 class="text-xl font-semibold mb-6">Training Phase Timeline</h2>
-        <div class="relative">
+      <div data-testid="journey-timeline">
+        <h2>Training Phase Timeline</h2>
+        <div>
           <!-- Timeline Line -->
-          <div class="absolute top-8 left-0 right-0 h-1 bg-gray-200"></div>
-          <div class="absolute top-8 left-0 h-1 bg-blue-500 transition-all duration-500" 
-               :style="{ width: phaseProgress + '%' }"></div>
+          <div></div>
+          <div :style="{ width: phaseProgress + '%' }"></div>
           
           <!-- Phase Icons -->
-          <div class="flex justify-between relative z-10">
-            <div v-for="(phase, index) in trainingPhases" :key="phase.id" 
-                 class="flex flex-col items-center">
-              <div class="w-16 h-16 flex items-center justify-center text-2xl mb-2 transition-all duration-300 cursor-pointer"
-                   :class="getPhaseIconClass(index)"
-                   :data-testid="phase.id + '-phase-icon'"
+          <div>
+            <div v-for="(phase, index) in trainingPhases" :key="phase.id">
+              <div :data-testid="phase.id + '-phase-icon'"
                    @mouseenter="showPhaseTooltip(phase, $event)"
                    @mouseleave="hidePhaseTooltip">
                 {{ phase.icon }}
               </div>
-              <div class="text-sm font-medium text-center max-w-20">{{ phase.name }}</div>
-              <div class="text-xs text-gray-500 text-center">{{ phase.lessons }}</div>
+              <div>{{ phase.name }}</div>
+              <div>{{ phase.lessons }}</div>
             </div>
           </div>
         </div>
         
         <!-- Current Phase Indicator -->
-        <div class="mt-6 p-4 bg-blue-50" data-testid="current-phase-indicator">
-          <div class="font-semibold text-blue-800">Current Phase: {{ currentPhase.name }}</div>
-          <div class="text-blue-700">{{ currentPhase.description }}</div>
+        <div data-testid="current-phase-indicator">
+          <div>Current Phase: {{ currentPhase.name }}</div>
+          <div>{{ currentPhase.description }}</div>
         </div>
         
         <!-- Lesson Progress Dots -->
-        <div class="mt-6" data-testid="lesson-progress-dots">
-          <div class="text-sm font-medium mb-3">Lesson Progress ({{ progress.completedLessons.length }}/27)</div>
-          <div class="flex flex-wrap gap-2">
+        <div data-testid="lesson-progress-dots">
+          <div>Lesson Progress ({{ progress.completedLessons.length }}/27)</div>
+          <div>
             <div v-for="lesson in 27" :key="lesson"
-                 class="w-8 h-8 cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
-                 :class="progress.completedLessons.includes(lesson) ? 'bg-green-500 text-white border-green-600' : 
-                         lesson === progress.currentLesson ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-300 text-gray-600 border-gray-400'"
                  :data-testid="`lesson-${lesson}-node`"
                  :data-status="progress.completedLessons.includes(lesson) ? 'completed' : 
                               lesson === progress.currentLesson ? 'current' : 
@@ -68,8 +60,7 @@
                  @blur="hideLessonTooltip"
                  @keydown.enter="showLessonTooltipOnFocus(lesson)"
                  @keydown.space="showLessonTooltipOnFocus(lesson)"
-                 tabindex="0"
-                 style="min-width: 32px; min-height: 32px;">
+                 tabindex="0">
               {{ lesson }}
             </div>
           </div>
@@ -77,13 +68,12 @@
       </div>
 
       <!-- Progress Wheels Row -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div>
         <!-- Flight Hours Progress Wheel -->
-        <div class="metro-card">
-          <h3 class="text-lg font-semibold mb-4">Flight Hours Progress</h3>
-          <div class="flex flex-col items-center">
-            <div class="relative w-48 h-48 mb-4 cursor-pointer" 
-                 data-testid="flight-hours-wheel"
+        <div>
+          <h3>Flight Hours Progress</h3>
+          <div>
+            <div data-testid="flight-hours-wheel"
                  @mouseenter="showHoursTooltip($event)"
                  @mouseleave="hideHoursTooltip">
               <!-- SVG Circular Progress -->

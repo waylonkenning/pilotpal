@@ -1,17 +1,16 @@
 <template>
-  <div class="min-h-screen gradient-sky">
-    <div class="container p-6">
+  <div>
+    <div>
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <div class="text-center flex-1">
-          <h1 class="text-3xl font-bold mb-4">👤 User Profile</h1>
-          <p class="text-lg text-gray-600">
+      <div>
+        <div>
+          <h1>👤 User Profile</h1>
+          <p>
             Manage your pilot profile and training preferences
           </p>
         </div>
         <button 
           @click="showProfileHelp = true"
-          class="btn btn-secondary text-sm"
           data-testid="profile-help-button"
         >
           ❓ Help
@@ -19,69 +18,63 @@
       </div>
 
       <!-- Profile Form -->
-      <div class="card mb-8" data-testid="user-profile-form">
-        <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
+      <div data-testid="user-profile-form">
+        <h2>Personal Information</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
           <!-- Basic Information -->
-          <div class="space-y-1">
-            <label class="form-label">Full Name</label>
+          <div>
+            <label>Full Name</label>
             <input 
               v-model="userProfile.name" 
               type="text" 
-              class="form-input"
               placeholder="John Smith"
               data-testid="pilot-name-input"
             >
           </div>
           
-          <div class="space-y-1">
-            <label class="form-label">Email Address</label>
+          <div>
+            <label>Email Address</label>
             <input 
               v-model="userProfile.email" 
               type="email" 
-              class="form-input"
               placeholder="john@example.com"
               data-testid="pilot-email-input"
             >
           </div>
           
-          <div class="space-y-1">
-            <label class="form-label">Phone Number</label>
+          <div>
+            <label>Phone Number</label>
             <input 
               v-model="userProfile.phone" 
               type="tel" 
-              class="form-input"
               placeholder="021-123-4567"
               data-testid="pilot-phone-input"
             >
           </div>
           
-          <div class="space-y-1">
-            <label class="form-label">Training Start Date</label>
+          <div>
+            <label>Training Start Date</label>
             <input 
               v-model="userProfile.trainingStartDate" 
               type="date" 
-              class="form-input"
               data-testid="training-start-date"
             >
           </div>
           
-          <div class="space-y-1">
-            <label class="form-label">Date of Birth</label>
+          <div>
+            <label>Date of Birth</label>
             <input 
               v-model="userProfile.dateOfBirth" 
               type="date" 
-              class="form-input"
               data-testid="date-of-birth-input"
             >
           </div>
           
-          <div class="space-y-1">
-            <label class="form-label">Preferred Flight School</label>
+          <div>
+            <label>Preferred Flight School</label>
             <select 
               v-model="userProfile.flightSchool" 
-              class="form-input"
               data-testid="flight-school-select"
             >
               <option value="">Select a school</option>
@@ -95,49 +88,48 @@
         </div>
 
         <!-- Training Preferences -->
-        <div class="mt-8">
-          <h3 class="text-lg font-semibold mb-4">Training Preferences</h3>
+        <div>
+          <h3>Training Preferences</h3>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-2">
-              <label class="form-label">Preferred Training Days</label>
-              <div class="space-y-2">
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="monday" class="mr-2">
+          <div>
+            <div>
+              <label>Preferred Training Days</label>
+              <div>
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="monday">
                   Monday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="tuesday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="tuesday">
                   Tuesday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="wednesday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="wednesday">
                   Wednesday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="thursday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="thursday">
                   Thursday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="friday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="friday">
                   Friday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="saturday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="saturday">
                   Saturday
                 </label>
-                <label class="flex items-center">
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="sunday" class="mr-2">
+                <label>
+                  <input type="checkbox" v-model="userProfile.preferredDays" value="sunday">
                   Sunday
                 </label>
               </div>
             </div>
             
-            <div class="space-y-1">
-              <label class="form-label">Training Pace</label>
+            <div>
+              <label>Training Pace</label>
               <select 
                 v-model="userProfile.trainingPace" 
-                class="form-input"
                 data-testid="training-pace-select"
               >
                 <option value="intensive">Intensive (3+ lessons/week)</option>
@@ -150,15 +142,14 @@
         </div>
 
         <!-- Save Button -->
-        <div class="mt-8 flex gap-4">
+        <div>
           <button 
             @click="saveProfile" 
-            class="btn btn-primary flex-1"
             data-testid="save-profile-button"
           >
             💾 Save Profile
           </button>
-          <router-link to="/dashboard" class="btn btn-secondary">
+          <router-link to="/dashboard">
             ← Back to Dashboard
           </router-link>
         </div>
@@ -166,18 +157,18 @@
 
 
       <!-- Reset Profile Section -->
-      <div class="card mb-8 border-red-200 bg-red-50" data-testid="reset-profile-section">
-        <h2 class="text-xl font-semibold mb-6 text-red-800">🔄 Reset Training Progress</h2>
+      <div data-testid="reset-profile-section">
+        <h2>🔄 Reset Training Progress</h2>
         
-        <div class="bg-white p-4 metro-card border border-red-200 mb-4">
-          <div class="flex items-start gap-3 mb-4">
-            <div class="text-2xl">⚠️</div>
+        <div>
+          <div>
+            <div>⚠️</div>
             <div>
-              <h3 class="font-semibold text-red-800 mb-2">Warning: This Action Cannot Be Undone</h3>
-              <p class="text-red-700 text-sm mb-2">
+              <h3>Warning: This Action Cannot Be Undone</h3>
+              <p>
                 Resetting your profile will permanently delete:
               </p>
-              <ul class="text-red-700 text-sm space-y-1 ml-4">
+              <ul>
                 <li>• All lesson progress and completed lessons</li>
                 <li>• Flight hours (dual, solo, cross-country)</li>
                 <li>• Achievement badges and milestones</li>
@@ -185,7 +176,7 @@
                 <li>• Financial expense tracking</li>
                 <li>• Demonstrated skills records</li>
               </ul>
-              <p class="text-red-700 text-sm mt-2">
+              <p>
                 Your profile information (name, email, etc.) will be kept.
               </p>
             </div>
@@ -193,7 +184,6 @@
           
           <button 
             @click="showResetConfirmation = true" 
-            class="btn bg-red-600 hover:bg-red-700 text-white border-red-600"
             data-testid="reset-profile-button"
           >
             🔄 Reset All Training Progress
@@ -202,55 +192,49 @@
       </div>
 
       <!-- Emergency Contacts -->
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-6">🚨 Emergency Contacts</h2>
+      <div>
+        <h2>🚨 Emergency Contacts</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
           <div>
-            <label class="form-label">Primary Emergency Contact</label>
+            <label>Primary Emergency Contact</label>
             <input 
               v-model="userProfile.emergencyContact1.name" 
               type="text" 
-              class="form-input mb-2"
               placeholder="Contact Name"
               data-testid="emergency-contact-1-name"
             >
             <input 
               v-model="userProfile.emergencyContact1.phone" 
               type="tel" 
-              class="form-input mb-2"
               placeholder="Phone Number"
               data-testid="emergency-contact-1-phone"
             >
             <input 
               v-model="userProfile.emergencyContact1.relationship" 
               type="text" 
-              class="form-input"
               placeholder="Relationship"
               data-testid="emergency-contact-1-relationship"
             >
           </div>
           
           <div>
-            <label class="form-label">Secondary Emergency Contact</label>
+            <label>Secondary Emergency Contact</label>
             <input 
               v-model="userProfile.emergencyContact2.name" 
               type="text" 
-              class="form-input mb-2"
               placeholder="Contact Name"
               data-testid="emergency-contact-2-name"
             >
             <input 
               v-model="userProfile.emergencyContact2.phone" 
               type="tel" 
-              class="form-input mb-2"
               placeholder="Phone Number"
               data-testid="emergency-contact-2-phone"
             >
             <input 
               v-model="userProfile.emergencyContact2.relationship" 
               type="text" 
-              class="form-input"
               placeholder="Relationship"
               data-testid="emergency-contact-2-relationship"
             >

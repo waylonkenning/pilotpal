@@ -1,17 +1,16 @@
 <template>
-  <div class="min-h-screen gradient-sky">
-    <div class="container p-6">
+  <div>
+    <div>
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <div class="text-center flex-1">
-          <h1 class="text-3xl font-bold mb-4">💰 Financial Tracking</h1>
-          <p class="text-lg text-gray-600">
+      <div>
+        <div>
+          <h1>💰 Financial Tracking</h1>
+          <p>
             Manage your PPL training budget and track expenses
           </p>
         </div>
         <button 
           @click="showContextualHelp = true"
-          class="metro-button metro-button-secondary metro-button-sm"
           data-testid="contextual-help-trigger"
         >
           ❓ Help
@@ -19,39 +18,37 @@
       </div>
 
       <!-- Financial Overview Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 content-wrapper">
+      <div>
         <!-- Total Spent -->
-        <div class="metro-card">
-          <h3 class="text-lg font-semibold mb-2">Total Spent</h3>
-          <div class="text-3xl font-bold text-orange-600 mb-2" data-testid="total-spent">
+        <div>
+          <h3>Total Spent</h3>
+          <div data-testid="total-spent">
             ${{ formatCurrency(totalSpent) }}
           </div>
-          <div class="text-sm text-gray-600">
+          <div>
             ${{ (totalSpent / Math.max(progress.flightHours.total, 0.1)).toFixed(0) }}/hour average
           </div>
         </div>
 
         <!-- Budget Remaining -->
-        <div class="metro-card">
-          <h3 class="text-lg font-semibold mb-2">Budget Remaining</h3>
-          <div class="text-3xl font-bold text-green-600 mb-2" data-testid="budget-remaining">
+        <div>
+          <h3>Budget Remaining</h3>
+          <div data-testid="budget-remaining">
             ${{ formatCurrency(budgetRemaining) }}
           </div>
-          <div class="text-sm text-gray-600">
+          <div>
             of ${{ formatCurrency(currentBudget) }} total budget
           </div>
         </div>
 
         <!-- Progress to Budget -->
-        <div class="metro-card">
-          <h3 class="text-lg font-semibold mb-2">Budget Progress</h3>
-          <div class="text-2xl font-bold mb-2" :class="budgetProgress > 100 ? 'text-red-600' : 'text-blue-600'">
+        <div>
+          <h3>Budget Progress</h3>
+          <div>
             {{ budgetProgress.toFixed(1) }}%
           </div>
-          <div class="w-full bg-gray-200 h-3" data-testid="spending-progress-bar">
+          <div data-testid="spending-progress-bar">
             <div 
-              class="h-3 transition-all duration-300" 
-              :class="budgetProgress > 100 ? 'bg-red-600' : 'bg-blue-600'"
               :style="{ width: Math.min(budgetProgress, 100) + '%' }"
             ></div>
           </div>
@@ -59,13 +56,11 @@
       </div>
 
       <!-- Tab Navigation -->
-      <div class="flex flex-wrap gap-2 mb-6 border-b">
+      <div>
         <button 
           v-for="tab in tabs" 
           :key="tab.id"
           @click="activeTab = tab.id"
-          class="px-4 py-2 font-medium transition-colors"
-          :class="activeTab === tab.id ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'"
           :data-testid="tab.id + '-tab'"
         >
           {{ tab.name }}
@@ -73,14 +68,13 @@
       </div>
 
       <!-- Tab Content -->
-      <div class="tab-content">
+      <div>
         <!-- Expenses Tab -->
         <div v-if="activeTab === 'expenses'">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-semibold">Expense Tracking</h2>
+          <div>
+            <h2>Expense Tracking</h2>
             <button 
               @click="showAddExpense = true"
-              class="metro-button metro-button-primary"
               data-testid="add-expense-button"
             >
               + Add Expense
@@ -88,44 +82,44 @@
           </div>
 
           <!-- Expense Categories Summary -->
-          <div class="grid grid-auto-fill gap-4 mb-6">
-            <div class="metro-card text-center" data-testid="flight-training-costs">
-              <div class="text-2xl mb-2">✈️</div>
-              <div class="font-semibold">Flight Training</div>
-              <div class="text-lg font-bold text-blue-600">
+          <div>
+            <div data-testid="flight-training-costs">
+              <div>✈️</div>
+              <div>Flight Training</div>
+              <div>
                 ${{ getCategoryTotal('flight-training').toFixed(0) }}
               </div>
             </div>
             
-            <div class="metro-card text-center" data-testid="theory-exam-costs">
-              <div class="text-2xl mb-2">📚</div>
-              <div class="font-semibold">Theory Exams</div>
-              <div class="text-lg font-bold text-purple-600">
+            <div data-testid="theory-exam-costs">
+              <div>📚</div>
+              <div>Theory Exams</div>
+              <div>
                 ${{ getCategoryTotal('theory-exam').toFixed(0) }}
               </div>
             </div>
             
-            <div class="metro-card text-center" data-testid="medical-cert-costs">
-              <div class="text-2xl mb-2">🏥</div>
-              <div class="font-semibold">Medical Certs</div>
-              <div class="text-lg font-bold text-green-600">
+            <div data-testid="medical-cert-costs">
+              <div>🏥</div>
+              <div>Medical Certs</div>
+              <div>
                 ${{ getCategoryTotal('medical').toFixed(0) }}
               </div>
             </div>
             
-            <div class="metro-card text-center" data-testid="equipment-costs">
-              <div class="text-2xl mb-2">🎧</div>
-              <div class="font-semibold">Equipment</div>
-              <div class="text-lg font-bold text-orange-600">
+            <div data-testid="equipment-costs">
+              <div>🎧</div>
+              <div>Equipment</div>
+              <div>
                 ${{ getCategoryTotal('equipment').toFixed(0) }}
               </div>
             </div>
           </div>
 
           <!-- Export Section -->
-          <div class="metro-card mb-6" data-testid="export-section">
-            <h3 class="text-lg font-semibold mb-4">📊 Export Financial Data</h3>
-            <div class="text-sm text-gray-600 mb-4" data-testid="export-description">
+          <div data-testid="export-section">
+            <h3>📊 Export Financial Data</h3>
+            <div data-testid="export-description">
               Export your financial data for record-keeping, tax purposes, or external analysis
             </div>
             

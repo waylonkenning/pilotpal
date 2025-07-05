@@ -1,35 +1,33 @@
 <template>
-  <div v-if="hasError" class="error-boundary min-h-screen flex items-center justify-center bg-red-50">
-    <div class="max-w-lg mx-auto p-8 bg-white metro-card shadow-lg border border-red-200">
-      <div class="text-center">
-        <div class="text-6xl mb-4">🚨</div>
-        <h2 class="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-        <p class="text-gray-600 mb-6">
+  <div v-if="hasError" data-testid="error-boundary">
+    <div>
+      <div>
+        <div>🚨</div>
+        <h2>Something went wrong</h2>
+        <p>
           We're sorry, but something unexpected happened. Please try refreshing the page or contact support if the problem persists.
         </p>
         
-        <div class="flex gap-3 justify-center">
+        <div>
           <button 
             @click="retry" 
-            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 metro-button transition-colors"
             data-testid="error-retry-button"
           >
             🔄 Try Again
           </button>
           <button 
             @click="goHome" 
-            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 metro-button transition-colors"
             data-testid="error-home-button"
           >
             🏠 Go Home
           </button>
         </div>
         
-        <details v-if="errorDetails" class="mt-6 text-left">
-          <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+        <details v-if="errorDetails">
+          <summary>
             Technical Details
           </summary>
-          <pre class="mt-2 text-xs text-gray-600 bg-gray-100 p-3 metro-card overflow-auto max-h-32">{{ errorDetails }}</pre>
+          <pre>{{ errorDetails }}</pre>
         </details>
       </div>
     </div>

@@ -1,48 +1,47 @@
 <template>
-  <div class="min-h-screen gradient-sky">
+  <div>
     <!-- First-time user welcome experience -->
-    <div v-if="!hasStartedJourney" class="flex items-center justify-center min-h-screen">
-      <div class="container">
-        <div class="text-center" data-testid="welcome-hero">
-          <h1 class="text-4xl font-bold mb-6 text-gradient-sky">
+    <div v-if="!hasStartedJourney">
+      <div>
+        <div data-testid="welcome-hero">
+          <h1>
             ✈️ PPL Quest NZ
           </h1>
-          <p class="text-xl mb-8">
+          <p>
             Your complete guide from zero to Private Pilot License
           </p>
           
-          <div class="card max-w-lg mx-auto" data-testid="journey-overview">
-            <h2 class="text-2xl font-semibold mb-4">Couch to PPL</h2>
-            <p class="mb-6">
+          <div data-testid="journey-overview">
+            <h2>Couch to PPL</h2>
+            <p>
               Just like Couch to 5K, we'll guide you step-by-step through your pilot training:
             </p>
             
-            <div class="grid grid-cols-2 mb-6 text-sm">
-              <div class="p-3">
-                <div class="font-bold text-blue-600">27 lessons</div>
+            <div>
+              <div>
+                <div>27 lessons</div>
                 <div>Progressive training</div>
               </div>
-              <div class="p-3">
-                <div class="font-bold text-green-600">50 hours</div>
+              <div>
+                <div>50 hours</div>
                 <div>Minimum flight time</div>
               </div>
-              <div class="p-3">
-                <div class="font-bold text-orange-600">6 exams</div>
+              <div>
+                <div>6 exams</div>
                 <div>Theory subjects</div>
               </div>
-              <div class="p-3">
-                <div class="font-bold text-purple-600">12 badges</div>
+              <div>
+                <div>12 badges</div>
                 <div>Achievement system</div>
               </div>
             </div>
             
-            <p class="text-sm mb-6">
+            <p>
               Complete lessons in order, earn badges for milestones, track your progress to becoming a licensed pilot in New Zealand.
             </p>
             
             <button 
               @click="startJourney" 
-              class="btn btn-primary w-full"
               data-testid="start-journey-button"
             >
               🚀 Start Your PPL Journey
@@ -53,54 +52,54 @@
     </div>
 
     <!-- Onboarding flow -->
-    <div v-else-if="showOnboarding" class="container p-6">
-      <div class="max-w-2xl mx-auto">
-        <div class="card" data-testid="onboarding-step-1">
-          <div class="text-center mb-6">
-            <h2 class="text-3xl font-bold mb-4">Welcome to Your PPL Journey! 🎯</h2>
-            <div class="text-6xl mb-4">✈️</div>
+    <div v-else-if="showOnboarding">
+      <div>
+        <div data-testid="onboarding-step-1">
+          <div>
+            <h2>Welcome to Your PPL Journey! 🎯</h2>
+            <div>✈️</div>
           </div>
           
           <div data-testid="onboarding-explanation">
-            <h3 class="text-xl font-semibold mb-4">How PPL Quest Works</h3>
+            <h3>How PPL Quest Works</h3>
             
-            <div class="space-y-4 mb-6">
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-blue-500 text-white flex items-center justify-center font-bold">1</div>
+            <div>
+              <div>
+                <div>1</div>
                 <div>
-                  <div class="font-semibold">Complete lessons in order</div>
-                  <div class="text-sm text-gray-600">Just like Couch to 5K - no skipping ahead! Each lesson builds on the previous one.</div>
+                  <div>Complete lessons in order</div>
+                  <div>Just like Couch to 5K - no skipping ahead! Each lesson builds on the previous one.</div>
                 </div>
               </div>
               
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-green-500 text-white flex items-center justify-center font-bold">2</div>
+              <div>
+                <div>2</div>
                 <div>
-                  <div class="font-semibold">Earn badges for achievements</div>
-                  <div class="text-sm text-gray-600">First Flight, Solo Wings, Theory Master - celebrate every milestone!</div>
+                  <div>Earn badges for achievements</div>
+                  <div>First Flight, Solo Wings, Theory Master - celebrate every milestone!</div>
                 </div>
               </div>
               
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-orange-500 text-white flex items-center justify-center font-bold">3</div>
+              <div>
+                <div>3</div>
                 <div>
-                  <div class="font-semibold">Track regulatory requirements</div>
-                  <div class="text-sm text-gray-600">Medical certificates, theory exams, solo endorsements - we'll guide you through it all.</div>
+                  <div>Track regulatory requirements</div>
+                  <div>Medical certificates, theory exams, solo endorsements - we'll guide you through it all.</div>
                 </div>
               </div>
               
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-purple-500 text-white flex items-center justify-center font-bold">4</div>
+              <div>
+                <div>4</div>
                 <div>
-                  <div class="font-semibold">See what's next</div>
-                  <div class="text-sm text-gray-600">Always know your next step - no confusion, just clear progress.</div>
+                  <div>See what's next</div>
+                  <div>Always know your next step - no confusion, just clear progress.</div>
                 </div>
               </div>
             </div>
 
-            <div class="bg-blue-50 p-4 metro-card mb-6">
-              <div class="font-semibold text-blue-800 mb-2">🇳🇿 Built for New Zealand</div>
-              <div class="text-sm text-blue-700">
+            <div>
+              <div>🇳🇿 Built for New Zealand</div>
+              <div>
                 Includes NZ-specific requirements like optional night flying, DL9 medical certificates, 
                 terrain awareness training, and CAA Part 61 compliance.
               </div>
@@ -109,7 +108,6 @@
           
           <button 
             @click="completeOnboarding" 
-            class="btn btn-primary w-full"
             data-testid="continue-to-app"
           >
             Let's Start Flying! 🛫
@@ -119,11 +117,11 @@
     </div>
 
     <!-- Redirect to dashboard once onboarding complete -->
-    <div v-else class="container p-6">
-      <div class="text-center">
-        <div class="text-4xl mb-4">🚀</div>
-        <div class="text-xl font-semibold mb-4">Taking you to your flight dashboard...</div>
-        <div class="text-sm text-gray-600">Loading your PPL progress...</div>
+    <div v-else>
+      <div>
+        <div>🚀</div>
+        <div>Taking you to your flight dashboard...</div>
+        <div>Loading your PPL progress...</div>
       </div>
     </div>
   </div>

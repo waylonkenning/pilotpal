@@ -1,25 +1,24 @@
 <template>
-  <div class="min-h-screen gradient-sky">
-    <div class="container p-6">
+  <div>
+    <div>
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold mb-4">📋 Regulatory Requirements</h1>
-        <p class="text-lg text-gray-600 mb-6">
+      <div>
+        <h1>📋 Regulatory Requirements</h1>
+        <p>
           Track your progress through New Zealand CAA Part 61 requirements
         </p>
       </div>
 
       <!-- Medical Certificate Section -->
-      <div class="metro-card mb-6" data-testid="medical-certificate-section">
-        <h2 class="text-xl font-semibold mb-4 text-blue-600">🏥 Medical Certificate</h2>
+      <div data-testid="medical-certificate-section">
+        <h2>🏥 Medical Certificate</h2>
         
-        <div v-if="!progress.medicalCertificate" class="space-y-4">
-          <div class="bg-yellow-50 p-4 metro-card border border-yellow-200">
-            <div class="font-semibold text-yellow-800 mb-2">Medical Certificate Required</div>
-            <div class="text-yellow-700 mb-3">Required before solo flight - choose Class 2 or DL9 option</div>
+        <div v-if="!progress.medicalCertificate">
+          <div>
+            <div>Medical Certificate Required</div>
+            <div>Required before solo flight - choose Class 2 or DL9 option</div>
             <button 
               @click="showMedicalInfo = true"
-              class="metro-button metro-button-secondary metro-button-sm" 
               data-testid="medical-certificate-learn-more"
             >
               Learn More
@@ -28,50 +27,49 @@
           
           <button 
             @click="showMedicalForm = true"
-            class="metro-button metro-button-primary w-full"
             data-testid="medical-cert-requirement"
           >
             📄 Complete Medical Certificate
           </button>
         </div>
 
-        <div v-else class="space-y-4">
+        <div v-else>
           <!-- Medical Certificate Status with Expiry Warnings -->
-          <div class="p-4 metro-card border" :class="getMedicalStatusClass()" data-testid="medical-cert-status">
-            <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center gap-3">
-                <div class="text-2xl">{{ getMedicalStatusIcon() }}</div>
+          <div data-testid="medical-cert-status">
+            <div>
+              <div>
+                <div>{{ getMedicalStatusIcon() }}</div>
                 <div>
-                  <div class="font-semibold" :class="getMedicalStatusTextClass()">
+                  <div>
                     {{ progress.medicalCertificate.type === 'class2' ? 'Class 2 Medical Certificate' : 'DL9 Driver License Medical' }}
                   </div>
-                  <div class="text-sm text-gray-600" data-testid="medical-expiry">
+                  <div data-testid="medical-expiry">
                     Valid until {{ formatDate(progress.medicalCertificate.expiryDate) }}
                   </div>
                 </div>
               </div>
-              <div class="text-right">
-                <div class="text-sm text-gray-600">Status:</div>
-                <div class="font-semibold" :class="getMedicalStatusTextClass()" data-testid="medical-expiry-status">
+              <div>
+                <div>Status:</div>
+                <div data-testid="medical-expiry-status">
                   {{ getMedicalExpiryStatus() }}
                 </div>
               </div>
             </div>
             
-            <div class="text-sm" :class="getMedicalStatusTextClass()" data-testid="medical-days-remaining">
+            <div data-testid="medical-days-remaining">
               {{ getMedicalTimeRemaining() }}
             </div>
           </div>
 
           <!-- Medical Expiry Warnings -->
-          <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 metro-card border border-orange-200" data-testid="medical-expiry-warning">
-            <div class="font-semibold text-orange-800 mb-2">⚠️ Medical Certificate Expiring Soon</div>
-            <div class="text-orange-700 mb-3">Your medical certificate expires soon. Schedule a renewal to maintain flying privileges.</div>
-            <div class="flex gap-3">
-              <button @click="showMedicalRenewalInfo = true" class="metro-button metro-button-secondary metro-button-sm" data-testid="medical-renewal-guidance">
+          <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" data-testid="medical-expiry-warning">
+            <div>⚠️ Medical Certificate Expiring Soon</div>
+            <div>Your medical certificate expires soon. Schedule a renewal to maintain flying privileges.</div>
+            <div>
+              <button @click="showMedicalRenewalInfo = true" data-testid="medical-renewal-guidance">
                 📋 Renewal Guide
               </button>
-              <button @click="showFindExaminer = true" class="metro-button metro-button-secondary metro-button-sm" data-testid="find-medical-examiner">
+              <button @click="showFindExaminer = true" data-testid="find-medical-examiner">
                 🔍 Find CAME
               </button>
             </div>

@@ -1,17 +1,16 @@
 <template>
-  <div class="min-h-screen gradient-sky">
-    <div class="container p-6">
+  <div>
+    <div>
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <div class="text-center flex-1">
-          <h1 class="text-3xl font-bold mb-4">📚 Theory Examinations</h1>
-          <p class="text-lg text-gray-600">
+      <div>
+        <div>
+          <h1>📚 Theory Examinations</h1>
+          <p>
             Track your progress through all 6 required theory subjects
           </p>
         </div>
         <button 
           @click="showTheoryEducation = true"
-          class="btn btn-secondary text-sm"
           data-testid="theory-exam-help-button"
         >
           ❓ Help
@@ -19,58 +18,58 @@
       </div>
         
         <!-- Overall Progress -->
-        <div class="card max-w-lg mx-auto mb-8">
-          <div class="grid grid-cols-3 text-center">
+        <div>
+          <div>
             <div>
-              <div class="text-2xl font-bold text-green-600">
+              <div>
                 {{ passedExams }}
               </div>
-              <div class="text-sm text-gray-600">Passed</div>
+              <div>Passed</div>
             </div>
             <div>
-              <div class="text-2xl font-bold text-blue-600">
+              <div>
                 6
               </div>
-              <div class="text-sm text-gray-600">Required</div>
+              <div>Required</div>
             </div>
             <div>
-              <div class="text-2xl font-bold text-orange-600">
+              <div>
                 {{ Math.round((passedExams / 6) * 100) }}%
               </div>
-              <div class="text-sm text-gray-600">Complete</div>
+              <div>Complete</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Exam Requirements -->
-      <div class="card mb-6">
-        <h2 class="text-xl font-semibold mb-4 text-blue-600">📊 Exam Information</h2>
+      <div>
+        <h2>📊 Exam Information</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="bg-blue-50 p-4 metro-card" data-testid="pass-requirement">
-            <div class="font-semibold text-blue-800 mb-2">Pass Mark</div>
-            <div class="text-blue-700">70% minimum to pass each subject</div>
+        <div>
+          <div data-testid="pass-requirement">
+            <div>Pass Mark</div>
+            <div>70% minimum to pass each subject</div>
           </div>
           
-          <div class="bg-green-50 p-4 metro-card">
-            <div class="font-semibold text-green-800 mb-2">Exam Format</div>
-            <div class="text-green-700">Multiple choice questions, computer-based</div>
+          <div>
+            <div>Exam Format</div>
+            <div>Multiple choice questions, computer-based</div>
           </div>
           
-          <div class="bg-orange-50 p-4 metro-card">
-            <div class="font-semibold text-orange-800 mb-2">Validity</div>
-            <div class="text-orange-700">Theory passes are valid for license application</div>
+          <div>
+            <div>Validity</div>
+            <div>Theory passes are valid for license application</div>
           </div>
           
-          <div class="bg-purple-50 p-4 metro-card">
-            <div class="font-semibold text-purple-800 mb-2">Cost</div>
-            <div class="text-purple-700">Approximately $65 per exam</div>
+          <div>
+            <div>Cost</div>
+            <div>Approximately $65 per exam</div>
           </div>
           
-          <div class="bg-red-50 p-4 metro-card" data-testid="retest-policy">
-            <div class="font-semibold text-red-800 mb-2">Retest Policy</div>
-            <div class="text-red-700">Up to 3 attempts within 3 months between first and last attempt</div>
+          <div data-testid="retest-policy">
+            <div>Retest Policy</div>
+            <div>Up to 3 attempts within 3 months between first and last attempt</div>
           </div>
         </div>
       </div>

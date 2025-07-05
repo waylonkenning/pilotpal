@@ -1,24 +1,21 @@
 <template>
   <Teleport to="body">
-    <div class="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+    <div data-testid="notifications-container">
       <TransitionGroup name="notification" tag="div">
         <div
           v-for="notification in errorNotifications"
           :key="notification.id"
           :class="getNotificationClass(notification.type)"
-          class="p-4 shadow-lg border relative"
-          style="border-radius: 0 !important;"
           data-testid="error-notification"
         >
-          <div class="flex items-start gap-3">
-            <div class="text-xl">{{ getNotificationIcon(notification.type) }}</div>
-            <div class="flex-1">
-              <h4 class="font-semibold text-sm mb-1">{{ notification.title }}</h4>
-              <p class="text-sm">{{ notification.message }}</p>
+          <div>
+            <div>{{ getNotificationIcon(notification.type) }}</div>
+            <div>
+              <h4>{{ notification.title }}</h4>
+              <p>{{ notification.message }}</p>
             </div>
             <button
               @click="removeError(notification.id)"
-              class="text-gray-400 hover:text-gray-600 transition-colors"
               data-testid="dismiss-notification"
             >
               ✕
@@ -28,7 +25,7 @@
           <!-- Progress bar for auto-dismiss -->
           <div
             v-if="!notification.persistent"
-            class="absolute bottom-0 left-0 h-1 bg-current opacity-30 animate-shrink"
+            data-testid="progress-bar"
           />
         </div>
       </TransitionGroup>
