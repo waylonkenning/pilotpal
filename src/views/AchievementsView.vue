@@ -1,50 +1,76 @@
 <template>
-  <div>
-    <div>
-      <!-- Header -->
-      <div>
-        <h1>🏆 Achievement Badges</h1>
-        <p>
-          Track your progress and celebrate milestones on your PPL journey
-        </p>
-        
-        <!-- Achievement Stats -->
-        <div data-testid="achievement-stats">
+  <div class="app-layout" data-testid="achievements-view">
+    <!-- Modern Header -->
+    <div class="app-header">
+      <div class="container">
+        <div class="flex items-center justify-between">
           <div>
+            <h1 class="text-xl font-bold">🏆 Achievement Badges</h1>
+            <p class="text-sm opacity-60">
+              Track your progress and celebrate milestones on your PPL journey
+            </p>
+          </div>
+          <div class="status-dot"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="app-content">
+      <div class="container">
+
+        <!-- Achievement Stats -->
+        <div class="card card-elevated mb-xl" data-testid="achievement-stats">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">📊</div>
             <div>
-              <div data-testid="badges-earned">
+              <h2 class="font-bold">Your Progress</h2>
+              <p class="text-sm opacity-80">Achievement unlocking status</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-md">
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm" data-testid="badges-earned">
                 {{ earnedBadges.length }}
               </div>
-              <div>Earned</div>
+              <div class="text-sm opacity-80">Earned</div>
+              <div class="progress mt-sm">
+                <div class="progress-bar" :style="{ width: (earnedBadges.length / totalBadges) * 100 + '%' }"></div>
+              </div>
             </div>
-            <div>
-              <div data-testid="badges-available">
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm" data-testid="badges-available">
                 {{ totalBadges }}
               </div>
-              <div>Available</div>
+              <div class="text-sm opacity-80">Available</div>
+              <div class="badge badge-primary mt-sm">Total</div>
             </div>
-            <div>
-              <div data-testid="completion-percentage">
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm" data-testid="completion-percentage">
                 {{ Math.round((earnedBadges.length / totalBadges) * 100) }}%
               </div>
-              <div>Complete</div>
+              <div class="text-sm opacity-80">Complete</div>
+              <div class="badge badge-success mt-sm">Progress</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Badge Categories -->
-      <div>
         <!-- Foundation Badges -->
-        <div data-testid="foundation-badges">
-          <h2>🛫 Foundation</h2>
-          <div>
+        <div class="card card-elevated mb-xl" data-testid="foundation-badges">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">🛫</div>
+            <h2 class="font-bold">Foundation</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
             <div v-for="badge in foundationBadges" :key="badge.id" 
+                 class="card card-compact"
+                 :class="{ 'bg-success': isEarned(badge.id) }"
                  :data-testid="badge.id + '-badge'">
-              <div>{{ badge.icon }}</div>
-              <div>{{ badge.name }}</div>
-              <div>{{ badge.description }}</div>
-              <div>
+              <div class="text-2xl mb-sm">{{ badge.icon }}</div>
+              <div class="font-medium mb-sm">{{ badge.name }}</div>
+              <div class="text-sm opacity-80 mb-md">{{ badge.description }}</div>
+              <div class="badge" :class="isEarned(badge.id) ? 'badge-success' : 'badge-secondary'">
                 {{ isEarned(badge.id) ? '✅ Earned' : badge.requirement }}
               </div>
             </div>
@@ -52,15 +78,20 @@
         </div>
 
         <!-- Skills Badges -->
-        <div data-testid="skills-badges">
-          <h2>⚡ Skills</h2>
-          <div>
+        <div class="card card-elevated mb-xl" data-testid="skills-badges">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">⚡</div>
+            <h2 class="font-bold">Skills</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
             <div v-for="badge in skillsBadges" :key="badge.id" 
+                 class="card card-compact"
+                 :class="{ 'bg-primary': isEarned(badge.id) }"
                  :data-testid="badge.id + '-badge'">
-              <div>{{ badge.icon }}</div>
-              <div>{{ badge.name }}</div>
-              <div>{{ badge.description }}</div>
-              <div>
+              <div class="text-2xl mb-sm">{{ badge.icon }}</div>
+              <div class="font-medium mb-sm">{{ badge.name }}</div>
+              <div class="text-sm opacity-80 mb-md">{{ badge.description }}</div>
+              <div class="badge" :class="isEarned(badge.id) ? 'badge-success' : 'badge-secondary'">
                 {{ isEarned(badge.id) ? '✅ Earned' : badge.requirement }}
               </div>
             </div>
@@ -68,15 +99,20 @@
         </div>
 
         <!-- Knowledge Badges -->
-        <div data-testid="knowledge-badges">
-          <h2>📚 Knowledge</h2>
-          <div>
+        <div class="card card-elevated mb-xl" data-testid="knowledge-badges">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">📚</div>
+            <h2 class="font-bold">Knowledge</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
             <div v-for="badge in knowledgeBadges" :key="badge.id" 
+                 class="card card-compact"
+                 :class="{ 'bg-warning': isEarned(badge.id) }"
                  :data-testid="badge.id + '-badge'">
-              <div>{{ badge.icon }}</div>
-              <div>{{ badge.name }}</div>
-              <div>{{ badge.description }}</div>
-              <div>
+              <div class="text-2xl mb-sm">{{ badge.icon }}</div>
+              <div class="font-medium mb-sm">{{ badge.name }}</div>
+              <div class="text-sm opacity-80 mb-md">{{ badge.description }}</div>
+              <div class="badge" :class="isEarned(badge.id) ? 'badge-success' : 'badge-secondary'">
                 {{ isEarned(badge.id) ? '✅ Earned' : badge.requirement }}
               </div>
             </div>
@@ -84,30 +120,36 @@
         </div>
 
         <!-- Special Badges -->
-        <div data-testid="special-badges">
-          <h2>⭐ Special</h2>
-          <div>
+        <div class="card card-elevated mb-xl" data-testid="special-badges">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">⭐</div>
+            <h2 class="font-bold">Special</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
             <div v-for="badge in specialBadges" :key="badge.id" 
+                 class="card card-compact"
+                 :class="{ 'bg-purple': isEarned(badge.id) }"
                  :data-testid="badge.id + '-badge'">
-              <div>{{ badge.icon }}</div>
-              <div>{{ badge.name }}</div>
-              <div>{{ badge.description }}</div>
-              <div>
+              <div class="text-2xl mb-sm">{{ badge.icon }}</div>
+              <div class="font-medium mb-sm">{{ badge.name }}</div>
+              <div class="text-sm opacity-80 mb-md">{{ badge.description }}</div>
+              <div class="badge" :class="isEarned(badge.id) ? 'badge-success' : 'badge-secondary'">
                 {{ isEarned(badge.id) ? '✅ Earned' : badge.requirement }}
               </div>
-              <div v-if="badge.rarity">
+              <div v-if="badge.rarity" class="badge badge-purple mt-sm">
                 {{ badge.rarity }}
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Back to Dashboard -->
-      <div>
-        <router-link to="/dashboard" data-testid="back-to-dashboard">
-          ← Back to Dashboard
-        </router-link>
+        <!-- Back to Dashboard -->
+        <div class="text-center">
+          <router-link to="/dashboard" class="btn btn-secondary" data-testid="back-to-dashboard">
+            ← Back to Dashboard
+          </router-link>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -275,3 +317,24 @@ onMounted(() => {
 })
 </script>
 
+<style scoped>
+.bg-success {
+  background: var(--gradient-success) !important;
+  color: var(--text-inverse) !important;
+}
+
+.bg-primary {
+  background: var(--gradient-primary) !important;
+  color: var(--text-inverse) !important;
+}
+
+.bg-warning {
+  background: var(--gradient-warning) !important;
+  color: var(--text-inverse) !important;
+}
+
+.bg-purple {
+  background: var(--gradient-purple) !important;
+  color: var(--text-inverse) !important;
+}
+</style>

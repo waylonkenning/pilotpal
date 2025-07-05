@@ -207,7 +207,7 @@ const lessonProgress = computed(() => {
 })
 
 // Tooltip functions
-const showProgressTooltip = (event: MouseEvent) => {
+const showProgressTooltip = (_event: MouseEvent) => {
   // Tooltip logic here
 }
 

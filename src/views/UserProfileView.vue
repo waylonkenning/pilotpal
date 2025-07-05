@@ -1,477 +1,293 @@
 <template>
-  <div>
-    <div>
-      <!-- Header -->
-      <div>
-        <div>
-          <h1>👤 User Profile</h1>
-          <p>
-            Manage your pilot profile and training preferences
-          </p>
+  <div class="app-layout" data-testid="user-profile-view">
+    <!-- Modern Header -->
+    <div class="app-header">
+      <div class="container">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-xl font-bold">👤 User Profile</h1>
+            <p class="text-sm opacity-60">
+              Manage your pilot profile and training preferences
+            </p>
+          </div>
+          <button 
+            @click="showProfileHelp = true"
+            class="btn btn-secondary btn-sm"
+            data-testid="profile-help-button">
+            ❓ Help
+          </button>
         </div>
-        <button 
-          @click="showProfileHelp = true"
-          data-testid="profile-help-button"
-        >
-          ❓ Help
-        </button>
       </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="app-content">
+      <div class="container">
 
-      <!-- Profile Form -->
-      <div data-testid="user-profile-form">
-        <h2>Personal Information</h2>
-        
-        <div>
-          <!-- Basic Information -->
-          <div>
-            <label>Full Name</label>
-            <input 
-              v-model="userProfile.name" 
-              type="text" 
-              placeholder="John Smith"
-              data-testid="pilot-name-input"
-            >
+        <!-- Personal Information -->
+        <div class="card card-elevated mb-xl" data-testid="user-profile-form">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">👤</div>
+            <h2 class="font-bold">Personal Information</h2>
           </div>
           
-          <div>
-            <label>Email Address</label>
-            <input 
-              v-model="userProfile.email" 
-              type="email" 
-              placeholder="john@example.com"
-              data-testid="pilot-email-input"
-            >
-          </div>
-          
-          <div>
-            <label>Phone Number</label>
-            <input 
-              v-model="userProfile.phone" 
-              type="tel" 
-              placeholder="021-123-4567"
-              data-testid="pilot-phone-input"
-            >
-          </div>
-          
-          <div>
-            <label>Training Start Date</label>
-            <input 
-              v-model="userProfile.trainingStartDate" 
-              type="date" 
-              data-testid="training-start-date"
-            >
-          </div>
-          
-          <div>
-            <label>Date of Birth</label>
-            <input 
-              v-model="userProfile.dateOfBirth" 
-              type="date" 
-              data-testid="date-of-birth-input"
-            >
-          </div>
-          
-          <div>
-            <label>Preferred Flight School</label>
-            <select 
-              v-model="userProfile.flightSchool" 
-              data-testid="flight-school-select"
-            >
-              <option value="">Select a school</option>
-              <option value="auckland-aero-club">Auckland Aero Club</option>
-              <option value="christchurch-flying-club">Christchurch Flying Club</option>
-              <option value="wellington-aero-club">Wellington Aero Club</option>
-              <option value="hamilton-flying-club">Hamilton Flying Club</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
+          <form @submit.prevent="saveProfile" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input 
+                  v-model="userProfile.name" 
+                  type="text" 
+                  class="form-input"
+                  placeholder="Enter your full name"
+                  required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input 
+                  v-model="userProfile.email" 
+                  type="email" 
+                  class="form-input"
+                  placeholder="your.email@example.com"
+                  required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input 
+                  v-model="userProfile.dateOfBirth" 
+                  type="date" 
+                  class="form-input"
+                  required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input 
+                  v-model="userProfile.phone" 
+                  type="tel" 
+                  class="form-input"
+                  placeholder="+64 21 123 4567">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <textarea 
+                v-model="userProfile.address" 
+                class="form-input"
+                rows="3"
+                placeholder="Your residential address"></textarea>
+            </div>
+
+            <div class="flex gap-md">
+              <button type="submit" class="btn btn-primary flex-1">
+                💾 Save Profile
+              </button>
+              <button type="button" @click="resetProfile" class="btn btn-secondary">
+                🔄 Reset
+              </button>
+            </div>
+          </form>
         </div>
 
         <!-- Training Preferences -->
-        <div>
-          <h3>Training Preferences</h3>
+        <div class="card card-elevated mb-xl">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">⚙️</div>
+            <h2 class="font-bold">Training Preferences</h2>
+          </div>
           
-          <div>
-            <div>
-              <label>Preferred Training Days</label>
-              <div>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="monday">
-                  Monday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="tuesday">
-                  Tuesday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="wednesday">
-                  Wednesday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="thursday">
-                  Thursday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="friday">
-                  Friday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="saturday">
-                  Saturday
-                </label>
-                <label>
-                  <input type="checkbox" v-model="userProfile.preferredDays" value="sunday">
-                  Sunday
-                </label>
-              </div>
-            </div>
-            
-            <div>
-              <label>Training Pace</label>
-              <select 
-                v-model="userProfile.trainingPace" 
-                data-testid="training-pace-select"
-              >
-                <option value="intensive">Intensive (3+ lessons/week)</option>
-                <option value="regular">Regular (2 lessons/week)</option>
-                <option value="relaxed">Relaxed (1 lesson/week)</option>
-                <option value="flexible">Flexible (as available)</option>
+          <div class="space-y-4">
+            <div class="form-group">
+              <label class="form-label">Preferred Flight School</label>
+              <select v-model="userProfile.preferredSchool" class="form-input">
+                <option value="">Select a flight school...</option>
+                <option value="auckland-flying-club">Auckland Flying Club</option>
+                <option value="christchurch-aviation">Christchurch Aviation</option>
+                <option value="wellington-aero-club">Wellington Aero Club</option>
+                <option value="other">Other</option>
               </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Training Frequency</label>
+              <select v-model="userProfile.trainingFrequency" class="form-input">
+                <option value="">Select frequency...</option>
+                <option value="intensive">Intensive (3-4 lessons/week)</option>
+                <option value="standard">Standard (1-2 lessons/week)</option>
+                <option value="casual">Casual (1 lesson/week or less)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Training Goals</label>
+              <textarea 
+                v-model="userProfile.goals" 
+                class="form-input"
+                rows="3"
+                placeholder="What do you want to achieve with your PPL?"></textarea>
+            </div>
+
+            <button @click="savePreferences" class="btn btn-primary w-full">
+              💾 Save Preferences
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="card card-elevated mb-xl">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">📊</div>
+            <h2 class="font-bold">Your Progress Summary</h2>
+          </div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm">{{ progress.flightHours.total }}</div>
+              <div class="text-sm opacity-80">Flight Hours</div>
+            </div>
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm">{{ passedTheoryExams }}/6</div>
+              <div class="text-sm opacity-80">Theory Exams</div>
+            </div>
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm">{{ progress.achievements.length }}</div>
+              <div class="text-sm opacity-80">Achievements</div>
+            </div>
+            <div class="card card-compact text-center">
+              <div class="text-2xl font-bold mb-sm">${{ (progress.totalSpent || 0).toLocaleString() }}</div>
+              <div class="text-sm opacity-80">Total Spent</div>
             </div>
           </div>
         </div>
 
-        <!-- Save Button -->
-        <div>
-          <button 
-            @click="saveProfile" 
-            data-testid="save-profile-button"
-          >
-            💾 Save Profile
-          </button>
-          <router-link to="/dashboard">
+        <!-- Back to Dashboard -->
+        <div class="text-center">
+          <router-link to="/dashboard" class="btn btn-secondary">
             ← Back to Dashboard
           </router-link>
         </div>
-      </div>
-
-
-      <!-- Reset Profile Section -->
-      <div data-testid="reset-profile-section">
-        <h2>🔄 Reset Training Progress</h2>
         
-        <div>
-          <div>
-            <div>⚠️</div>
-            <div>
-              <h3>Warning: This Action Cannot Be Undone</h3>
-              <p>
-                Resetting your profile will permanently delete:
-              </p>
-              <ul>
-                <li>• All lesson progress and completed lessons</li>
-                <li>• Flight hours (dual, solo, cross-country)</li>
-                <li>• Achievement badges and milestones</li>
-                <li>• Theory exam history and results</li>
-                <li>• Financial expense tracking</li>
-                <li>• Demonstrated skills records</li>
-              </ul>
-              <p>
-                Your profile information (name, email, etc.) will be kept.
-              </p>
-            </div>
-          </div>
-          
-          <button 
-            @click="showResetConfirmation = true" 
-            data-testid="reset-profile-button"
-          >
-            🔄 Reset All Training Progress
-          </button>
-        </div>
-      </div>
-
-      <!-- Emergency Contacts -->
-      <div>
-        <h2>🚨 Emergency Contacts</h2>
-        
-        <div>
-          <div>
-            <label>Primary Emergency Contact</label>
-            <input 
-              v-model="userProfile.emergencyContact1.name" 
-              type="text" 
-              placeholder="Contact Name"
-              data-testid="emergency-contact-1-name"
-            >
-            <input 
-              v-model="userProfile.emergencyContact1.phone" 
-              type="tel" 
-              placeholder="Phone Number"
-              data-testid="emergency-contact-1-phone"
-            >
-            <input 
-              v-model="userProfile.emergencyContact1.relationship" 
-              type="text" 
-              placeholder="Relationship"
-              data-testid="emergency-contact-1-relationship"
-            >
-          </div>
-          
-          <div>
-            <label>Secondary Emergency Contact</label>
-            <input 
-              v-model="userProfile.emergencyContact2.name" 
-              type="text" 
-              placeholder="Contact Name"
-              data-testid="emergency-contact-2-name"
-            >
-            <input 
-              v-model="userProfile.emergencyContact2.phone" 
-              type="tel" 
-              placeholder="Phone Number"
-              data-testid="emergency-contact-2-phone"
-            >
-            <input 
-              v-model="userProfile.emergencyContact2.relationship" 
-              type="text" 
-              placeholder="Relationship"
-              data-testid="emergency-contact-2-relationship"
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Profile Save Success Modal -->
-    <div v-if="showSaveSuccess" class="modal-overlay" @click="showSaveSuccess = false">
-      <div class="modal-content" @click.stop data-testid="profile-save-success">
-        <div class="p-6 text-center">
-          <div class="text-6xl mb-4">✅</div>
-          <h3 class="text-xl font-bold mb-4">Profile Saved!</h3>
-          <p class="text-gray-600 mb-6">
-            Your profile has been successfully updated and saved.
-          </p>
-          <button @click="showSaveSuccess = false" class="btn btn-primary">
-            Continue
-          </button>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Reset Confirmation Modal -->
-    <div v-if="showResetConfirmation" class="modal-overlay" @click="showResetConfirmation = false">
-      <div class="modal-content" @click.stop data-testid="reset-confirmation-modal">
-        <div class="p-6">
-          <div class="text-center mb-6">
-            <div class="text-6xl mb-4">⚠️</div>
-            <h3 class="text-2xl font-bold mb-4 text-red-800">Confirm Training Reset</h3>
-          </div>
-          
-          <div class="bg-red-50 p-4 metro-card border border-red-200 mb-6">
-            <p class="text-red-800 font-semibold mb-2">
-              Are you absolutely sure you want to reset all training progress?
-            </p>
-            <p class="text-red-700 text-sm">
-              This will permanently delete all your lesson progress, flight hours, achievements, 
-              theory exam history, and financial tracking. Your profile information will be kept.
-            </p>
-          </div>
-
-          <div class="mb-6">
-            <label class="form-label text-red-800">Type "RESET" to confirm:</label>
-            <input 
-              v-model="resetConfirmText" 
-              type="text" 
-              class="form-input border-red-300 focus:border-red-500"
-              placeholder="Type RESET here"
-              data-testid="reset-confirmation-input"
-            >
-          </div>
-          
-          <div class="flex gap-4">
-            <button 
-              @click="showResetConfirmation = false" 
-              class="btn btn-secondary flex-1"
-              data-testid="cancel-reset-button"
-            >
-              Cancel
-            </button>
-            <button 
-              @click="confirmReset" 
-              :disabled="resetConfirmText !== 'RESET'"
-              :class="resetConfirmText === 'RESET' ? 
-                'btn bg-red-600 hover:bg-red-700 text-white border-red-600 flex-1' : 
-                'btn bg-gray-300 text-gray-500 border-gray-300 flex-1 cursor-not-allowed'"
-              data-testid="confirm-reset-button"
-            >
-              🔄 Reset Everything
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Reset Success Modal -->
-    <div v-if="showResetSuccess" class="modal-overlay" @click="showResetSuccess = false">
-      <div class="modal-content" @click.stop data-testid="reset-success-modal">
-        <div class="p-6 text-center">
-          <div class="text-6xl mb-4">🔄</div>
-          <h3 class="text-xl font-bold mb-4">Training Progress Reset!</h3>
-          <p class="text-gray-600 mb-6">
-            Your training progress has been successfully reset. You can now start your PPL journey fresh.
-          </p>
-          <button @click="navigateToHome" class="btn btn-primary">
-            Start Fresh Journey
-          </button>
-        </div>
       </div>
     </div>
 
     <!-- Profile Help Modal -->
     <div v-if="showProfileHelp" class="modal-overlay" @click="showProfileHelp = false">
       <div class="modal-content" @click.stop>
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-4">User Profile Help</h3>
-          
-          <div class="space-y-4">
-            <div>
-              <h4 class="font-semibold text-blue-600 mb-2">📋 Personal Information</h4>
-              <p class="text-gray-700">
-                Keep your contact information up to date for emergency situations and 
-                communication with your flight school.
-              </p>
-            </div>
-            
-            
-            <div>
-              <h4 class="font-semibold text-blue-600 mb-2">🚨 Emergency Contacts</h4>
-              <p class="text-gray-700">
-                Required for flight training. Your flight school needs these contacts 
-                in case of emergency during training flights.
-              </p>
-            </div>
-          </div>
-          
-          <div class="mt-6">
-            <button @click="showProfileHelp = false" class="btn btn-primary w-full">
-              Got it!
-            </button>
+        <div class="flex items-center justify-between mb-lg">
+          <h3 class="font-bold text-lg">❓ Profile Help</h3>
+          <button @click="showProfileHelp = false" class="btn-ghost text-2xl">&times;</button>
+        </div>
+
+        <div class="card card-compact mb-lg">
+          <h4 class="font-medium mb-md">Managing Your Profile</h4>
+          <div class="text-sm opacity-80 space-y-2">
+            <p>• Keep your personal information up to date</p>
+            <p>• Set training preferences to get personalized recommendations</p>
+            <p>• Track your overall progress and achievements</p>
+            <p>• Your data is stored locally and remains private</p>
           </div>
         </div>
+
+        <button @click="showProfileHelp = false" class="btn btn-primary w-full">
+          Got it!
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { handleLocalStorageError, handleFormValidationError } from '../utils/errorHandler'
+import { ref, computed, onMounted } from 'vue'
 
-const router = useRouter()
-
-// Profile data
+// State
 const userProfile = ref({
   name: '',
   email: '',
-  phone: '',
   dateOfBirth: '',
-  trainingStartDate: '',
-  flightSchool: '',
-  preferredDays: [] as string[],
-  trainingPace: 'regular',
-  emergencyContact1: {
-    name: '',
-    phone: '',
-    relationship: ''
+  phone: '',
+  address: '',
+  preferredSchool: '',
+  trainingFrequency: '',
+  goals: ''
+})
+
+const progress = ref({
+  flightHours: { total: 0 },
+  theoryExams: {
+    airLaw: { passed: false },
+    navigation: { passed: false },
+    technicalKnowledge: { passed: false },
+    humanFactors: { passed: false },
+    meteorology: { passed: false },
+    radioTelephony: { passed: false }
   },
-  emergencyContact2: {
-    name: '',
-    phone: '',
-    relationship: ''
-  }
+  achievements: [] as string[],
+  totalSpent: 0
 })
 
-// Modal states
-const showSaveSuccess = ref(false)
+// Modal state
 const showProfileHelp = ref(false)
-const showResetConfirmation = ref(false)
-const showResetSuccess = ref(false)
-const resetConfirmText = ref('')
 
-// Load profile data on mount
-onMounted(() => {
-  loadProfile()
+// Computed properties
+const passedTheoryExams = computed(() => {
+  return Object.values(progress.value.theoryExams).filter(exam => exam.passed).length
 })
 
-const loadProfile = () => {
-  try {
-    const savedProfile = localStorage.getItem('ppl-quest-user-profile')
-    if (savedProfile) {
-      const parsed = JSON.parse(savedProfile)
-      userProfile.value = { ...userProfile.value, ...parsed }
-    }
-  } catch (error) {
-    console.error('Error loading profile:', error)
-    handleLocalStorageError('load', error as Error)
-  }
-}
-
+// Methods
 const saveProfile = () => {
-  try {
-    // Validate required fields
-    if (!userProfile.value.name?.trim()) {
-      handleFormValidationError('Full Name', 'This field is required')
-      return
+  localStorage.setItem('ppl-quest-profile', JSON.stringify(userProfile.value))
+  alert('Profile saved successfully!')
+}
+
+const savePreferences = () => {
+  localStorage.setItem('ppl-quest-profile', JSON.stringify(userProfile.value))
+  alert('Preferences saved successfully!')
+}
+
+const resetProfile = () => {
+  if (confirm('Are you sure you want to reset your profile? This action cannot be undone.')) {
+    userProfile.value = {
+      name: '',
+      email: '',
+      dateOfBirth: '',
+      phone: '',
+      address: '',
+      preferredSchool: '',
+      trainingFrequency: '',
+      goals: ''
     }
-    
-    if (!userProfile.value.email?.trim()) {
-      handleFormValidationError('Email Address', 'This field is required')
-      return
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('ppl-quest-user-profile', JSON.stringify(userProfile.value))
-    
-    // Show success message
-    showSaveSuccess.value = true
-    
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
-      showSaveSuccess.value = false
-    }, 3000)
-  } catch (error) {
-    console.error('Error saving profile:', error)
-    handleLocalStorageError('save', error as Error)
   }
 }
 
-const confirmReset = () => {
-  if (resetConfirmText.value !== 'RESET') {
-    return
+const loadData = () => {
+  // Load profile data
+  const savedProfile = localStorage.getItem('ppl-quest-profile')
+  if (savedProfile) {
+    try {
+      userProfile.value = { ...userProfile.value, ...JSON.parse(savedProfile) }
+    } catch (error) {
+      console.error('Failed to load profile:', error)
+    }
   }
   
-  try {
-    // Remove all training progress data but keep profile information
-    localStorage.removeItem('ppl-quest-progress')
-    
-    // Reset confirmation text
-    resetConfirmText.value = ''
-    
-    // Close confirmation modal and show success
-    showResetConfirmation.value = false
-    showResetSuccess.value = true
-  } catch (error) {
-    console.error('Error resetting profile:', error)
-    handleLocalStorageError('reset', error as Error)
+  // Load progress data
+  const savedProgress = localStorage.getItem('ppl-quest-progress')
+  if (savedProgress) {
+    try {
+      progress.value = { ...progress.value, ...JSON.parse(savedProgress) }
+    } catch (error) {
+      console.error('Failed to load progress:', error)
+    }
   }
 }
 
-const navigateToHome = () => {
-  showResetSuccess.value = false
-  router.push('/')
-}
-
+onMounted(() => {
+  loadData()
+})
 </script>
+
+<style scoped>
+</style>
