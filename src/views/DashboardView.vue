@@ -226,13 +226,6 @@
 
         <!-- Quick Navigation Metro Tiles -->
         <div>
-          <router-link to="/journey" data-testid="journey-tab">
-            <div>
-              <div>🗺️</div>
-              <div>Journey</div>
-              <div>Track Progress</div>
-            </div>
-          </router-link>
           <router-link to="/achievements" data-testid="achievements-tab">
             <div>
               <div>🏆</div>
