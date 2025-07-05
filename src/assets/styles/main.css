@@ -763,6 +763,11 @@ p {
   --metro-danger-red: #d13438;      /* Emergency/danger red */
   --metro-night-black: #000000;     /* High contrast black */
   --metro-cockpit-white: #ffffff;   /* Pure white for text */
+  --metro-teal: #008080;            /* Teal for variety */
+  --metro-navy: #1e3a5f;           /* Navy blue alternative */
+  --metro-maroon: #800020;         /* Maroon for contrast */
+  --metro-forest: #228b22;         /* Forest green variant */
+  --metro-amber: #ffbf00;          /* Amber alternative to orange */
   
   /* Metro spacing for tiles */
   --metro-tile-gap: 0.5rem;
@@ -895,6 +900,46 @@ p {
 
 .metro-tile-neutral {
   background-color: var(--metro-cloud-gray);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-teal {
+  background-color: var(--metro-teal);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-navy {
+  background-color: var(--metro-navy);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-maroon {
+  background-color: var(--metro-maroon);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-forest {
+  background-color: var(--metro-forest);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-amber {
+  background-color: var(--metro-amber);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-header {
+  background-color: var(--metro-navy);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-help {
+  background-color: var(--metro-teal);
+  color: var(--metro-cockpit-white);
+}
+
+.metro-tile-education {
+  background-color: var(--metro-maroon);
   color: var(--metro-cockpit-white);
 }
 

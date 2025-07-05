@@ -3,32 +3,18 @@
     <div class="w-full">
       <div class="px-4 py-6">
         
-        <!-- Header with Help and Education -->
-        <div class="flex justify-between items-center mb-6">
-          <div>
-            <h1 class="text-2xl font-bold">Dashboard</h1>
-            <p class="text-gray-600">Track your PPL training progress</p>
-          </div>
-          <div class="flex gap-3">
-            <button 
-              @click="showContextualHelp = true"
-              class="metro-button metro-button-secondary"
-              data-testid="contextual-help-trigger metro-button"
-            >
-              ❓ Help
-            </button>
-            <button 
-              @click="showEducationCenter = true"
-              class="metro-button metro-button-primary"
-              data-testid="education-center-button metro-button"
-            >
-              📚 Education Center
-            </button>
+        <!-- Dashboard Header Metro Tile -->
+        <div class="metro-grid-container mb-6">
+          <div class="metro-tile metro-tile-header metro-tile-full">
+            <div class="text-center">
+              <h1 class="metro-tile-title">PPL Quest Dashboard</h1>
+              <div class="metro-tile-subtitle">Track your pilot training progress</div>
+            </div>
           </div>
         </div>
         
         <!-- Today's Focus - Primary lesson display -->
-        <div class="metro-tile metro-tile-progress metro-tile-2x2 mb-6" data-testid="todays-focus">
+        <div class="metro-tile metro-tile-progress metro-tile-2x2" data-testid="todays-focus">
           <div class="text-center mb-4">
             <h1 class="metro-tile-title">Today's Focus</h1>
             <div class="metro-tile-subtitle">Your next step in the PPL journey</div>
@@ -95,7 +81,7 @@
           </div>
           
           <!-- Lesson Progress Metro Tile -->
-          <div class="metro-tile metro-tile-progress metro-tile-half" data-testid="metro-tile metro-tile-progress">
+          <div class="metro-tile metro-tile-teal metro-tile-half" data-testid="metro-tile metro-tile-progress">
             <div>
               <div class="metro-tile-title" data-testid="metro-tile-title">Lesson Progress</div>
               <div class="metro-tile-value" data-testid="lesson-progress">
@@ -154,7 +140,7 @@
           </div>
           
           <!-- Next Major Milestone Metro Tile -->
-          <div class="metro-tile metro-tile-requirements metro-tile-half metro-tile-interactive" 
+          <div class="metro-tile metro-tile-amber metro-tile-half metro-tile-interactive" 
                data-testid="metro-tile metro-tile-requirements"
                @click="showMilestoneRequirements = true">
             <div>
@@ -174,7 +160,7 @@
         </div>
 
         <!-- Upcoming Requirements -->
-        <div class="metro-tile metro-tile-requirements metro-tile-full mb-6" data-testid="upcoming-requirements">
+        <div class="metro-tile metro-tile-forest metro-tile-full" data-testid="upcoming-requirements">
           <h3 class="metro-tile-title">📋 Upcoming Requirements</h3>
           <div class="space-y-3">
             <div v-for="requirement in upcomingRequirements" :key="requirement.id" 
@@ -267,7 +253,7 @@
               <div class="metro-tile-subtitle">View Badges</div>
             </div>
           </router-link>
-          <router-link to="/theory" class="metro-tile metro-tile-requirements metro-tile-third" data-testid="theory-tab">
+          <router-link to="/theory" class="metro-tile metro-tile-navy metro-tile-third" data-testid="theory-tab">
             <div class="text-center">
               <div class="text-4xl mb-2">📚</div>
               <div class="metro-tile-title">Theory</div>
@@ -288,13 +274,39 @@
               <div class="metro-tile-subtitle">Track Costs</div>
             </div>
           </router-link>
-          <router-link to="/profile" class="metro-tile metro-tile-neutral metro-tile-third" data-testid="user-profile-tab">
+          <router-link to="/profile" class="metro-tile metro-tile-maroon metro-tile-third" data-testid="user-profile-tab">
             <div class="text-center">
               <div class="text-4xl mb-2">👤</div>
               <div class="metro-tile-title">Profile</div>
               <div class="metro-tile-subtitle">Settings</div>
             </div>
           </router-link>
+        </div>
+
+        <!-- Help and Education Center Metro Tiles -->
+        <div class="metro-grid-container mt-6">
+          <button 
+            @click="showContextualHelp = true"
+            class="metro-tile metro-tile-help metro-tile-half"
+            data-testid="contextual-help-trigger metro-button"
+          >
+            <div class="text-center">
+              <div class="text-4xl mb-2">❓</div>
+              <div class="metro-tile-title">Help</div>
+              <div class="metro-tile-subtitle">Get Support</div>
+            </div>
+          </button>
+          <button 
+            @click="showEducationCenter = true"
+            class="metro-tile metro-tile-education metro-tile-half"
+            data-testid="education-center-button metro-button"
+          >
+            <div class="text-center">
+              <div class="text-4xl mb-2">📚</div>
+              <div class="metro-tile-title">Education Center</div>
+              <div class="metro-tile-subtitle">Learn & Study</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
