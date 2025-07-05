@@ -161,6 +161,53 @@
         
       </div>
     </div>
+
+    <!-- Complete Lesson Modal -->
+    <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false">
+      <div class="modal-content" @click.stop>
+        <div class="flex items-center justify-between mb-lg">
+          <h3 class="font-bold text-lg">✅ Complete Lesson {{ currentLessonInfo.id }}</h3>
+          <button @click="showCompleteLesson = false" class="btn-ghost text-2xl">&times;</button>
+        </div>
+
+        <div class="card card-compact mb-lg">
+          <div class="font-medium mb-sm">{{ currentLessonInfo.name }}</div>
+          <div class="text-sm opacity-80 mb-md">{{ currentLessonInfo.description }}</div>
+          <div class="text-sm opacity-60">Mark this lesson as completed in your progress tracking.</div>
+        </div>
+
+        <div class="flex gap-md">
+          <button @click="showCompleteLesson = false" class="btn btn-secondary flex-1">
+            Cancel
+          </button>
+          <button @click="completeLesson" class="btn btn-success flex-1">
+            Mark Complete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Info Modal -->
+    <div v-if="showLessonInfo" class="modal-overlay" @click="showLessonInfo = false">
+      <div class="modal-content" @click.stop>
+        <div class="flex items-center justify-between mb-lg">
+          <h3 class="font-bold text-lg">ℹ️ Lesson {{ currentLessonInfo.id }} Details</h3>
+          <button @click="showLessonInfo = false" class="btn-ghost text-2xl">&times;</button>
+        </div>
+
+        <div class="card card-compact mb-lg">
+          <div class="font-medium mb-sm">{{ currentLessonInfo.name }}</div>
+          <div class="text-sm opacity-80 mb-md">{{ currentLessonInfo.description }}</div>
+          
+          <div class="font-medium mb-sm mt-lg">📋 Preparation Required:</div>
+          <div class="text-sm opacity-80">{{ currentLessonInfo.preparation }}</div>
+        </div>
+
+        <button @click="showLessonInfo = false" class="btn btn-primary w-full">
+          Got it!
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -213,6 +260,19 @@ const showProgressTooltip = (_event: MouseEvent) => {
 
 const hideProgressTooltip = () => {
   // Hide tooltip logic here
+}
+
+// Lesson completion function
+const completeLesson = () => {
+  if (!progress.value.completedLessons.includes(progress.value.currentLesson)) {
+    progress.value.completedLessons.push(progress.value.currentLesson)
+    progress.value.currentLesson += 1
+    
+    // Save to localStorage
+    localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
+  }
+  
+  showCompleteLesson.value = false
 }
 
 // Load progress data
