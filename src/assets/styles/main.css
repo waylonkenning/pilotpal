@@ -12,68 +12,111 @@
 html {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
 body {
   margin: 0;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  font-size: 16px;
-  line-height: 1.6;
+  color: var(--metro-white);
+  background: var(--metro-dark);
+  font-size: 11pt;
+  line-height: 1.4;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* CSS Custom Properties - Mobile First */
+/* Metro Design System Variables */
 :root {
-  /* Colors - Aviation Theme */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-accent: #f1f5f9;
+  /* Metro Grid System - 20px base units, 5px sub-units */
+  --metro-unit: 20px;
+  --metro-sub-unit: 5px;
+  --metro-half-unit: 10px;
+  --metro-double-unit: 40px;
+  --metro-quad-unit: 80px;
+  --metro-six-unit: 120px;
+  --metro-five-unit: 100px;
+  --metro-seven-unit: 140px;
   
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  /* Metro Touch Targets */
+  --metro-min-touch: 50px;
   
-  --border-light: #e2e8f0;
-  --border-medium: #cbd5e1;
+  /* Metro Color Palette */
+  --metro-lime: #A4C400;
+  --metro-green: #60A917;
+  --metro-emerald: #008A00;
+  --metro-teal: #00ABA9;
+  --metro-cyan: #1BA1E2;
+  --metro-cobalt: #0050EF;
+  --metro-indigo: #6A00FF;
+  --metro-violet: #AA00FF;
+  --metro-pink: #F472D0;
+  --metro-magenta: #D80073;
+  --metro-crimson: #A20025;
+  --metro-red: #E51400;
+  --metro-orange: #FA6800;
+  --metro-amber: #F0A30A;
+  --metro-yellow: #E3C800;
+  --metro-brown: #825A2C;
+  --metro-olive: #6D8764;
+  --metro-steel: #647687;
+  --metro-mauve: #76608A;
+  --metro-sienna: #A0522D;
   
-  --blue-50: #eff6ff;
-  --blue-500: #3b82f6;
-  --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
+  /* Metro Neutrals */
+  --metro-dark: #1D1D1D;
+  --metro-darken: #2D2D30;
+  --metro-darker: #252526;
+  --metro-light: #E0E0E0;
+  --metro-lighter: #F0F0F0;
+  --metro-white: #FFFFFF;
+  --metro-default-bg: #464646;
   
-  --green-50: #f0fdf4;
-  --green-500: #22c55e;
-  --green-600: #16a34a;
+  /* Metro Animation Timings */
+  --metro-fast: 167ms;
+  --metro-normal: 250ms;
+  --metro-slow: 367ms;
+  --metro-easing: cubic-bezier(0.1, 0.9, 0.2, 1);
   
-  --orange-500: #f97316;
-  --orange-600: #ea580c;
+  /* Metro Typography Scale */
+  --metro-header-size: 42pt;
+  --metro-section-size: 20pt;
+  --metro-subheader-size: 11pt;
+  --metro-body-size: 11pt;
+  --metro-caption-size: 9pt;
+
+  /* Legacy color variables (deprecated - use Metro colors above) */
+  --bg-primary: var(--metro-dark);
+  --bg-secondary: var(--metro-darken);
+  --bg-accent: var(--metro-darker);
   
-  --red-500: #ef4444;
-  --red-600: #dc2626;
+  --text-primary: var(--metro-white);
+  --text-secondary: var(--metro-light);
+  --text-muted: var(--metro-steel);
   
-  /* Spacing Scale - Enhanced with more granular options */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-5: 1.25rem;   /* 20px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-7: 1.75rem;   /* 28px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
+  --border-light: var(--metro-steel);
+  --border-medium: var(--metro-mauve);
   
-  /* Typography Scale */
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
+  /* Metro Spacing System - Based on 5px sub-units */
+  --space-1: var(--metro-sub-unit);     /* 5px */
+  --space-2: var(--metro-half-unit);    /* 10px */
+  --space-3: 15px;                      /* 3 sub-units */
+  --space-4: var(--metro-unit);         /* 20px - 1 unit */
+  --space-5: 25px;                      /* 5 sub-units */
+  --space-6: 30px;                      /* 6 sub-units */
+  --space-7: 35px;                      /* 7 sub-units */
+  --space-8: var(--metro-double-unit);  /* 40px - 2 units */
+  --space-10: var(--metro-min-touch);   /* 50px - min touch */
+  --space-12: var(--metro-unit-3);      /* 60px - 3 units */
+  --space-16: var(--metro-quad-unit);   /* 80px - 4 units */
+  --space-20: var(--metro-five-unit);   /* 100px - 5 units */
+  --space-24: var(--metro-six-unit);    /* 120px - 6 units */
+  --space-28: var(--metro-seven-unit);  /* 140px - 7 units */
+  
+  /* Metro Typography Scale */
+  --text-caption: var(--metro-caption-size);   /* 9pt */
+  --text-body: var(--metro-body-size);         /* 11pt */
+  --text-subheader: var(--metro-subheader-size); /* 11pt */
+  --text-section: var(--metro-section-size);   /* 20pt */
+  --text-header: var(--metro-header-size);     /* 42pt */
   
   /* Border Radius - Metro Design (All Sharp Corners) */
   --radius-sm: 0;
@@ -81,69 +124,119 @@ body {
   --radius-lg: 0;
   --radius-xl: 0;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  /* Metro Shadows - Minimal for authentically digital design */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-accent: #334155;
-    
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    
-    --border-light: #334155;
-    --border-medium: #475569;
-  }
+/* Metro Layout System */
+.metro-container {
+  min-width: 1024px;
+  padding-left: var(--metro-six-unit);  /* 120px - safe zone */
+  padding-right: var(--metro-six-unit);
+  background: var(--metro-dark);
+  color: var(--metro-white);
+  overflow-x: auto;
 }
 
-/* Typography - Enhanced hierarchy */
+.metro-page-header {
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  font-size: var(--metro-header-size);
+  font-weight: 200;
+  margin-top: var(--metro-five-unit);    /* 100px from top */
+  margin-bottom: var(--metro-double-unit); /* 40px spacing */
+  color: var(--metro-white);
+  line-height: 1.1;
+}
+
+.metro-content-area {
+  margin-top: var(--metro-seven-unit);   /* 140px from top */
+  display: flex;
+  gap: var(--metro-quad-unit);           /* 80px between groups */
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.metro-section-header {
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  font-size: var(--metro-section-size);
+  font-weight: 200;
+  color: var(--metro-white);
+  margin-bottom: var(--metro-unit);
+  line-height: 1.2;
+}
+
+.metro-subheader {
+  font-family: 'Segoe UI Semilight', 'Segoe UI', sans-serif;
+  font-size: var(--metro-subheader-size);
+  font-weight: 300;
+  color: var(--metro-light);
+  margin-bottom: var(--metro-half-unit);
+}
+
+.metro-body-text {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-body-size);
+  font-weight: 400;
+  color: var(--metro-white);
+  line-height: 1.4;
+}
+
+.metro-caption {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-caption-size);
+  font-weight: 400;
+  color: var(--metro-light);
+  line-height: 1.3;
+}
+
+/* Metro Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
-  letter-spacing: -0.025em;
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  color: var(--metro-white);
+  margin-bottom: var(--metro-unit);
+  line-height: 1.2;
+  font-weight: 200;
 }
 
 h1 { 
-  font-size: var(--text-4xl); 
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-size: var(--metro-header-size);
+  font-weight: 200;
   line-height: 1.1;
 }
 h2 { 
-  font-size: var(--text-3xl); 
-  font-weight: 650;
-  letter-spacing: -0.03em;
+  font-size: var(--metro-section-size);
+  font-weight: 200;
 }
 h3 { 
-  font-size: var(--text-2xl); 
-  font-weight: 600;
+  font-size: var(--metro-subheader-size);
+  font-weight: 300;
+  font-family: 'Segoe UI Semilight', 'Segoe UI', sans-serif;
 }
 h4 { 
-  font-size: var(--text-xl); 
-  font-weight: 600;
+  font-size: var(--metro-body-size);
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
 }
 h5 { 
-  font-size: var(--text-lg); 
-  font-weight: 600;
+  font-size: var(--metro-caption-size);
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
 }
 h6 { 
-  font-size: var(--text-base); 
-  font-weight: 600;
+  font-size: var(--metro-caption-size);
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 p {
-  color: var(--text-secondary);
-  margin-bottom: var(--space-4);
-  line-height: 1.6;
+  color: var(--metro-white);
+  margin-bottom: var(--metro-unit);
+  line-height: 1.4;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-body-size);
+  font-weight: 400;
 }
 
 .text-display {
@@ -160,15 +253,16 @@ p {
   letter-spacing: -0.03em;
 }
 
-/* Layout */
+/* Metro Layout - Replace legacy container with Metro system */
 .container {
   width: 100%;
-  padding-left: var(--space-4);
-  padding-right: var(--space-4);
+  padding-left: var(--metro-six-unit);  /* 120px safe zone */
+  padding-right: var(--metro-six-unit);
   margin-left: auto;
   margin-right: auto;
-  max-width: 1200px;
-  overflow-x: hidden;
+  min-width: 1024px;
+  overflow-x: auto;
+  background: var(--metro-dark);
 }
 
 /* Content overflow prevention */
@@ -185,18 +279,29 @@ p {
   text-overflow: ellipsis;
 }
 
-/* Responsive breakpoints */
-@media (min-width: 640px) {
-  .container {
-    padding-left: var(--space-6);
-    padding-right: var(--space-6);
+/* Metro Responsive Breakpoints */
+/* Snap view - sidebar */
+@media (max-width: 320px) {
+  .metro-container {
+    padding-left: var(--metro-unit);
+    padding-right: var(--metro-unit);
+    min-width: 320px;
   }
 }
 
-@media (min-width: 768px) {
+/* Portrait orientation */
+@media (orientation: portrait) {
+  .metro-container {
+    padding-left: var(--metro-double-unit);
+    padding-right: var(--metro-double-unit);
+  }
+}
+
+/* Minimum app width */
+@media (min-width: 500px) {
   .container {
-    padding-left: var(--space-8);
-    padding-right: var(--space-8);
+    padding-left: var(--metro-six-unit);
+    padding-right: var(--metro-six-unit);
   }
 }
 
@@ -769,19 +874,58 @@ p {
   --metro-forest: #228b22;         /* Forest green variant */
   --metro-amber: #ffbf00;          /* Amber alternative to orange */
   
+  /* Metro Tile Dimensions */
+  --metro-tile-small-size: 70px;
+  --metro-tile-medium-size: 150px;
+  --metro-tile-large-width: 310px;
+  --metro-tile-large-height: 150px;
+  --metro-tile-wide-width: 310px;
+  --metro-tile-wide-height: 310px;
+  --metro-tile-medium-height: 150px;
+  
   /* Metro spacing for tiles */
-  --metro-tile-gap: 0.5rem;
-  --metro-tile-padding: 1.5rem;
+  --metro-tile-gap: var(--metro-half-unit);  /* 10px between tiles */
+  --metro-tile-padding: var(--metro-half-unit); /* 10px inside tiles */
+  --metro-column-gap: var(--metro-double-unit); /* 40px between columns */
+  --metro-group-gap: var(--metro-quad-unit);    /* 80px between groups */
 }
 
-/* Metro Grid Container - Full Width Edge-to-Edge with Zero Gaps */
+/* Metro Grid Container - Standard Metro Layout */
 .metro-grid-container {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6-column grid for 100%, 50%, 33% support */
-  gap: 0; /* Zero margins between tiles */
-  padding: 0;
-  margin: 0 calc(-100vw / 2 + 50%); /* Force full viewport width */
-  width: 100vw; /* Full viewport width */
+  grid-template-columns: repeat(auto-fit, minmax(var(--metro-tile-small-size), 1fr));
+  gap: var(--metro-tile-gap); /* 10px between tiles */
+  padding: var(--metro-tile-gap);
+  margin-bottom: var(--metro-group-gap); /* 80px between groups */
+  justify-content: start;
+  align-items: start;
+}
+
+/* Metro Tile Group - For organizing related tiles */
+.metro-tile-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--metro-tile-medium-size));
+  gap: var(--metro-tile-gap);
+  margin-bottom: var(--metro-group-gap);
+  justify-content: start;
+}
+
+/* Metro Hub Layout - Horizontal scrolling groups */
+.metro-hub-layout {
+  display: flex;
+  gap: var(--metro-group-gap); /* 80px between groups */
+  overflow-x: auto;
+  padding: var(--metro-tile-gap);
+  scroll-snap-type: x mandatory;
+}
+
+.metro-hub-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--metro-tile-medium-size));
+  gap: var(--metro-tile-gap);
+  min-width: max-content;
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }
 
 /* Alternative full-width class for Metro sections */
@@ -792,125 +936,345 @@ p {
   position: relative;
 }
 
-/* Base Metro Tile */
+/* Base Metro Tile - Authentic Windows 8 Style */
 .metro-tile {
-  border-radius: 0 \!important;
-  box-shadow: none \!important;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-right: 1px solid rgba(0,0,0,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none; /* Pure Metro has no borders */
   padding: var(--metro-tile-padding);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  justify-content: center;
+  align-items: flex-start;
+  transition: transform var(--metro-fast) var(--metro-easing);
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--metro-white);
+  text-align: left;
+  min-height: var(--metro-min-touch); /* Ensure touch targets meet 50px minimum */
 }
 
 .metro-tile:hover {
   transform: scale(0.98);
-  opacity: 0.9;
+  transition: transform var(--metro-fast) var(--metro-easing);
 }
 
 .metro-tile:active {
   transform: scale(0.95);
+  transition: transform var(--metro-fast) var(--metro-easing);
 }
 
-/* Metro Tile Sizes - Based on 6-column grid */
-/* 100% width tiles */
+/* Metro Tile Interactive States */
+.metro-tile-interactive {
+  cursor: pointer;
+}
+
+.metro-tile-interactive:focus {
+  outline: 2px solid var(--metro-white);
+  outline-offset: 2px;
+}
+
+/* Authentic Metro Tile Sizes - Following Windows 8 Standards */
+/* Small tiles - 70px × 70px */
+.metro-tile-small {
+  width: 70px;
+  height: 70px;
+  min-height: 70px;
+  grid-column: span 1;
+  padding: var(--metro-half-unit);
+}
+
+/* Medium tiles - 150px × 150px */
+.metro-tile-medium {
+  width: 150px;
+  height: 150px;
+  min-height: 150px;
+  grid-column: span 2;
+  padding: var(--metro-half-unit);
+}
+
+/* Large tiles - 310px × 150px */
+.metro-tile-large {
+  width: 310px;
+  height: 150px;
+  min-height: 150px;
+  grid-column: span 4;
+  padding: var(--metro-half-unit);
+}
+
+/* Wide tiles - 310px × 310px */
+.metro-tile-wide {
+  width: 310px;
+  height: 310px;
+  min-height: 310px;
+  grid-column: span 4;
+  grid-row: span 2;
+  padding: var(--metro-half-unit);
+}
+
+/* Legacy responsive tile sizes for current grid system */
 .metro-tile-full {
-  min-height: 120px;
+  min-height: var(--metro-tile-medium-height);
   grid-column: span 6;
+  padding: var(--metro-half-unit);
 }
 
-/* 50% width tiles */
 .metro-tile-half {
-  min-height: 120px;
+  min-height: var(--metro-tile-medium-height);
   grid-column: span 3;
+  padding: var(--metro-half-unit);
 }
 
-/* 33% width tiles */
 .metro-tile-third {
-  min-height: 120px;
+  min-height: var(--metro-tile-medium-height);
   grid-column: span 2;
+  padding: var(--metro-half-unit);
 }
 
-/* Legacy tile sizes for backward compatibility */
-.metro-tile-1x1 {
-  min-height: 120px;
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.metro-tile-2x1 {
-  min-height: 120px;
-  grid-column: span 3;
-  grid-row: span 1;
-}
-
+/* Legacy 2x2 large content tile */
 .metro-tile-2x2 {
-  min-height: 400px;
+  min-height: var(--metro-tile-wide-height);
   grid-column: span 6;
   grid-row: span 2;
+  padding: var(--metro-half-unit);
 }
 
 /* Metro Button Variants for use on colored backgrounds */
 .metro-button-on-colored {
   background-color: rgba(255,255,255,0.2) !important;
-  color: white !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
+  color: var(--metro-white) !important;
+  border: none !important;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-body-size);
+  text-transform: lowercase;
 }
 
 .metro-button-on-colored:hover {
   background-color: rgba(255,255,255,0.3) !important;
+  transform: scale(0.98);
 }
 
-/* Metro Tile Color Variants */
-.metro-tile-progress {
-  background-color: var(--metro-sky-blue);
-  color: var(--metro-cockpit-white);
+.metro-button-on-colored:active {
+  background-color: rgba(255,255,255,0.4) !important;
+  transform: scale(0.95);
 }
 
-.metro-tile-achievements {
-  background-color: var(--metro-ground-green);
-  color: var(--metro-cockpit-white);
+/* Authentic Metro Tile Color Variants - Windows 8 Palette */
+.metro-tile-lime {
+  background-color: var(--metro-lime);
+  color: var(--metro-white);
 }
 
-.metro-tile-financial {
-  background-color: var(--metro-runway-orange);
-  color: var(--metro-cockpit-white);
+.metro-tile-green {
+  background-color: var(--metro-green);
+  color: var(--metro-white);
 }
 
-.metro-tile-requirements {
-  background-color: var(--metro-altitude-purple);
-  color: var(--metro-cockpit-white);
-}
-
-.metro-tile-journey {
-  background-color: var(--metro-cloud-gray);
-  color: var(--metro-cockpit-white);
-}
-
-.metro-tile-danger {
-  background-color: var(--metro-danger-red);
-  color: var(--metro-cockpit-white);
-}
-
-.metro-tile-neutral {
-  background-color: var(--metro-cloud-gray);
-  color: var(--metro-cockpit-white);
+.metro-tile-emerald {
+  background-color: var(--metro-emerald);
+  color: var(--metro-white);
 }
 
 .metro-tile-teal {
   background-color: var(--metro-teal);
-  color: var(--metro-cockpit-white);
+  color: var(--metro-white);
 }
 
-.metro-tile-navy {
-  background-color: var(--metro-navy);
-  color: var(--metro-cockpit-white);
+.metro-tile-cyan {
+  background-color: var(--metro-cyan);
+  color: var(--metro-white);
+}
+
+.metro-tile-cobalt {
+  background-color: var(--metro-cobalt);
+  color: var(--metro-white);
+}
+
+.metro-tile-indigo {
+  background-color: var(--metro-indigo);
+  color: var(--metro-white);
+}
+
+.metro-tile-violet {
+  background-color: var(--metro-violet);
+  color: var(--metro-white);
+}
+
+.metro-tile-pink {
+  background-color: var(--metro-pink);
+  color: var(--metro-white);
+}
+
+.metro-tile-magenta {
+  background-color: var(--metro-magenta);
+  color: var(--metro-white);
+}
+
+.metro-tile-crimson {
+  background-color: var(--metro-crimson);
+  color: var(--metro-white);
+}
+
+.metro-tile-red {
+  background-color: var(--metro-red);
+  color: var(--metro-white);
+}
+
+.metro-tile-orange {
+  background-color: var(--metro-orange);
+  color: var(--metro-white);
+}
+
+.metro-tile-amber {
+  background-color: var(--metro-amber);
+  color: var(--metro-white);
+}
+
+.metro-tile-yellow {
+  background-color: var(--metro-yellow);
+  color: var(--metro-dark);
+}
+
+.metro-tile-brown {
+  background-color: var(--metro-brown);
+  color: var(--metro-white);
+}
+
+.metro-tile-olive {
+  background-color: var(--metro-olive);
+  color: var(--metro-white);
+}
+
+.metro-tile-steel {
+  background-color: var(--metro-steel);
+  color: var(--metro-white);
+}
+
+.metro-tile-mauve {
+  background-color: var(--metro-mauve);
+  color: var(--metro-white);
+}
+
+.metro-tile-sienna {
+  background-color: var(--metro-sienna);
+  color: var(--metro-white);
+}
+
+.metro-tile-dark {
+  background-color: var(--metro-dark);
+  color: var(--metro-white);
+}
+
+.metro-tile-light {
+  background-color: var(--metro-light);
+  color: var(--metro-dark);
+}
+
+.metro-tile-default {
+  background-color: var(--metro-default-bg);
+  color: var(--metro-white);
+}
+
+/* Legacy color support for existing tiles */
+.metro-tile-progress {
+  background-color: var(--metro-cyan);
+  color: var(--metro-white);
+}
+
+.metro-tile-achievements {
+  background-color: var(--metro-green);
+  color: var(--metro-white);
+}
+
+.metro-tile-financial {
+  background-color: var(--metro-orange);
+  color: var(--metro-white);
+}
+
+.metro-tile-requirements {
+  background-color: var(--metro-violet);
+  color: var(--metro-white);
+}
+
+.metro-tile-journey {
+  background-color: var(--metro-steel);
+  color: var(--metro-white);
+}
+
+.metro-tile-danger {
+  background-color: var(--metro-red);
+  color: var(--metro-white);
+}
+
+.metro-tile-neutral {
+  background-color: var(--metro-steel);
+  color: var(--metro-white);
+}
+
+/* Metro Typography Classes for Tiles */
+.metro-tile-title {
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  font-size: var(--metro-section-size);
+  font-weight: 200;
+  color: inherit;
+  margin-bottom: var(--metro-sub-unit);
+  line-height: 1.1;
+  text-transform: lowercase;
+}
+
+.metro-tile-value {
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 200;
+  color: inherit;
+  line-height: 0.9;
+  margin: var(--metro-sub-unit) 0;
+}
+
+.metro-tile-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-caption-size);
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.9;
+  text-transform: lowercase;
+}
+
+.metro-tile-subtitle {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-caption-size);
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.8;
+  text-transform: lowercase;
+  line-height: 1.3;
+}
+
+/* Metro Button Styles */
+.metro-button {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: var(--metro-body-size);
+  font-weight: 400;
+  border: none;
+  border-radius: 0;
+  padding: var(--metro-half-unit) var(--metro-unit);
+  background-color: var(--metro-white);
+  color: var(--metro-dark);
+  cursor: pointer;
+  transition: transform var(--metro-fast) var(--metro-easing);
+  min-height: var(--metro-min-touch);
+  text-transform: lowercase;
+}
+
+.metro-button:hover {
+  transform: scale(0.98);
+  background-color: var(--metro-light);
+}
+
+.metro-button:active {
+  transform: scale(0.95);
 }
 
 .metro-tile-maroon {
