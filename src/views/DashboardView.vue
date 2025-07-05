@@ -34,37 +34,37 @@
             <div class="metro-tile-subtitle">Your next step in the PPL journey</div>
           </div>
           
-          <div class="bg-blue-50 p-6" data-testid="current-lesson">
+          <div data-testid="current-lesson">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <h2 class="text-3xl font-bold" data-testid="current-lesson-title">
+                <h2 class="text-2xl font-bold text-white" data-testid="current-lesson-title">
                   Lesson {{ progress.currentLesson }}
                 </h2>
-                <div class="text-lg text-gray-600" data-testid="current-lesson-description">
+                <div class="text-lg text-white opacity-90" data-testid="current-lesson-description">
                   {{ currentLessonInfo.name }}
                 </div>
               </div>
-              <div class="text-6xl">{{ currentLessonInfo.icon }}</div>
+              <div class="text-5xl">{{ currentLessonInfo.icon }}</div>
             </div>
             
-            <p class="text-gray-700 mb-4">{{ currentLessonInfo.description }}</p>
+            <p class="text-white opacity-90 mb-4">{{ currentLessonInfo.description }}</p>
             
-            <div class="bg-blue-100 p-4 mb-4" data-testid="preparation-needed">
-              <div class="font-semibold text-blue-800 mb-2">📋 What you need to do:</div>
-              <div class="text-blue-700">{{ currentLessonInfo.preparation }}</div>
+            <div class="p-4 mb-4 bg-white bg-opacity-20 border-l-4 border-white" data-testid="preparation-needed">
+              <div class="font-semibold text-white mb-2">📋 What you need to do:</div>
+              <div class="text-white opacity-90">{{ currentLessonInfo.preparation }}</div>
             </div>
             
             <div class="flex gap-3">
               <button 
                 @click="showCompleteLesson = true" 
-                class="metro-button metro-button-primary flex-1"
+                class="metro-button metro-button-on-colored flex-1"
                 data-testid="complete-lesson-button"
               >
                 ✅ Complete This Lesson
               </button>
               <button 
                 @click="showLessonInfo = true"
-                class="metro-button metro-button-secondary" 
+                class="metro-button metro-button-on-colored" 
                 data-testid="lesson-info-button"
               >
                 ℹ️ More Info
