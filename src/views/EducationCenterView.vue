@@ -585,9 +585,9 @@
             <button @click="showHoursEducation = false">
               Start Logging Hours
             </button>
-            <div>
+            <router-link to="/journey">
               Track My Progress
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
