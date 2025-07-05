@@ -14,7 +14,7 @@
         <h2 class="text-xl font-semibold mb-4 text-blue-600">🏥 Medical Certificate</h2>
         
         <div v-if="!progress.medicalCertificate" class="space-y-4">
-          <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+          <div class="bg-yellow-50 p-4 metro-card border border-yellow-200">
             <div class="font-semibold text-yellow-800 mb-2">Medical Certificate Required</div>
             <div class="text-yellow-700 mb-3">Required before solo flight - choose Class 2 or DL9 option</div>
             <button 
@@ -37,7 +37,7 @@
 
         <div v-else class="space-y-4">
           <!-- Medical Certificate Status with Expiry Warnings -->
-          <div class="p-4 rounded-lg border" :class="getMedicalStatusClass()" data-testid="medical-cert-status">
+          <div class="p-4 metro-card border" :class="getMedicalStatusClass()" data-testid="medical-cert-status">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
                 <div class="text-2xl">{{ getMedicalStatusIcon() }}</div>
@@ -64,7 +64,7 @@
           </div>
 
           <!-- Medical Expiry Warnings -->
-          <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="medical-expiry-warning">
+          <div v-if="getMedicalExpiryStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 metro-card border border-orange-200" data-testid="medical-expiry-warning">
             <div class="font-semibold text-orange-800 mb-2">⚠️ Medical Certificate Expiring Soon</div>
             <div class="text-orange-700 mb-3">Your medical certificate expires soon. Schedule a renewal to maintain flying privileges.</div>
             <div class="flex gap-3">
@@ -77,7 +77,7 @@
             </div>
           </div>
 
-          <div v-if="getMedicalExpiryStatus() === 'Expired'" class="bg-red-50 p-4 rounded-lg border border-red-200" data-testid="medical-overdue-warning">
+          <div v-if="getMedicalExpiryStatus() === 'Expired'" class="bg-red-50 p-4 metro-card border border-red-200" data-testid="medical-overdue-warning">
             <div class="font-semibold text-red-800 mb-2">🚫 Medical Certificate Expired</div>
             <div class="text-red-700 mb-2" data-testid="medical-flight-restriction">
               Your medical certificate has expired. You cannot exercise pilot privileges until renewed.
@@ -87,7 +87,7 @@
             </button>
           </div>
 
-          <div v-if="getMedicalExpiryStatus() === 'Renewal Due'" class="bg-yellow-50 p-4 rounded-lg border border-yellow-200" data-testid="medical-renewal-reminder">
+          <div v-if="getMedicalExpiryStatus() === 'Renewal Due'" class="bg-yellow-50 p-4 metro-card border border-yellow-200" data-testid="medical-renewal-reminder">
             <div class="font-semibold text-yellow-800 mb-2">📅 Medical Renewal Recommended</div>
             <div class="text-yellow-700 mb-3">Consider scheduling your medical renewal now to avoid any interruption to your flying.</div>
             <div class="text-sm text-yellow-600" data-testid="medical-renewal-cost">
@@ -95,7 +95,7 @@
             </div>
           </div>
           
-          <div v-if="progress.medicalCertificate && !isExpired()" class="bg-blue-50 p-4 rounded-lg" data-testid="solo-flight-unlocked">
+          <div v-if="progress.medicalCertificate && !isExpired()" class="bg-blue-50 p-4 metro-card" data-testid="solo-flight-unlocked">
             <div class="font-semibold text-blue-800 mb-2">🦅 Solo Flight Unlocked!</div>
             <div class="text-blue-700">You can now progress to solo flight lessons with instructor endorsement.</div>
           </div>
@@ -133,7 +133,7 @@
         
         <div data-testid="fpp-requirement">
           <div v-if="!progress.fppAssessment" class="space-y-4">
-            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+            <div class="bg-yellow-50 p-4 metro-card border border-yellow-200">
               <div class="font-semibold text-yellow-800 mb-2">FPP Assessment Required</div>
               <div class="text-yellow-700 mb-3">Required for license application under Civil Aviation Act</div>
               <button 
@@ -153,7 +153,7 @@
             </button>
           </div>
 
-          <div v-else class="bg-green-50 p-4 rounded-lg border border-green-200">
+          <div v-else class="bg-green-50 p-4 metro-card border border-green-200">
             <div class="flex items-center gap-3">
               <div class="text-2xl">✅</div>
               <div>
@@ -172,7 +172,7 @@
         <h2 class="text-xl font-semibold mb-4 text-purple-600">📚 Theory Examinations</h2>
         
         <div class="mb-4">
-          <div class="bg-blue-50 p-4 rounded-lg border border-blue-200" data-testid="pass-requirement">
+          <div class="bg-blue-50 p-4 metro-card border border-blue-200" data-testid="pass-requirement">
             <div class="font-semibold text-blue-800 mb-2">📊 Pass Requirements</div>
             <div class="text-blue-700">70% minimum to pass each subject. All 6 subjects must be completed.</div>
           </div>
@@ -182,7 +182,7 @@
           <div 
             v-for="(exam, subject) in progress.theoryExams" 
             :key="subject"
-            class="p-4 rounded-lg border"
+            class="p-4 metro-card border"
             :class="exam.passed ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'"
             :data-testid="subject.replace(/([A-Z])/g, '-$1').toLowerCase() + '-exam'"
           >
@@ -224,7 +224,7 @@
             <div 
               v-for="medical in medicalHistory" 
               :key="medical.id"
-              class="p-3 bg-gray-50 rounded-lg border text-sm"
+              class="p-3 bg-gray-50 metro-card border text-sm"
             >
               <div class="flex items-center justify-between">
                 <div>
@@ -245,7 +245,7 @@
       <div class="metro-card mb-6" data-testid="bfr-currency-section">
         <h2 class="text-xl font-semibold mb-4 text-indigo-600">🛩️ Biennial Flight Review (BFR) Currency</h2>
         
-        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200 mb-4" data-testid="bfr-requirements-info">
+        <div class="bg-indigo-50 p-4 metro-card border border-indigo-200 mb-4" data-testid="bfr-requirements-info">
           <div class="font-semibold text-indigo-800 mb-2">BFR Requirements for Licensed Pilots</div>
           <div class="text-indigo-700 text-sm space-y-1">
             <p>• Required every 24 months for license currency</p>
@@ -257,7 +257,7 @@
 
         <!-- Current BFR Status -->
         <div v-if="!bfrRecords.length" class="space-y-4">
-          <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+          <div class="bg-yellow-50 p-4 metro-card border border-yellow-200">
             <div class="flex items-center gap-3">
               <div class="text-2xl">⚠️</div>
               <div>
@@ -270,7 +270,7 @@
 
         <div v-else class="space-y-4">
           <!-- BFR Status Card -->
-          <div class="p-4 rounded-lg border" :class="getBfrStatusClass()" data-testid="bfr-status-card">
+          <div class="p-4 metro-card border" :class="getBfrStatusClass()" data-testid="bfr-status-card">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
                 <div class="text-2xl">{{ getBfrStatusIcon() }}</div>
@@ -295,12 +295,12 @@
           </div>
 
           <!-- BFR Warning Messages -->
-          <div v-if="getBfrStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="bfr-warning-message">
+          <div v-if="getBfrStatus() === 'Expiring Soon'" class="bg-orange-50 p-4 metro-card border border-orange-200" data-testid="bfr-warning-message">
             <div class="font-semibold text-orange-800 mb-2">⏰ BFR Expiring Soon</div>
             <div class="text-orange-700">Your BFR will expire soon. Schedule a flight review to maintain currency.</div>
           </div>
 
-          <div v-if="getBfrStatus() === 'Overdue'" class="bg-red-50 p-4 rounded-lg border border-red-200" data-testid="bfr-overdue-warning">
+          <div v-if="getBfrStatus() === 'Overdue'" class="bg-red-50 p-4 metro-card border border-red-200" data-testid="bfr-overdue-warning">
             <div class="font-semibold text-red-800 mb-2">🚫 BFR Overdue</div>
             <div class="text-red-700">Your BFR has expired. You cannot exercise pilot privileges until completing a BFR.</div>
           </div>
@@ -324,7 +324,7 @@
             <div 
               v-for="bfr in sortedBfrRecords" 
               :key="bfr.id"
-              class="p-4 bg-gray-50 rounded-lg border"
+              class="p-4 bg-gray-50 metro-card border"
               data-testid="bfr-history-item"
             >
               <div class="flex items-center justify-between">
@@ -359,7 +359,7 @@
         </div>
 
         <!-- What BFR Includes -->
-        <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200" data-testid="bfr-includes">
+        <div class="mt-6 bg-blue-50 p-4 metro-card border border-blue-200" data-testid="bfr-includes">
           <h4 class="font-semibold text-blue-800 mb-2">What a BFR Includes</h4>
           <div class="text-blue-700 text-sm space-y-1">
             <p><strong>Flight Review:</strong> Demonstration of safe flight operations and general operating rules</p>
@@ -374,7 +374,7 @@
       <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-orange-600">🌙 Night Flying (Optional)</h2>
         
-        <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+        <div class="bg-orange-50 p-4 metro-card border border-orange-200">
           <div class="font-semibold text-orange-800 mb-2">Optional Qualification</div>
           <div class="text-orange-700 mb-3">
             Night flying is optional in New Zealand. Requires 5 hours including 2h dual, 2h solo, and 1h additional.
@@ -389,7 +389,7 @@
       <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-red-600">🏔️ Terrain Awareness Training</h2>
         
-        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+        <div class="bg-red-50 p-4 metro-card border border-red-200">
           <div class="font-semibold text-red-800 mb-2">NZ Specific Requirement</div>
           <div class="text-red-700 mb-3">
             5 hours of terrain awareness training required for New Zealand mountainous conditions.
@@ -415,7 +415,7 @@
           <h3 class="text-xl font-bold mb-4">Medical Certificate Options</h3>
           
           <div class="space-y-4" data-testid="medical-cost-comparison">
-            <div class="border rounded-lg p-4" data-testid="class-2-explanation">
+            <div class="border metro-card p-4" data-testid="class-2-explanation">
               <h4 class="font-semibold text-blue-600 mb-2">Class 2 Medical Certificate</h4>
               <p class="text-gray-700 mb-2">
                 Full aviation medical examination by CAA-approved doctor. Required before solo flight.
@@ -425,7 +425,7 @@
               </div>
             </div>
             
-            <div class="border rounded-lg p-4" data-testid="dl9-explanation">
+            <div class="border metro-card p-4" data-testid="dl9-explanation">
               <h4 class="font-semibold text-green-600 mb-2">DL9 Driver License Medical</h4>
               <p class="text-gray-700 mb-2">
                 Use your existing NZ driver license medical if valid. Simpler and more cost-effective option.
@@ -437,7 +437,7 @@
           </div>
 
           <!-- Eligibility Requirements -->
-          <div class="bg-blue-50 p-4 rounded-lg mt-4" data-testid="medical-eligibility-info">
+          <div class="bg-blue-50 p-4 metro-card mt-4" data-testid="medical-eligibility-info">
             <h4 class="font-semibold text-blue-800 mb-2">✅ Eligibility Requirements</h4>
             <div class="text-blue-700 text-sm space-y-1">
               <p>• Must be at least 17 years old for PPL training</p>
@@ -449,7 +449,7 @@
           </div>
 
           <!-- Next Steps -->
-          <div class="bg-green-50 p-4 rounded-lg mt-4" data-testid="medical-next-steps">
+          <div class="bg-green-50 p-4 metro-card mt-4" data-testid="medical-next-steps">
             <h4 class="font-semibold text-green-800 mb-2">🎯 Next Steps</h4>
             <div class="text-green-700 text-sm space-y-2">
               <p><strong>1. Choose your option:</strong> Decide between Class 2 or DL9 based on your needs</p>
@@ -538,7 +538,7 @@
           
           <!-- FPP Components -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border rounded-lg p-4" data-testid="fpp-oral-exam-info">
+            <div class="border metro-card p-4" data-testid="fpp-oral-exam-info">
               <h4 class="font-semibold text-blue-600 mb-2">🗣️ Oral Examination</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Duration:</strong> 30-60 minutes</p>
@@ -547,7 +547,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="fpp-flight-test-info">
+            <div class="border metro-card p-4" data-testid="fpp-flight-test-info">
               <h4 class="font-semibold text-green-600 mb-2">✈️ Practical Flight Test</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Duration:</strong> 90-120 minutes</p>
@@ -558,7 +558,7 @@
           </div>
 
           <!-- Preparation Tips -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="fpp-preparation-tips">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="fpp-preparation-tips">
             <h4 class="font-semibold text-blue-800 mb-3">📚 Preparation Tips</h4>
             <div class="text-blue-700 text-sm space-y-1">
               <p>• Complete instructor recommendation before booking</p>
@@ -569,7 +569,7 @@
           </div>
 
           <!-- Required Documents -->
-          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="fpp-required-documents">
+          <div class="bg-green-50 p-4 metro-card mb-6" data-testid="fpp-required-documents">
             <h4 class="font-semibold text-green-800 mb-2">📄 Required Documents</h4>
             <div class="text-green-700 text-sm space-y-1">
               <p>• Valid medical certificate</p>
@@ -581,7 +581,7 @@
           </div>
 
           <!-- Examiner Information -->
-          <div class="bg-purple-50 p-4 rounded-lg mb-6" data-testid="fpp-examiner-info">
+          <div class="bg-purple-50 p-4 metro-card mb-6" data-testid="fpp-examiner-info">
             <h4 class="font-semibold text-purple-800 mb-2">👨‍✈️ About Your Examiner</h4>
             <div class="text-purple-700 text-sm">
               <p>Your flight test will be conducted by a CAA authorised examiner who holds appropriate qualifications and experience.</p>
@@ -589,7 +589,7 @@
           </div>
 
           <!-- Cost Information -->
-          <div class="bg-orange-50 p-4 rounded-lg" data-testid="fpp-cost-info">
+          <div class="bg-orange-50 p-4 metro-card" data-testid="fpp-cost-info">
             <h4 class="font-semibold text-orange-800 mb-2">💰 Cost Information</h4>
             <div class="text-orange-700 text-sm">
               <p><strong>Typical FPP Costs:</strong> $800-$1,200 including examiner fee and aircraft rental</p>
@@ -629,7 +629,7 @@
               >
             </div>
             
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="bg-blue-50 p-4 metro-card">
               <div class="text-sm text-blue-700">
                 This will be valid for 1 year from submission date. You'll need to update if circumstances change.
               </div>
@@ -811,7 +811,7 @@
           <h3 class="text-xl font-bold mb-4">🏥 Medical Certificate Renewal Guide</h3>
           
           <div class="space-y-4">
-            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div class="bg-blue-50 p-4 metro-card border border-blue-200">
               <h4 class="font-semibold text-blue-800 mb-2">📅 When to Renew</h4>
               <div class="text-blue-700 text-sm space-y-1">
                 <p>• Class 2 Medical: Valid for 60 months (until age 40), then 24 months</p>
@@ -820,7 +820,7 @@
               </div>
             </div>
             
-            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+            <div class="bg-green-50 p-4 metro-card border border-green-200">
               <h4 class="font-semibold text-green-800 mb-2">🔍 What You'll Need</h4>
               <div class="text-green-700 text-sm space-y-1">
                 <p>• Current medical certificate</p>
@@ -831,7 +831,7 @@
               </div>
             </div>
             
-            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200" data-testid="medical-renewal-cost">
+            <div class="bg-orange-50 p-4 metro-card border border-orange-200" data-testid="medical-renewal-cost">
               <h4 class="font-semibold text-orange-800 mb-2">💰 Renewal Costs</h4>
               <div class="text-orange-700 text-sm space-y-1">
                 <p><strong>Class 2 Medical:</strong> $420-$1070 (varies by location and tests)</p>
@@ -860,7 +860,7 @@
           <h3 class="text-xl font-bold mb-4">🔍 Find a Civil Aviation Medical Examiner (CAME)</h3>
           
           <div class="space-y-4">
-            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div class="bg-blue-50 p-4 metro-card border border-blue-200">
               <h4 class="font-semibold text-blue-800 mb-2">📍 Major Centers</h4>
               <div class="text-blue-700 text-sm space-y-2">
                 <div><strong>Auckland:</strong> Multiple CAMEs available - Auckland Airport area</div>
@@ -870,7 +870,7 @@
               </div>
             </div>
             
-            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+            <div class="bg-green-50 p-4 metro-card border border-green-200">
               <h4 class="font-semibold text-green-800 mb-2">📞 How to Find CAMEs</h4>
               <div class="text-green-700 text-sm space-y-1">
                 <p>1. <strong>CAA Website:</strong> aviation.govt.nz - Medical section</p>
@@ -880,7 +880,7 @@
               </div>
             </div>
             
-            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+            <div class="bg-orange-50 p-4 metro-card border border-orange-200">
               <h4 class="font-semibold text-orange-800 mb-2">⏰ Booking Tips</h4>
               <div class="text-orange-700 text-sm space-y-1">
                 <p>• Book 2-4 weeks in advance</p>

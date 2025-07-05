@@ -169,7 +169,7 @@
       <div class="card mb-8 border-red-200 bg-red-50" data-testid="reset-profile-section">
         <h2 class="text-xl font-semibold mb-6 text-red-800">🔄 Reset Training Progress</h2>
         
-        <div class="bg-white p-4 rounded-lg border border-red-200 mb-4">
+        <div class="bg-white p-4 metro-card border border-red-200 mb-4">
           <div class="flex items-start gap-3 mb-4">
             <div class="text-2xl">⚠️</div>
             <div>
@@ -285,7 +285,7 @@
             <h3 class="text-2xl font-bold mb-4 text-red-800">Confirm Training Reset</h3>
           </div>
           
-          <div class="bg-red-50 p-4 rounded-lg border border-red-200 mb-6">
+          <div class="bg-red-50 p-4 metro-card border border-red-200 mb-6">
             <p class="text-red-800 font-semibold mb-2">
               Are you absolutely sure you want to reset all training progress?
             </p>

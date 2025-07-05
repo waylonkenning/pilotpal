@@ -13,22 +13,22 @@
       <div class="card mb-8" data-testid="ppl-pathway-overview">
         <h2 class="text-xl font-semibold mb-4">🎯 Complete PPL Pathway</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div class="text-center p-4 bg-blue-50 rounded-lg">
+          <div class="text-center p-4 bg-blue-50 metro-card">
             <div class="text-3xl mb-2">📋</div>
             <div class="font-semibold">Medical Certificate</div>
             <div class="text-sm text-gray-600">Class 2 or DL9</div>
           </div>
-          <div class="text-center p-4 bg-green-50 rounded-lg">
+          <div class="text-center p-4 bg-green-50 metro-card">
             <div class="text-3xl mb-2">✈️</div>
             <div class="font-semibold">Flight Training</div>
             <div class="text-sm text-gray-600">50+ hours</div>
           </div>
-          <div class="text-center p-4 bg-purple-50 rounded-lg">
+          <div class="text-center p-4 bg-purple-50 metro-card">
             <div class="text-3xl mb-2">📚</div>
             <div class="font-semibold">Theory Exams</div>
             <div class="text-sm text-gray-600">6 subjects</div>
           </div>
-          <div class="text-center p-4 bg-orange-50 rounded-lg">
+          <div class="text-center p-4 bg-orange-50 metro-card">
             <div class="text-3xl mb-2">🎯</div>
             <div class="font-semibold">Flight Test</div>
             <div class="text-sm text-gray-600">FPP Practical</div>
@@ -36,7 +36,7 @@
         </div>
         
         <!-- CAA Part 61 Explanation -->
-        <div class="bg-blue-50 p-4 rounded-lg" data-testid="part-61-explanation">
+        <div class="bg-blue-50 p-4 metro-card" data-testid="part-61-explanation">
           <h3 class="font-semibold text-blue-800 mb-2">📜 CAA Part 61 Requirements</h3>
           <p class="text-blue-700 text-sm">
             New Zealand Private Pilot Licence requirements are governed by CAA Part 61. 
@@ -124,7 +124,7 @@
               <span class="font-semibold">8-12 months</span>
             </div>
           </div>
-          <div class="mt-4 p-3 bg-yellow-50 rounded-lg">
+          <div class="mt-4 p-3 bg-yellow-50 metro-card">
             <p class="text-yellow-800 text-sm">
               <strong>Note:</strong> Timeline varies based on weather, aircraft availability, 
               and individual progress. NZ weather can impact training consistency.
@@ -258,7 +258,7 @@
           
           <!-- Class 2 vs DL9 Comparison -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border rounded-lg p-4" data-testid="class-2-explanation">
+            <div class="border metro-card p-4" data-testid="class-2-explanation">
               <h4 class="font-semibold text-blue-600 mb-3">Class 2 Medical Certificate</h4>
               <div class="space-y-2 text-sm">
                 <p><strong>Required for:</strong> All private pilot operations</p>
@@ -269,7 +269,7 @@
               </div>
             </div>
             
-            <div class="border rounded-lg p-4" data-testid="dl9-explanation">
+            <div class="border metro-card p-4" data-testid="dl9-explanation">
               <h4 class="font-semibold text-green-600 mb-3">DL9 Driver License Medical</h4>
               <div class="space-y-2 text-sm">
                 <p><strong>Alternative option:</strong> Use existing NZ driver license medical</p>
@@ -282,7 +282,7 @@
           </div>
 
           <!-- Cost Comparison -->
-          <div class="bg-gray-50 p-4 rounded-lg mb-6" data-testid="medical-cost-comparison">
+          <div class="bg-gray-50 p-4 metro-card mb-6" data-testid="medical-cost-comparison">
             <h4 class="font-semibold mb-3">💰 Cost Comparison</h4>
             <div class="grid grid-cols-2 gap-4 text-sm">
               <div>
@@ -297,7 +297,7 @@
           </div>
 
           <!-- Eligibility Requirements -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="medical-eligibility-info">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="medical-eligibility-info">
             <h4 class="font-semibold text-blue-800 mb-3">✅ Eligibility Requirements</h4>
             <div class="text-blue-700 text-sm space-y-1">
               <p>• Must be at least 17 years old for PPL training</p>
@@ -309,7 +309,7 @@
           </div>
 
           <!-- Next Steps -->
-          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="medical-next-steps">
+          <div class="bg-green-50 p-4 metro-card mb-6" data-testid="medical-next-steps">
             <h4 class="font-semibold text-green-800 mb-3">🎯 Next Steps</h4>
             <div class="text-green-700 text-sm space-y-2">
               <p><strong>1. Choose your option:</strong> Decide between Class 2 or DL9 based on your needs</p>
@@ -339,7 +339,7 @@
           <h3 class="text-xl font-bold mb-4">📚 Theory Exam Requirements</h3>
           
           <!-- Exam Format Info -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="exam-format-info">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="exam-format-info">
             <h4 class="font-semibold text-blue-800 mb-2">📋 Exam Format</h4>
             <div class="text-blue-700 text-sm grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -359,7 +359,7 @@
 
           <!-- 6 Exam Subjects -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="border rounded-lg p-4" data-testid="air-law-explanation">
+            <div class="border metro-card p-4" data-testid="air-law-explanation">
               <h4 class="font-semibold text-purple-600 mb-2">📜 Air Law</h4>
               <p class="text-sm text-gray-600 mb-2">Aviation regulations, airspace, and legal requirements</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -370,7 +370,7 @@
               </ul>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="navigation-explanation">
+            <div class="border metro-card p-4" data-testid="navigation-explanation">
               <h4 class="font-semibold text-blue-600 mb-2">🧭 Navigation</h4>
               <p class="text-sm text-gray-600 mb-2">Chart reading, flight planning, and navigation techniques</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -381,7 +381,7 @@
               </ul>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="technical-knowledge-explanation">
+            <div class="border metro-card p-4" data-testid="technical-knowledge-explanation">
               <h4 class="font-semibold text-green-600 mb-2">🔧 Technical Knowledge</h4>
               <p class="text-sm text-gray-600 mb-2">Aircraft systems, engines, and performance</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -392,7 +392,7 @@
               </ul>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="human-factors-explanation">
+            <div class="border metro-card p-4" data-testid="human-factors-explanation">
               <h4 class="font-semibold text-orange-600 mb-2">🧠 Human Factors</h4>
               <p class="text-sm text-gray-600 mb-2">Aviation psychology, decision making, and safety</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -403,7 +403,7 @@
               </ul>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="meteorology-explanation">
+            <div class="border metro-card p-4" data-testid="meteorology-explanation">
               <h4 class="font-semibold text-indigo-600 mb-2">🌤️ Meteorology</h4>
               <p class="text-sm text-gray-600 mb-2">Weather theory, forecasting, and interpretation</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -414,7 +414,7 @@
               </ul>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="radio-telephony-explanation">
+            <div class="border metro-card p-4" data-testid="radio-telephony-explanation">
               <h4 class="font-semibold text-red-600 mb-2">📻 Radio Telephony</h4>
               <p class="text-sm text-gray-600 mb-2">Communication procedures and phraseology</p>
               <ul class="text-xs text-gray-600 space-y-1">
@@ -427,7 +427,7 @@
           </div>
 
           <!-- Study Resources -->
-          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="theory-study-resources">
+          <div class="bg-green-50 p-4 metro-card mb-6" data-testid="theory-study-resources">
             <h4 class="font-semibold text-green-800 mb-3">📖 Study Resources</h4>
             <div class="text-green-700 text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -452,7 +452,7 @@
           </div>
 
           <!-- Booking Information -->
-          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="exam-booking-info">
+          <div class="bg-yellow-50 p-4 metro-card mb-6" data-testid="exam-booking-info">
             <h4 class="font-semibold text-yellow-800 mb-2">📅 Booking Your Exams</h4>
             <div class="text-yellow-700 text-sm">
               <p class="mb-2">Theory exams are conducted at approved testing centres throughout New Zealand.</p>
@@ -481,7 +481,7 @@
           <h3 class="text-xl font-bold mb-4">⏱️ Flight Hours Requirements</h3>
           
           <!-- Minimum Hours -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="minimum-hours-explanation">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="minimum-hours-explanation">
             <h4 class="font-semibold text-blue-800 mb-2">📊 Minimum Hour Requirements</h4>
             <div class="text-blue-700">
               <p class="mb-2"><strong>Total Minimum:</strong> 50 hours flight time</p>
@@ -491,7 +491,7 @@
 
           <!-- Hour Types Breakdown -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border rounded-lg p-4" data-testid="dual-hours-explanation">
+            <div class="border metro-card p-4" data-testid="dual-hours-explanation">
               <h4 class="font-semibold text-green-600 mb-2">👨‍✈️ Dual Instruction Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 25 hours with instructor</p>
@@ -506,7 +506,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="solo-hours-explanation">
+            <div class="border metro-card p-4" data-testid="solo-hours-explanation">
               <h4 class="font-semibold text-purple-600 mb-2">🦅 Solo Flight Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 15 hours solo</p>
@@ -520,7 +520,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4 md:col-span-2" data-testid="cross-country-explanation">
+            <div class="border metro-card p-4 md:col-span-2" data-testid="cross-country-explanation">
               <h4 class="font-semibold text-orange-600 mb-2">🗺️ Cross-Country Requirements</h4>
               <div class="text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -545,7 +545,7 @@
 
           <!-- NZ-Specific Requirements -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-green-50 p-4 rounded-lg" data-testid="nz-terrain-awareness-info">
+            <div class="bg-green-50 p-4 metro-card" data-testid="nz-terrain-awareness-info">
               <h4 class="font-semibold text-green-800 mb-2">🏔️ NZ Terrain Awareness</h4>
               <div class="text-green-700 text-sm">
                 <p class="mb-2">New Zealand's mountainous terrain requires specific training:</p>
@@ -559,7 +559,7 @@
               </div>
             </div>
 
-            <div class="bg-purple-50 p-4 rounded-lg" data-testid="controlled-airspace-info">
+            <div class="bg-purple-50 p-4 metro-card" data-testid="controlled-airspace-info">
               <h4 class="font-semibold text-purple-800 mb-2">🛂 Controlled Airspace</h4>
               <div class="text-purple-700 text-sm">
                 <p class="mb-2">Training must include controlled airspace operations:</p>
@@ -575,7 +575,7 @@
           </div>
 
           <!-- Hour Logging Guidance -->
-          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="hour-logging-guidance">
+          <div class="bg-yellow-50 p-4 metro-card mb-6" data-testid="hour-logging-guidance">
             <h4 class="font-semibold text-yellow-800 mb-2">📝 Hour Logging Guidelines</h4>
             <div class="text-yellow-700 text-sm space-y-2">
               <p><strong>What Counts:</strong> All flight time from engine start to engine stop</p>
@@ -605,7 +605,7 @@
           
           <!-- FPP Components -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border rounded-lg p-4" data-testid="fpp-oral-exam-info">
+            <div class="border metro-card p-4" data-testid="fpp-oral-exam-info">
               <h4 class="font-semibold text-blue-600 mb-2">🗣️ Oral Examination</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Duration:</strong> 30-60 minutes</p>
@@ -620,7 +620,7 @@
               </div>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="fpp-flight-test-info">
+            <div class="border metro-card p-4" data-testid="fpp-flight-test-info">
               <h4 class="font-semibold text-green-600 mb-2">✈️ Practical Flight Test</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Duration:</strong> 90-120 minutes</p>
@@ -637,7 +637,7 @@
           </div>
 
           <!-- Preparation Tips -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="fpp-preparation-tips">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="fpp-preparation-tips">
             <h4 class="font-semibold text-blue-800 mb-3">📚 Preparation Tips</h4>
             <div class="text-blue-700 text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -662,7 +662,7 @@
           </div>
 
           <!-- Required Documents -->
-          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="fpp-required-documents">
+          <div class="bg-green-50 p-4 metro-card mb-6" data-testid="fpp-required-documents">
             <h4 class="font-semibold text-green-800 mb-2">📄 Required Documents</h4>
             <div class="text-green-700 text-sm grid grid-cols-2 gap-4">
               <div>
@@ -687,7 +687,7 @@
           </div>
 
           <!-- Examiner Information -->
-          <div class="bg-purple-50 p-4 rounded-lg mb-6" data-testid="fpp-examiner-info">
+          <div class="bg-purple-50 p-4 metro-card mb-6" data-testid="fpp-examiner-info">
             <h4 class="font-semibold text-purple-800 mb-2">👨‍✈️ About Your Examiner</h4>
             <div class="text-purple-700 text-sm">
               <p class="mb-2">Your flight test will be conducted by a CAA authorised examiner who:</p>
@@ -701,7 +701,7 @@
           </div>
 
           <!-- Cost Information -->
-          <div class="bg-orange-50 p-4 rounded-lg mb-6" data-testid="fpp-cost-info">
+          <div class="bg-orange-50 p-4 metro-card mb-6" data-testid="fpp-cost-info">
             <h4 class="font-semibold text-orange-800 mb-2">💰 Cost Information</h4>
             <div class="text-orange-700 text-sm space-y-2">
               <p><strong>Typical FPP Costs:</strong></p>

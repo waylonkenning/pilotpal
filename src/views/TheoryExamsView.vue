@@ -48,27 +48,27 @@
         <h2 class="text-xl font-semibold mb-4 text-blue-600">📊 Exam Information</h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="bg-blue-50 p-4 rounded-lg" data-testid="pass-requirement">
+          <div class="bg-blue-50 p-4 metro-card" data-testid="pass-requirement">
             <div class="font-semibold text-blue-800 mb-2">Pass Mark</div>
             <div class="text-blue-700">70% minimum to pass each subject</div>
           </div>
           
-          <div class="bg-green-50 p-4 rounded-lg">
+          <div class="bg-green-50 p-4 metro-card">
             <div class="font-semibold text-green-800 mb-2">Exam Format</div>
             <div class="text-green-700">Multiple choice questions, computer-based</div>
           </div>
           
-          <div class="bg-orange-50 p-4 rounded-lg">
+          <div class="bg-orange-50 p-4 metro-card">
             <div class="font-semibold text-orange-800 mb-2">Validity</div>
             <div class="text-orange-700">Theory passes are valid for license application</div>
           </div>
           
-          <div class="bg-purple-50 p-4 rounded-lg">
+          <div class="bg-purple-50 p-4 metro-card">
             <div class="font-semibold text-purple-800 mb-2">Cost</div>
             <div class="text-purple-700">Approximately $65 per exam</div>
           </div>
           
-          <div class="bg-red-50 p-4 rounded-lg" data-testid="retest-policy">
+          <div class="bg-red-50 p-4 metro-card" data-testid="retest-policy">
             <div class="font-semibold text-red-800 mb-2">Retest Policy</div>
             <div class="text-red-700">Up to 3 attempts within 3 months between first and last attempt</div>
           </div>
@@ -98,14 +98,14 @@
           </div>
 
           <!-- Exam Status -->
-          <div v-if="exam.passed" class="bg-green-50 p-4 rounded-lg border border-green-200 mb-4">
+          <div v-if="exam.passed" class="bg-green-50 p-4 metro-card border border-green-200 mb-4">
             <div class="font-semibold text-green-800 mb-1">✅ Passed</div>
             <div class="text-green-700 text-sm">
               Last attempt: {{ exam.attempts.length > 0 ? formatScore(exam.attempts[exam.attempts.length - 1]) : 'N/A' }}
             </div>
           </div>
 
-          <div v-else-if="exam.attempts.length > 0" class="bg-orange-50 p-4 rounded-lg border border-orange-200 mb-4">
+          <div v-else-if="exam.attempts.length > 0" class="bg-orange-50 p-4 metro-card border border-orange-200 mb-4">
             <div class="font-semibold text-orange-800 mb-1">📋 Previous Attempts</div>
             <div class="space-y-1">
               <div v-for="(attempt, index) in exam.attempts" :key="index" class="text-orange-700 text-sm">
@@ -114,7 +114,7 @@
             </div>
           </div>
 
-          <div v-else class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+          <div v-else class="bg-blue-50 p-4 metro-card border border-blue-200 mb-4">
             <div class="font-semibold text-blue-800 mb-1">📚 Ready to Study</div>
             <div class="text-blue-700 text-sm">No attempts yet - schedule your first exam</div>
           </div>
@@ -217,7 +217,7 @@
               >
             </div>
 
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="bg-blue-50 p-4 metro-card">
               <div class="font-semibold text-blue-800 mb-2">Pass Status</div>
               <div class="text-blue-700">
                 {{ parseFloat(attemptForm.score) >= 70 ? '✅ Pass (70%+)' : '❌ Fail (below 70%)' }}
@@ -276,7 +276,7 @@
           <h3 class="text-xl font-bold mb-4">📚 Theory Exam Requirements</h3>
           
           <!-- Exam Format Info -->
-          <div class="bg-blue-50 p-4 rounded-lg mb-6" data-testid="exam-format-info">
+          <div class="bg-blue-50 p-4 metro-card mb-6" data-testid="exam-format-info">
             <h4 class="font-semibold text-blue-800 mb-2">📋 Exam Format</h4>
             <div class="text-blue-700 text-sm grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -296,39 +296,39 @@
 
           <!-- 6 Exam Subjects -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="border rounded-lg p-4" data-testid="air-law-explanation">
+            <div class="border metro-card p-4" data-testid="air-law-explanation">
               <h4 class="font-semibold text-purple-600 mb-2">📜 Air Law</h4>
               <p class="text-sm text-gray-600">Aviation regulations, airspace, and legal requirements</p>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="navigation-explanation">
+            <div class="border metro-card p-4" data-testid="navigation-explanation">
               <h4 class="font-semibold text-blue-600 mb-2">🧭 Navigation</h4>
               <p class="text-sm text-gray-600">Chart reading, flight planning, and navigation techniques</p>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="technical-knowledge-explanation">
+            <div class="border metro-card p-4" data-testid="technical-knowledge-explanation">
               <h4 class="font-semibold text-green-600 mb-2">🔧 Technical Knowledge</h4>
               <p class="text-sm text-gray-600">Aircraft systems, engines, and performance</p>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="human-factors-explanation">
+            <div class="border metro-card p-4" data-testid="human-factors-explanation">
               <h4 class="font-semibold text-orange-600 mb-2">🧠 Human Factors</h4>
               <p class="text-sm text-gray-600">Aviation psychology, decision making, and safety</p>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="meteorology-explanation">
+            <div class="border metro-card p-4" data-testid="meteorology-explanation">
               <h4 class="font-semibold text-indigo-600 mb-2">🌤️ Meteorology</h4>
               <p class="text-sm text-gray-600">Weather theory, forecasting, and interpretation</p>
             </div>
 
-            <div class="border rounded-lg p-4" data-testid="radio-telephony-explanation">
+            <div class="border metro-card p-4" data-testid="radio-telephony-explanation">
               <h4 class="font-semibold text-red-600 mb-2">📻 Radio Telephony</h4>
               <p class="text-sm text-gray-600">Communication procedures and phraseology</p>
             </div>
           </div>
 
           <!-- Study Resources -->
-          <div class="bg-green-50 p-4 rounded-lg mb-6" data-testid="theory-study-resources">
+          <div class="bg-green-50 p-4 metro-card mb-6" data-testid="theory-study-resources">
             <h4 class="font-semibold text-green-800 mb-3">📖 Study Resources</h4>
             <div class="text-green-700 text-sm">
               <p>Official CAA resources, online practice exams, and aviation textbooks are recommended for preparation.</p>
@@ -336,7 +336,7 @@
           </div>
 
           <!-- Booking Information -->
-          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="exam-booking-info">
+          <div class="bg-yellow-50 p-4 metro-card mb-6" data-testid="exam-booking-info">
             <h4 class="font-semibold text-yellow-800 mb-2">📅 Booking Your Exams</h4>
             <div class="text-yellow-700 text-sm">
               <p>Theory exams are conducted at approved testing centres. Contact your local testing centre to schedule exams.</p>

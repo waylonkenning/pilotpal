@@ -66,7 +66,7 @@
             
             <div class="space-y-4 mb-6">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                <div class="w-8 h-8 bg-blue-500 text-white flex items-center justify-center font-bold">1</div>
                 <div>
                   <div class="font-semibold">Complete lessons in order</div>
                   <div class="text-sm text-gray-600">Just like Couch to 5K - no skipping ahead! Each lesson builds on the previous one.</div>
@@ -74,7 +74,7 @@
               </div>
               
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                <div class="w-8 h-8 bg-green-500 text-white flex items-center justify-center font-bold">2</div>
                 <div>
                   <div class="font-semibold">Earn badges for achievements</div>
                   <div class="text-sm text-gray-600">First Flight, Solo Wings, Theory Master - celebrate every milestone!</div>
@@ -82,7 +82,7 @@
               </div>
               
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                <div class="w-8 h-8 bg-orange-500 text-white flex items-center justify-center font-bold">3</div>
                 <div>
                   <div class="font-semibold">Track regulatory requirements</div>
                   <div class="text-sm text-gray-600">Medical certificates, theory exams, solo endorsements - we'll guide you through it all.</div>
@@ -90,7 +90,7 @@
               </div>
               
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                <div class="w-8 h-8 bg-purple-500 text-white flex items-center justify-center font-bold">4</div>
                 <div>
                   <div class="font-semibold">See what's next</div>
                   <div class="text-sm text-gray-600">Always know your next step - no confusion, just clear progress.</div>
@@ -98,7 +98,7 @@
               </div>
             </div>
 
-            <div class="bg-blue-50 p-4 rounded-lg mb-6">
+            <div class="bg-blue-50 p-4 metro-card mb-6">
               <div class="font-semibold text-blue-800 mb-2">🇳🇿 Built for New Zealand</div>
               <div class="text-sm text-blue-700">
                 Includes NZ-specific requirements like optional night flying, DL9 medical certificates, 

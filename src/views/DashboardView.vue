@@ -345,7 +345,7 @@
                   <input 
                     type="checkbox" 
                     v-model="demonstratedSkills[skill.id]"
-                    class="w-4 h-4 text-blue-600 rounded"
+                    class="w-4 h-4 text-blue-600"
                     :data-testid="`skill-${skill.id}`"
                   >
                   <div>
@@ -388,10 +388,10 @@
           
           <!-- Celebration Particles -->
           <div class="absolute inset-0 pointer-events-none z-10" data-testid="celebration-particles">
-            <div class="animate-ping absolute top-4 left-4 w-2 h-2 bg-yellow-400 rounded-full opacity-100"></div>
-            <div class="animate-ping absolute top-8 right-6 w-3 h-3 bg-blue-400 rounded-full opacity-100" style="animation-delay: 0.5s;"></div>
-            <div class="animate-ping absolute bottom-12 left-8 w-2 h-2 bg-green-400 rounded-full opacity-100" style="animation-delay: 1s;"></div>
-            <div class="animate-ping absolute bottom-6 right-4 w-3 h-3 bg-red-400 rounded-full opacity-100" style="animation-delay: 1.5s;"></div>
+            <div class="animate-ping absolute top-4 left-4 w-2 h-2 bg-yellow-400 opacity-100"></div>
+            <div class="animate-ping absolute top-8 right-6 w-3 h-3 bg-blue-400 opacity-100" style="animation-delay: 0.5s;"></div>
+            <div class="animate-ping absolute bottom-12 left-8 w-2 h-2 bg-green-400 opacity-100" style="animation-delay: 1s;"></div>
+            <div class="animate-ping absolute bottom-6 right-4 w-3 h-3 bg-red-400 opacity-100" style="animation-delay: 1.5s;"></div>
           </div>
           
           <h3 class="text-2xl font-bold mb-4">Lesson Complete!</h3>
@@ -411,8 +411,8 @@
             <!-- Progress Bar Animation -->
             <div class="mt-4" data-testid="progress-bar-animation">
               <div class="text-sm mb-1">Overall Progress</div>
-              <div class="w-full bg-gray-200 rounded-full h-3">
-                <div class="bg-blue-600 h-3 rounded-full transition-all duration-1000 animate-pulse"
+              <div class="w-full bg-gray-200 h-3">
+                <div class="bg-blue-600 h-3 transition-all duration-1000 animate-pulse"
                      :style="{ width: ((progress.completedLessons.length / 27) * 100) + '%' }"></div>
               </div>
             </div>
@@ -436,7 +436,7 @@
           </p>
           
           <div class="space-y-4" data-testid="medical-options">
-            <div class="border rounded-lg p-4">
+            <div class="border p-4">
               <h4 class="font-semibold text-blue-600 mb-2">Class 2 Medical Certificate</h4>
               <p class="text-gray-700 mb-2">
                 Full aviation medical examination by CAA-approved doctor.
@@ -446,7 +446,7 @@
               </div>
             </div>
             
-            <div class="border rounded-lg p-4">
+            <div class="border p-4">
               <h4 class="font-semibold text-green-600 mb-2">DL9 Driver License Medical</h4>
               <p class="text-gray-700 mb-2">
                 Use your existing NZ driver license medical if valid. More cost-effective option.
@@ -476,28 +476,28 @@
           <h3 class="text-xl font-bold mb-4">📖 Dashboard Help</h3>
           
           <div class="space-y-4" data-testid="dashboard-help-content">
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="bg-blue-50 p-4">
               <h4 class="font-semibold text-blue-800 mb-2">🎯 Today's Focus</h4>
               <p class="text-blue-700 text-sm">
                 Your dashboard shows your current lesson and what you need to prepare. Complete lessons to progress through your PPL training.
               </p>
             </div>
             
-            <div class="bg-green-50 p-4 rounded-lg">
+            <div class="bg-green-50 p-4">
               <h4 class="font-semibold text-green-800 mb-2">📊 Progress Tracking</h4>
               <p class="text-green-700 text-sm">
                 Monitor your flight hours, achievements, and upcoming requirements. The app tracks your progress automatically as you complete lessons.
               </p>
             </div>
             
-            <div class="bg-purple-50 p-4 rounded-lg">
+            <div class="bg-purple-50 p-4">
               <h4 class="font-semibold text-purple-800 mb-2">🏆 Achievements</h4>
               <p class="text-purple-700 text-sm">
                 Earn badges for completing milestones like your first solo flight, navigation flights, and theory exams.
               </p>
             </div>
             
-            <div class="bg-orange-50 p-4 rounded-lg">
+            <div class="bg-orange-50 p-4">
               <h4 class="font-semibold text-orange-800 mb-2">⚠️ Requirements</h4>
               <p class="text-orange-700 text-sm">
                 Keep track of upcoming requirements like medical certificates, theory exams, and minimum flight hours.

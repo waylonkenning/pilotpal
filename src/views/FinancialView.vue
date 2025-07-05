@@ -48,9 +48,9 @@
           <div class="text-2xl font-bold mb-2" :class="budgetProgress > 100 ? 'text-red-600' : 'text-blue-600'">
             {{ budgetProgress.toFixed(1) }}%
           </div>
-          <div class="w-full bg-gray-200 rounded-full h-3" data-testid="spending-progress-bar">
+          <div class="w-full bg-gray-200 h-3" data-testid="spending-progress-bar">
             <div 
-              class="h-3 rounded-full transition-all duration-300" 
+              class="h-3 transition-all duration-300" 
               :class="budgetProgress > 100 ? 'bg-red-600' : 'bg-blue-600'"
               :style="{ width: Math.min(budgetProgress, 100) + '%' }"
             ></div>
@@ -64,7 +64,7 @@
           v-for="tab in tabs" 
           :key="tab.id"
           @click="activeTab = tab.id"
-          class="px-4 py-2 font-medium rounded-t-lg transition-colors"
+          class="px-4 py-2 font-medium transition-colors"
           :class="activeTab === tab.id ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'"
           :data-testid="tab.id + '-tab'"
         >
@@ -167,7 +167,7 @@
             </div>
 
             <!-- Export Statistics -->
-            <div v-if="filteredExpensesForExport.length > 0" class="bg-blue-50 p-4 rounded-lg mb-4" data-testid="export-stats">
+            <div v-if="filteredExpensesForExport.length > 0" class="bg-blue-50 p-4 metro-card mb-4" data-testid="export-stats">
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                 <div>
                   <div class="text-2xl font-bold text-blue-600" data-testid="export-total-expenses">
@@ -219,7 +219,7 @@
             </div>
 
             <!-- Success Message -->
-            <div v-if="exportMessage" class="mt-4 p-3 rounded-lg" :class="exportMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'" data-testid="export-success-message">
+            <div v-if="exportMessage" class="mt-4 p-3 metro-card" :class="exportMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'" data-testid="export-success-message">
               {{ exportMessage.text }}
             </div>
           </div>
@@ -234,7 +234,7 @@
               <div 
                 v-for="expense in sortedExpenses" 
                 :key="expense.id"
-                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                class="flex items-center justify-between p-3 bg-gray-50 metro-card"
                 data-testid="expense-item"
               >
                 <div class="flex items-center gap-3">
@@ -279,25 +279,25 @@
             <div class="text-2xl font-bold text-blue-600 mb-4">$25,000 - $35,000</div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-blue-50 p-4 rounded-lg" data-testid="flight-training-budget">
+              <div class="bg-blue-50 p-4 metro-card" data-testid="flight-training-budget">
                 <div class="font-semibold text-blue-800 mb-2">Flight Training</div>
                 <div class="text-blue-700">$18,000 - $25,000</div>
                 <div class="text-sm text-blue-600">40-50 hours @ $360-500/hour</div>
               </div>
               
-              <div class="bg-purple-50 p-4 rounded-lg" data-testid="theory-exam-budget">
+              <div class="bg-purple-50 p-4 metro-card" data-testid="theory-exam-budget">
                 <div class="font-semibold text-purple-800 mb-2">Theory Exams</div>
                 <div class="text-purple-700">$390</div>
                 <div class="text-sm text-purple-600">6 exams @ $65 each</div>
               </div>
               
-              <div class="bg-green-50 p-4 rounded-lg" data-testid="medical-cert-budget">
+              <div class="bg-green-50 p-4 metro-card" data-testid="medical-cert-budget">
                 <div class="font-semibold text-green-800 mb-2">Medical Certificate</div>
                 <div class="text-green-700">$420 - $1,070</div>
                 <div class="text-sm text-green-600">Class 2 or DL9 option</div>
               </div>
               
-              <div class="bg-orange-50 p-4 rounded-lg">
+              <div class="bg-orange-50 p-4 metro-card">
                 <div class="font-semibold text-orange-800 mb-2">Equipment & Misc</div>
                 <div class="text-orange-700">$2,000 - $4,000</div>
                 <div class="text-sm text-orange-600">Headset, charts, flight test</div>
@@ -399,7 +399,7 @@
           <!-- StudyLink Information -->
           <div class="metro-card mb-6" data-testid="studylink-info">
             <h3 class="text-lg font-semibold mb-4">🎓 StudyLink Student Loan</h3>
-            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+            <div class="bg-blue-50 p-4 metro-card mb-4">
               <div class="text-2xl font-bold text-blue-600 mb-2" data-testid="studylink-amount">
                 Up to $35,000
               </div>
@@ -461,9 +461,9 @@
                     <span>{{ category.name }}</span>
                     <span>${{ getCategoryTotal(category.id).toFixed(0) }}</span>
                   </div>
-                  <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="w-full bg-gray-200 h-2">
                     <div 
-                      class="h-2 rounded-full transition-all duration-300"
+                      class="h-2 transition-all duration-300"
                       :class="category.color"
                       :style="{ width: getCategoryPercentage(category.id) + '%' }"
                     ></div>
@@ -653,7 +653,7 @@
             </div>
           </div>
           
-          <div class="bg-blue-50 p-4 rounded-lg mt-4">
+          <div class="bg-blue-50 p-4 metro-card mt-4">
             <div class="font-semibold text-blue-800 mb-2">Next Steps</div>
             <div class="text-blue-700 text-sm">
               Contact StudyLink directly or visit studylink.govt.nz to apply and confirm your eligibility.
@@ -670,7 +670,7 @@
     </div>
 
     <!-- Export Success Toast -->
-    <div v-if="showExportSuccess" class="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg" data-testid="export-success">
+    <div v-if="showExportSuccess" class="fixed bottom-4 right-4 bg-green-500 text-white p-4 metro-card shadow-lg" data-testid="export-success">
       <div class="flex items-center gap-2">
         <div>✅</div>
         <div>Data exported successfully!</div>
@@ -684,28 +684,28 @@
           <h3 class="text-xl font-bold mb-4">💰 Financial Help</h3>
           
           <div class="space-y-4" data-testid="financial-help-content">
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="bg-blue-50 p-4 metro-card">
               <h4 class="font-semibold text-blue-800 mb-2">📊 Budget Tracking</h4>
               <p class="text-blue-700 text-sm">
                 Set realistic budgets for each category and monitor your spending to stay on track. PPL training costs typically range from $25,000-$35,000 NZD.
               </p>
             </div>
             
-            <div class="bg-green-50 p-4 rounded-lg">
+            <div class="bg-green-50 p-4 metro-card">
               <h4 class="font-semibold text-green-800 mb-2">💳 Expense Categories</h4>
               <p class="text-green-700 text-sm">
                 Track expenses across Flight Training, Theory Exams, Medical Certificate, Equipment, and FPP costs. This helps identify areas to optimize spending.
               </p>
             </div>
             
-            <div class="bg-orange-50 p-4 rounded-lg">
+            <div class="bg-orange-50 p-4 metro-card">
               <h4 class="font-semibold text-orange-800 mb-2">📈 Cost Management</h4>
               <p class="text-orange-700 text-sm">
                 Monitor your cost per flight hour and look for trends. Consistent training reduces overall costs by minimizing skill decay between lessons.
               </p>
             </div>
             
-            <div class="bg-purple-50 p-4 rounded-lg">
+            <div class="bg-purple-50 p-4 metro-card">
               <h4 class="font-semibold text-purple-800 mb-2">📋 Export & Records</h4>
               <p class="text-purple-700 text-sm">
                 Export your financial data for tax purposes or loan applications. Keep detailed records of all training-related expenses.

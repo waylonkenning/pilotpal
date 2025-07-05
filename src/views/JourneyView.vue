@@ -31,7 +31,7 @@
           <div class="flex justify-between relative z-10">
             <div v-for="(phase, index) in trainingPhases" :key="phase.id" 
                  class="flex flex-col items-center">
-              <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-2 transition-all duration-300 cursor-pointer"
+              <div class="w-16 h-16 flex items-center justify-center text-2xl mb-2 transition-all duration-300 cursor-pointer"
                    :class="getPhaseIconClass(index)"
                    :data-testid="phase.id + '-phase-icon'"
                    @mouseenter="showPhaseTooltip(phase, $event)"
@@ -55,7 +55,7 @@
           <div class="text-sm font-medium mb-3">Lesson Progress ({{ progress.completedLessons.length }}/27)</div>
           <div class="flex flex-wrap gap-2">
             <div v-for="lesson in 27" :key="lesson"
-                 class="w-8 h-8 rounded-full cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
+                 class="w-8 h-8 cursor-pointer transition-transform hover:scale-125 flex items-center justify-center text-xs font-bold border-2"
                  :class="progress.completedLessons.includes(lesson) ? 'bg-green-500 text-white border-green-600' : 
                          lesson === progress.currentLesson ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-300 text-gray-600 border-gray-400'"
                  :data-testid="`lesson-${lesson}-node`"
@@ -122,15 +122,15 @@
             <!-- Legend -->
             <div class="grid grid-cols-3 gap-2 text-sm">
               <div class="flex items-center gap-1">
-                <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                <div class="w-3 h-3 bg-blue-500"></div>
                 <span>Dual: {{ progress.flightHours.dual }}h</span>
               </div>
               <div class="flex items-center gap-1">
-                <div class="w-3 h-3 bg-green-500 rounded"></div>
+                <div class="w-3 h-3 bg-green-500"></div>
                 <span>Solo: {{ progress.flightHours.solo }}h</span>
               </div>
               <div class="flex items-center gap-1">
-                <div class="w-3 h-3 bg-yellow-500 rounded"></div>
+                <div class="w-3 h-3 bg-yellow-500"></div>
                 <span>XC: {{ progress.flightHours.crossCountry }}h</span>
               </div>
             </div>
@@ -182,23 +182,23 @@
         <div class="mb-6" data-testid="lesson-phase-indicators">
           <div class="flex flex-wrap gap-2 mb-4">
             <div class="flex items-center gap-2 px-3 py-1 bg-blue-100 text-sm" data-testid="foundation-phase-indicator">
-              <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span class="w-2 h-2 bg-blue-500"></span>
               <span>Foundation (1-5)</span>
             </div>
             <div class="flex items-center gap-2 px-3 py-1 bg-purple-100 text-sm">
-              <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span class="w-2 h-2 bg-purple-500"></span>
               <span>Circuit (6-12)</span>
             </div>
             <div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-sm">
-              <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span class="w-2 h-2 bg-green-500"></span>
               <span>Navigation (13-20)</span>
             </div>
             <div class="flex items-center gap-2 px-3 py-1 bg-orange-100 text-sm">
-              <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+              <span class="w-2 h-2 bg-orange-500"></span>
               <span>Advanced (21-25)</span>
             </div>
             <div class="flex items-center gap-2 px-3 py-1 bg-red-100 text-sm">
-              <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+              <span class="w-2 h-2 bg-red-500"></span>
               <span>Test (26-27)</span>
             </div>
           </div>
@@ -221,7 +221,7 @@
           <!-- Lesson Nodes -->
           <div class="relative" :style="{ 'z-index': 2, height: getMapHeight() + 'px' }">
             <div v-for="lessonNum in 27" :key="lessonNum"
-                 class="absolute rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 cursor-pointer hover:scale-110 focus:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                 class="absolute flex items-center justify-center font-bold border-2 transition-all duration-300 cursor-pointer hover:scale-110 focus:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                  :class="getResponsiveLessonNodeClass(lessonNum)"
                  :style="getNodeStyle(lessonNum)"
                  :data-testid="`lesson-${lessonNum}-node`"
@@ -242,15 +242,15 @@
         <!-- Mobile Legend -->
         <div class="mt-4 grid grid-cols-3 gap-2 text-xs" data-testid="lesson-status-legend">
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+            <div class="w-4 h-4 bg-green-500"></div>
             <span>Completed</span>
           </div>
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-blue-500 rounded-full ring-2 ring-blue-400"></div>
+            <div class="w-4 h-4 bg-blue-500 ring-2 ring-blue-400"></div>
             <span>Current</span>
           </div>
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-gray-200 rounded-full"></div>
+            <div class="w-4 h-4 bg-gray-200"></div>
             <span>Upcoming</span>
           </div>
         </div>
@@ -258,7 +258,7 @@
       
       <!-- Lesson Details Modal -->
       <div v-if="showLessonModal && selectedLesson" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-testid="lesson-details-modal" @click="closeLessonModal">
-        <div class="bg-white max-w-md w-full p-6" @click.stop>
+        <div class="bg-white max-w-md w-full p-6 metro-card" @click.stop>
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-xl font-bold">{{ getLessonTitle(selectedLesson) }}</h3>
             <button @click="closeLessonModal" class="text-gray-400 hover:text-gray-600">
@@ -286,14 +286,14 @@
               <h4 class="font-semibold text-gray-700">Prerequisites</h4>
               <ul class="text-gray-600 text-sm space-y-1">
                 <li v-for="prereq in getLessonPrerequisites(selectedLesson)" :key="prereq" class="flex items-center gap-2">
-                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  <span class="w-1.5 h-1.5 bg-gray-400"></span>
                   {{ prereq }}
                 </li>
               </ul>
             </div>
           </div>
           <div class="mt-6 flex justify-end">
-            <button @click="closeLessonModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+            <button @click="closeLessonModal" class="px-4 py-2 bg-blue-500 text-white metro-button metro-button-primary transition-colors">
               Close
             </button>
           </div>
@@ -311,12 +311,12 @@
                 <span>Flight Training</span>
                 <span>${{ getCategorySpending('flight-training') }} / $25,000</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-4 cursor-pointer" 
+              <div class="w-full bg-gray-200 h-4 cursor-pointer" 
                    data-testid="spending-progress-bar"
                    @mouseenter="showFinancialTooltip($event)"
                    @mouseleave="hideFinancialTooltip"
                    style="min-height: 16px; height: 16px; display: block; visibility: visible;">
-                <div class="h-4 rounded-full transition-all duration-300"
+                <div class="h-4 transition-all duration-300"
                      :class="getBudgetStatusColor('flight-training')"
                      :style="{ width: Math.max(getSpendingPercentage('flight-training', 25000), 10) + '%' }"></div>
               </div>
@@ -328,8 +328,8 @@
                 <span>Theory Exams</span>
                 <span>${{ getCategorySpending('theory-exam') }} / $390</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-4" data-testid="theory-exam-bar">
-                <div class="h-4 rounded-full transition-all duration-300"
+              <div class="w-full bg-gray-200 h-4" data-testid="theory-exam-bar">
+                <div class="h-4 transition-all duration-300"
                      :class="getBudgetStatusColor('theory-exam')"
                      :style="{ width: getSpendingPercentage('theory-exam', 390) + '%' }"></div>
               </div>
@@ -341,8 +341,8 @@
                 <span>Medical Certificate</span>
                 <span>${{ getCategorySpending('medical') }} / $1,070</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-4" data-testid="medical-cert-bar">
-                <div class="h-4 rounded-full transition-all duration-300"
+              <div class="w-full bg-gray-200 h-4" data-testid="medical-cert-bar">
+                <div class="h-4 transition-all duration-300"
                      :class="getBudgetStatusColor('medical')"
                      :style="{ width: getSpendingPercentage('medical', 1070) + '%' }"></div>
               </div>
@@ -350,7 +350,7 @@
           </div>
           
           <!-- Budget Status Indicator -->
-          <div class="mt-4 p-3 rounded-lg" :class="overallBudgetStatusClass" data-testid="budget-status-color">
+          <div class="mt-4 p-3 metro-card" :class="overallBudgetStatusClass" data-testid="budget-status-color">
             <div class="font-semibold">Overall Budget Status</div>
             <div class="text-sm">{{ overallBudgetMessage }}</div>
           </div>
@@ -367,7 +367,7 @@
         <h3 class="text-lg font-semibold mb-4">Requirements Status</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="requirements-status-grid">
           <!-- Medical Certificate -->
-          <div class="text-center p-4 rounded-lg border" :class="getRequirementStatusClass('medical')">
+          <div class="text-center p-4 metro-card border" :class="getRequirementStatusClass('medical')">
             <div class="text-3xl mb-2" data-testid="medical-cert-status-icon">
               {{ getRequirementIcon('medical') }}
             </div>
@@ -376,7 +376,7 @@
           </div>
           
           <!-- Theory Exams -->
-          <div class="text-center p-4 rounded-lg border cursor-pointer" 
+          <div class="text-center p-4 metro-card border cursor-pointer" 
                :class="getRequirementStatusClass('theory')"
                data-testid="theory-progress-card"
                @mouseenter="showTheoryTooltip($event)"
@@ -390,7 +390,7 @@
           </div>
           
           <!-- FPP Status -->
-          <div class="text-center p-4 rounded-lg border" :class="getRequirementStatusClass('fpp')">
+          <div class="text-center p-4 metro-card border" :class="getRequirementStatusClass('fpp')">
             <div class="text-3xl mb-2" data-testid="fpp-status-icon">
               {{ getRequirementIcon('fpp') }}
             </div>
@@ -399,7 +399,7 @@
           </div>
           
           <!-- Hours Status -->
-          <div class="text-center p-4 rounded-lg border" :class="getRequirementStatusClass('hours')">
+          <div class="text-center p-4 metro-card border" :class="getRequirementStatusClass('hours')">
             <div class="text-3xl mb-2">
               {{ getRequirementIcon('hours') }}
             </div>
@@ -411,15 +411,15 @@
         <!-- Status Legend -->
         <div class="flex justify-center gap-6 mt-6 text-sm">
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+            <div class="w-4 h-4 bg-red-100 border border-red-300"></div>
             <span data-testid="not-started-icon">Not Started</span>
           </div>
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+            <div class="w-4 h-4 bg-yellow-100 border border-yellow-300"></div>
             <span data-testid="in-progress-icon">In Progress</span>
           </div>
           <div class="flex items-center gap-2">
-            <div class="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
+            <div class="w-4 h-4 bg-green-100 border border-green-300"></div>
             <span>Completed</span>
           </div>
         </div>
@@ -430,7 +430,7 @@
         <h3 class="text-lg font-semibold mb-4">Achievement Showcase</h3>
         <div class="grid grid-cols-3 md:grid-cols-6 gap-4" data-testid="earned-badges-showcase">
           <div v-for="badge in allBadges" :key="badge.id"
-               class="text-center p-3 rounded-lg transition-all duration-300 cursor-pointer"
+               class="text-center p-3 metro-card transition-all duration-300 cursor-pointer"
                :class="progress.achievements.includes(badge.id) ? 'bg-yellow-50 border-2 border-yellow-300' : 'bg-gray-50 border border-gray-200'"
                :data-testid="`${badge.id}-badge`"
                @mouseenter="showAchievementTooltip(badge, $event)"
@@ -444,7 +444,7 @@
             
             <!-- Rarity Indicator -->
             <div v-if="progress.achievements.includes(badge.id)" 
-                 class="mt-2 px-2 py-1 rounded text-xs"
+                 class="mt-2 px-2 py-1 text-xs"
                  :class="getBadgeRarityClass(badge.rarity)"
                  data-testid="badge-rarity-indicator">
               {{ badge.rarity }}
@@ -453,7 +453,7 @@
         </div>
         
         <!-- Milestones Section -->
-        <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+        <div class="mt-6 p-4 bg-purple-50 metro-card">
           <div class="font-semibold text-purple-800 mb-2">Training Milestones</div>
           <div class="space-y-2">
             <div class="flex items-center gap-3 cursor-pointer"
@@ -470,7 +470,7 @@
         </div>
         
         <!-- Next Badge Progress -->
-        <div v-if="nextBadgeToUnlock" class="mt-6 p-4 bg-blue-50 rounded-lg" data-testid="next-badge-preview">
+        <div v-if="nextBadgeToUnlock" class="mt-6 p-4 bg-blue-50 metro-card" data-testid="next-badge-preview">
           <div class="font-semibold text-blue-800 mb-2">Next Badge to Unlock</div>
           <div class="flex items-center gap-4">
             <div class="text-4xl">{{ nextBadgeToUnlock.icon }}</div>
@@ -482,8 +482,8 @@
                   <span>Progress:</span>
                   <span data-testid="next-badge-progress">{{ getNextBadgeProgress() }}%</span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                <div class="w-full bg-gray-200 h-2">
+                  <div class="bg-blue-500 h-2 transition-all duration-300"
                        :style="{ width: getNextBadgeProgress() + '%' }"></div>
                 </div>
               </div>
@@ -508,25 +508,25 @@
           <!-- Map Loading State -->
           <div 
             v-if="mapLoading" 
-            class="absolute inset-0 flex items-center justify-center bg-blue-50 rounded-lg"
+            class="absolute inset-0 flex items-center justify-center bg-blue-50 metro-card"
             data-testid="map-loading"
           >
             <div class="text-center">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+              <div class="animate-spin h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
               <p class="text-gray-600">Loading aviation map...</p>
             </div>
           </div>
           
           <!-- Map Legend -->
-          <div class="absolute bottom-4 left-4 bg-white p-3 border-2 border-gray-200 z-10" data-testid="map-legend">
+          <div class="absolute bottom-4 left-4 bg-white p-3 border-2 border-gray-200 z-10 metro-card" data-testid="map-legend">
             <h4 class="font-semibold text-sm mb-2">Legend</h4>
             <div class="space-y-1 text-xs">
               <div class="flex items-center">
-                <div class="w-3 h-3 bg-blue-600 rounded-full mr-2"></div>
+                <div class="w-3 h-3 bg-blue-600 mr-2"></div>
                 <span>Airports</span>
               </div>
               <div class="flex items-center">
-                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <div class="w-3 h-3 bg-red-500 mr-2"></div>
                 <span>Training Areas</span>
               </div>
               <div class="flex items-center">
@@ -549,7 +549,7 @@
         <!-- Completion Timeline Visual -->
         <div class="mb-6" data-testid="completion-timeline-visual">
           <div class="text-sm font-medium mb-2">Estimated Completion Timeline</div>
-          <div class="relative h-12 bg-gray-100 rounded-lg overflow-hidden">
+          <div class="relative h-12 bg-gray-100 overflow-hidden">
             <!-- Timeline Animation -->
             <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 h-full transition-all duration-1000"
                  :style="{ width: (progress.completedLessons.length / 27) * 100 + '%' }"
@@ -567,8 +567,8 @@
             <div class="space-y-2">
               <div v-for="month in 6" :key="month" class="flex items-center gap-2">
                 <div class="text-xs w-16">Month {{ month }}</div>
-                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                  <div class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                <div class="flex-1 bg-gray-200 h-2">
+                  <div class="bg-blue-500 h-2 transition-all duration-300"
                        :style="{ width: Math.min(month * 15, 100) + '%' }"></div>
                 </div>
                 <div class="text-xs">{{ Math.min(month * 4, 27) }} lessons</div>
@@ -581,19 +581,19 @@
             <div class="text-sm font-medium mb-3" data-testid="seasonal-indicators">Seasonal Training Considerations</div>
             <div class="space-y-2 text-sm">
               <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-yellow-400"></div>
                 <span>Summer: Ideal conditions, longer days</span>
               </div>
               <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-orange-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-orange-400"></div>
                 <span>Autumn: Variable weather, good visibility</span>
               </div>
               <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-blue-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-blue-400"></div>
                 <span>Winter: Limited hours, weather delays</span>
               </div>
               <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                <div class="w-3 h-3 bg-green-400"></div>
                 <span>Spring: Improving conditions, turbulence</span>
               </div>
             </div>
@@ -604,17 +604,17 @@
         <div class="mt-6" data-testid="pace-comparison">
           <div class="text-sm font-medium mb-3">Training Pace Options</div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-3 border rounded-lg">
+            <div class="p-3 border metro-card">
               <div class="font-semibold text-green-600">Accelerated</div>
               <div class="text-sm text-gray-600">2-3 lessons/week</div>
               <div class="text-xs">Complete in 3-4 months</div>
             </div>
-            <div class="p-3 border rounded-lg bg-blue-50 border-blue-300">
+            <div class="p-3 border metro-card bg-blue-50 border-blue-300">
               <div class="font-semibold text-blue-600">Standard</div>
               <div class="text-sm text-gray-600">1-2 lessons/week</div>
               <div class="text-xs">Complete in 6-8 months</div>
             </div>
-            <div class="p-3 border rounded-lg">
+            <div class="p-3 border metro-card">
               <div class="font-semibold text-gray-600">Flexible</div>
               <div class="text-sm text-gray-600">1 lesson/week</div>
               <div class="text-xs">Complete in 8-12 months</div>
@@ -626,11 +626,11 @@
       <!-- Mobile Optimized Elements -->
       <div class="block">
         <!-- Mobile Progress Wheels -->
-        <div class="card mb-8" data-testid="mobile-progress-wheels">
+        <div class="metro-card mb-8" data-testid="mobile-progress-wheels">
           <h3 class="text-lg font-semibold mb-4">Progress Overview</h3>
           <div class="space-y-4">
             <div class="flex items-center gap-4">
-              <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 bg-blue-100 flex items-center justify-center">
                 <span class="text-sm font-bold">{{ hoursPercentage }}%</span>
               </div>
               <div class="flex-1">
@@ -639,7 +639,7 @@
               </div>
             </div>
             <div class="flex items-center gap-4">
-              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 bg-green-100 flex items-center justify-center">
                 <span class="text-sm font-bold">{{ achievementPercentage }}%</span>
               </div>
               <div class="flex-1">
@@ -651,11 +651,11 @@
         </div>
         
         <!-- Mobile Timeline Stack -->
-        <div class="card mb-8" data-testid="mobile-timeline-stack">
+        <div class="metro-card mb-8" data-testid="mobile-timeline-stack">
           <h3 class="text-lg font-semibold mb-4">Training Phases</h3>
           <div class="space-y-3">
             <div v-for="(phase, index) in trainingPhases" :key="phase.id"
-                 class="flex items-center gap-3 p-3 rounded-lg"
+                 class="flex items-center gap-3 p-3 metro-card"
                  :class="getPhaseIconClass(index)">
               <div class="text-2xl">{{ phase.icon }}</div>
               <div class="flex-1">
@@ -667,7 +667,7 @@
         </div>
         
         <!-- Swipeable Lesson Cards -->
-        <div class="card mb-8 overflow-x-auto" data-testid="swipeable-lesson-cards" style="overflow-x: auto !important;">
+        <div class="metro-card mb-8 overflow-x-auto" data-testid="swipeable-lesson-cards" style="overflow-x: auto !important;">
           <h3 class="text-lg font-semibold mb-4">📚 Lesson Progress</h3>
           <div class="relative">
             <!-- Horizontal scrollable lesson cards -->
@@ -675,7 +675,7 @@
                  style="overflow-x: auto !important; scrollbar-width: none; -ms-overflow-style: none;"
                  ref="lessonCardsContainer">
               <div v-for="lesson in 27" :key="lesson"
-                   class="flex-shrink-0 w-48 h-32 p-4 border-2 rounded-xl text-center cursor-pointer transition-all duration-300 hover:shadow-lg snap-center touch-manipulation"
+                   class="flex-shrink-0 w-48 h-32 p-4 border-2 metro-card text-center cursor-pointer transition-all duration-300 hover:shadow-lg snap-center touch-manipulation"
                    :class="getLessonCardClass(lesson)"
                    :data-testid="`lesson-card-${lesson}`"
                    style="min-width: 48px; min-height: 48px;"
@@ -684,7 +684,7 @@
                    @touchend="handleTouchEnd($event, lesson)">
                 
                 <!-- Lesson Number Badge -->
-                <div class="flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold mb-2 mx-auto"
+                <div class="flex items-center justify-center w-8 h-8 text-sm font-bold mb-2 mx-auto"
                      :class="getLessonBadgeClass(lesson)">
                   {{ lesson }}
                 </div>
@@ -695,7 +695,7 @@
                 </div>
                 
                 <!-- Lesson Status -->
-                <div class="text-xs px-2 py-1 rounded-full" 
+                <div class="text-xs px-2 py-1" 
                      :class="getLessonStatusClass(lesson)"
                      data-testid="lesson-card-status">
                   {{ getLessonStatus(lesson) }}
@@ -714,7 +714,7 @@
                  data-testid="swipe-indicators"
                  style="display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 9999 !important; height: auto !important; width: auto !important;">
               <div v-for="indicator in Math.ceil(27 / 5)" :key="indicator"
-                   class="w-4 h-4 rounded-full transition-colors duration-300"
+                   class="w-4 h-4 transition-colors duration-300"
                    :class="indicator === currentCardPage ? 'bg-blue-500' : 'bg-gray-300'"
                    style="display: block !important; visibility: visible !important; opacity: 1 !important; min-width: 16px !important; min-height: 16px !important;">
               </div>
@@ -723,22 +723,22 @@
         </div>
         
         <!-- Mobile Requirement Icons -->
-        <div class="card mb-8" data-testid="mobile-requirement-icons">
+        <div class="metro-card mb-8" data-testid="mobile-requirement-icons">
           <h3 class="text-lg font-semibold mb-4">Requirements</h3>
           <div class="grid grid-cols-2 gap-3">
-            <div class="text-center p-3 rounded-lg border">
+            <div class="text-center p-3 metro-card border">
               <div class="text-2xl mb-1">{{ getRequirementIcon('medical') }}</div>
               <div class="text-sm font-medium">Medical</div>
             </div>
-            <div class="text-center p-3 rounded-lg border">
+            <div class="text-center p-3 metro-card border">
               <div class="text-2xl mb-1">{{ getRequirementIcon('theory') }}</div>
               <div class="text-sm font-medium">Theory</div>
             </div>
-            <div class="text-center p-3 rounded-lg border">
+            <div class="text-center p-3 metro-card border">
               <div class="text-2xl mb-1">{{ getRequirementIcon('hours') }}</div>
               <div class="text-sm font-medium">Hours</div>
             </div>
-            <div class="text-center p-3 rounded-lg border">
+            <div class="text-center p-3 metro-card border">
               <div class="text-2xl mb-1">{{ getRequirementIcon('fpp') }}</div>
               <div class="text-sm font-medium">Flight Test</div>
             </div>
@@ -747,11 +747,11 @@
         
         <!-- Touch Friendly Targets -->
         <div class="grid grid-cols-2 gap-4" data-testid="touch-friendly-targets">
-          <div class="p-4 bg-blue-50 rounded-lg text-center" style="min-width: 48px; min-height: 48px;">
+          <div class="p-4 bg-blue-50 metro-card text-center" style="min-width: 48px; min-height: 48px;">
             <div class="text-2xl mb-2">✈️</div>
             <div class="text-sm font-medium">Lessons</div>
           </div>
-          <div class="p-4 bg-green-50 rounded-lg text-center" style="min-width: 48px; min-height: 48px;">
+          <div class="p-4 bg-green-50 metro-card text-center" style="min-width: 48px; min-height: 48px;">
             <div class="text-2xl mb-2">📊</div>
             <div class="text-sm font-medium">Progress</div>
           </div>
@@ -809,7 +809,7 @@
 
           <!-- Hour Types Breakdown -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="border p-4" data-testid="dual-hours-explanation">
+            <div class="border p-4 metro-card" data-testid="dual-hours-explanation">
               <h4 class="font-semibold text-green-600 mb-2">👨‍✈️ Dual Instruction Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 25 hours with instructor</p>
@@ -817,7 +817,7 @@
               </div>
             </div>
 
-            <div class="border p-4" data-testid="solo-hours-explanation">
+            <div class="border p-4 metro-card" data-testid="solo-hours-explanation">
               <h4 class="font-semibold text-purple-600 mb-2">🦅 Solo Flight Hours</h4>
               <div class="text-sm space-y-2">
                 <p><strong>Minimum Required:</strong> 15 hours solo</p>
@@ -825,7 +825,7 @@
               </div>
             </div>
 
-            <div class="border p-4 md:col-span-2" data-testid="cross-country-explanation">
+            <div class="border p-4 metro-card md:col-span-2" data-testid="cross-country-explanation">
               <h4 class="font-semibold text-orange-600 mb-2">🗺️ Cross-Country Requirements</h4>
               <div class="text-sm">
                 <p><strong>Solo Cross-Country:</strong> 5 hours minimum including at least one flight over 150nm with 2 intermediate stops.</p>
@@ -835,14 +835,14 @@
 
           <!-- NZ-Specific Requirements -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-green-50 p-4" data-testid="nz-terrain-awareness-info">
+            <div class="bg-green-50 p-4 metro-card" data-testid="nz-terrain-awareness-info">
               <h4 class="font-semibold text-green-800 mb-2">🏔️ NZ Terrain Awareness</h4>
               <div class="text-green-700 text-sm">
                 <p>New Zealand's mountainous terrain requires specific training in mountain flying techniques and weather recognition.</p>
               </div>
             </div>
 
-            <div class="bg-purple-50 p-4" data-testid="controlled-airspace-info">
+            <div class="bg-purple-50 p-4 metro-card" data-testid="controlled-airspace-info">
               <h4 class="font-semibold text-purple-800 mb-2">🛂 Controlled Airspace</h4>
               <div class="text-purple-700 text-sm">
                 <p>Training must include controlled airspace operations and ATC communication procedures.</p>
@@ -851,7 +851,7 @@
           </div>
 
           <!-- Hour Logging Guidance -->
-          <div class="bg-yellow-50 p-4 rounded-lg mb-6" data-testid="hour-logging-guidance">
+          <div class="bg-yellow-50 p-4 metro-card mb-6" data-testid="hour-logging-guidance">
             <h4 class="font-semibold text-yellow-800 mb-2">📝 Hour Logging Guidelines</h4>
             <div class="text-yellow-700 text-sm">
               <p>Log all flight time from engine start to engine stop. Dual flights must be signed by instructor.</p>
@@ -878,7 +878,7 @@
       <div class="font-semibold mb-1" data-testid="lesson-tooltip-title">
         Lesson {{ tooltipLesson }}: {{ getLessonName(tooltipLesson) }}
       </div>
-      <div class="text-xs px-2 py-1 rounded mb-2" 
+      <div class="text-xs px-2 py-1 mb-2" 
            :class="getLessonType(tooltipLesson) === 'Ground School' ? 'bg-orange-600 text-white' : 'bg-blue-600 text-white'"
            data-testid="lesson-type">
         {{ getLessonType(tooltipLesson) }}
@@ -887,7 +887,7 @@
         {{ getLessonDescription(tooltipLesson) }}
       </div>
       <div class="flex items-center gap-2">
-        <div class="text-xs px-2 py-1 rounded" 
+        <div class="text-xs px-2 py-1" 
              :class="getLessonStatusColor(tooltipLesson)"
              data-testid="lesson-tooltip-status">
           {{ getLessonStatus(tooltipLesson) }}
@@ -983,7 +983,7 @@
       <div class="text-xs text-yellow-300" data-testid="achievement-requirements">
         {{ getAchievementRequirements(achievementTooltipBadge.id) }}
       </div>
-      <div class="text-xs px-2 py-1 rounded mt-2" 
+      <div class="text-xs px-2 py-1 mt-2" 
            :class="getRarityColor(achievementTooltipBadge.rarity)">
         {{ achievementTooltipBadge.rarity }}
       </div>
@@ -1068,7 +1068,7 @@
             <!-- Status -->
             <div>
               <h4 class="font-semibold text-gray-700 mb-2">Status</h4>
-              <div class="inline-block px-3 py-1 rounded-full text-sm"
+              <div class="inline-block px-3 py-1 text-sm"
                    :class="getLessonStatusColor(selectedLesson)">
                 {{ getLessonStatus(selectedLesson) }}
               </div>
@@ -1088,16 +1088,16 @@
             <!-- Action Button -->
             <div class="pt-4">
               <button v-if="getLessonStatus(selectedLesson) === 'In Progress'" 
-                      class="w-full btn btn-primary"
+                      class="w-full metro-button metro-button-primary"
                       @click="startLesson(selectedLesson)">
                 Start This Lesson
               </button>
               <button v-else-if="getLessonStatus(selectedLesson) === 'Future'" 
-                      class="w-full btn btn-secondary" disabled>
+                      class="w-full metro-button metro-button-secondary" disabled>
                 Complete Prerequisites First
               </button>
               <button v-else 
-                      class="w-full btn btn-secondary"
+                      class="w-full metro-button metro-button-secondary"
                       @click="reviewLesson(selectedLesson)">
                 Review Lesson
               </button>
@@ -2046,7 +2046,7 @@ const initializeMap = async () => {
       const marker = L.marker(airport.coords, {
         icon: L.divIcon({
           className: 'airport-marker',
-          html: '<div class="w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-md"></div>',
+          html: '<div class="w-4 h-4 bg-blue-600 border-2 border-white shadow-md"></div>',
           iconSize: [16, 16],
           iconAnchor: [8, 8]
         })
@@ -2073,7 +2073,7 @@ const initializeMap = async () => {
       const marker = L.marker(area.coords, {
         icon: L.divIcon({
           className: 'training-area-marker',
-          html: '<div class="w-4 h-4 bg-red-500 rounded-full border-2 border-white shadow-md"></div>',
+          html: '<div class="w-4 h-4 bg-red-500 border-2 border-white shadow-md"></div>',
           iconSize: [16, 16],
           iconAnchor: [8, 8]
         })
