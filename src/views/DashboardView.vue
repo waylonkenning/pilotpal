@@ -251,25 +251,49 @@
         </div>
 
 
-        <!-- Quick Navigation -->
-        <div class="grid grid-auto-fit gap-4">
-          <router-link to="/journey" class="metro-button metro-button-secondary text-center" data-testid="journey-tab">
-            🗺️ View Journey
+        <!-- Quick Navigation Metro Tiles -->
+        <div class="metro-grid-container">
+          <router-link to="/journey" class="metro-tile metro-tile-journey metro-tile-third" data-testid="journey-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🗺️</div>
+              <div class="metro-tile-title">Journey</div>
+              <div class="metro-tile-subtitle">Track Progress</div>
+            </div>
           </router-link>
-          <router-link to="/achievements" class="metro-button metro-button-secondary" data-testid="achievements-tab">
-            🏆 Achievements
+          <router-link to="/achievements" class="metro-tile metro-tile-achievements metro-tile-third" data-testid="achievements-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🏆</div>
+              <div class="metro-tile-title">Achievements</div>
+              <div class="metro-tile-subtitle">View Badges</div>
+            </div>
           </router-link>
-          <router-link to="/theory" class="metro-button metro-button-secondary" data-testid="theory-tab">
-            📚 Theory Exams
+          <router-link to="/theory" class="metro-tile metro-tile-requirements metro-tile-third" data-testid="theory-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">📚</div>
+              <div class="metro-tile-title">Theory</div>
+              <div class="metro-tile-subtitle">Exam Progress</div>
+            </div>
           </router-link>
-          <router-link to="/requirements" class="metro-button metro-button-secondary" data-testid="requirements-tab">
-            📋 Requirements
+          <router-link to="/requirements" class="metro-tile metro-tile-requirements metro-tile-third" data-testid="requirements-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">📋</div>
+              <div class="metro-tile-title">Requirements</div>
+              <div class="metro-tile-subtitle">Check Status</div>
+            </div>
           </router-link>
-          <router-link to="/finances" class="metro-button metro-button-secondary" data-testid="finances-tab">
-            💰 Finances
+          <router-link to="/finances" class="metro-tile metro-tile-financial metro-tile-third" data-testid="finances-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">💰</div>
+              <div class="metro-tile-title">Finances</div>
+              <div class="metro-tile-subtitle">Track Costs</div>
+            </div>
           </router-link>
-          <router-link to="/profile" class="metro-button metro-button-secondary" data-testid="user-profile-tab">
-            👤 Profile
+          <router-link to="/profile" class="metro-tile metro-tile-neutral metro-tile-third" data-testid="user-profile-tab">
+            <div class="text-center">
+              <div class="text-4xl mb-2">👤</div>
+              <div class="metro-tile-title">Profile</div>
+              <div class="metro-tile-subtitle">Settings</div>
+            </div>
           </router-link>
         </div>
       </div>
