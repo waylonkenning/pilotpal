@@ -76,7 +76,7 @@
         <!-- Metro Progress Overview -->
         <div class="metro-grid-container" data-testid="metro-grid-container">
           <!-- Flight Hours Metro Tile -->
-          <div class="metro-tile metro-tile-progress metro-tile-1x1" data-testid="metro-tile metro-tile-progress">
+          <div class="metro-tile metro-tile-progress metro-tile-third" data-testid="metro-tile metro-tile-progress">
             <div>
               <div class="metro-tile-title" data-testid="metro-tile-title">Flight Hours</div>
               <div class="metro-tile-value cursor-pointer" 
@@ -95,7 +95,7 @@
           </div>
           
           <!-- Lesson Progress Metro Tile -->
-          <div class="metro-tile metro-tile-progress metro-tile-2x1" data-testid="metro-tile metro-tile-progress">
+          <div class="metro-tile metro-tile-progress metro-tile-half" data-testid="metro-tile metro-tile-progress">
             <div>
               <div class="metro-tile-title" data-testid="metro-tile-title">Lesson Progress</div>
               <div class="metro-tile-value" data-testid="lesson-progress">
@@ -113,7 +113,7 @@
           </div>
           
           <!-- Achievements Metro Tile -->
-          <div class="metro-tile metro-tile-achievements metro-tile-1x1" data-testid="metro-tile metro-tile-achievements">
+          <div class="metro-tile metro-tile-achievements metro-tile-third" data-testid="metro-tile metro-tile-achievements">
             <div>
               <div class="metro-tile-title" data-testid="metro-tile-title">Achievements</div>
               <div class="metro-tile-value" data-testid="badges-earned">
@@ -140,7 +140,7 @@
         <!-- Metro Financial & Milestone Tiles -->
         <div class="metro-grid-container mb-6">
           <!-- Training Costs Metro Tile -->
-          <div class="metro-tile metro-tile-financial metro-tile-1x1" data-testid="metro-tile metro-tile-financial">
+          <div class="metro-tile metro-tile-financial metro-tile-third" data-testid="metro-tile metro-tile-financial">
             <div>
               <div class="metro-tile-title" data-testid="metro-tile-title">Training Costs</div>
               <div class="metro-tile-value" data-testid="total-spent">
@@ -154,7 +154,7 @@
           </div>
           
           <!-- Next Major Milestone Metro Tile -->
-          <div class="metro-tile metro-tile-requirements metro-tile-2x1 metro-tile-interactive" 
+          <div class="metro-tile metro-tile-requirements metro-tile-half metro-tile-interactive" 
                data-testid="metro-tile metro-tile-requirements"
                @click="showMilestoneRequirements = true">
             <div>
@@ -174,7 +174,7 @@
         </div>
 
         <!-- Upcoming Requirements -->
-        <div class="metro-tile metro-tile-requirements metro-tile-2x1 mb-6" data-testid="upcoming-requirements">
+        <div class="metro-tile metro-tile-requirements metro-tile-full mb-6" data-testid="upcoming-requirements">
           <h3 class="metro-tile-title">📋 Upcoming Requirements</h3>
           <div class="space-y-3">
             <div v-for="requirement in upcomingRequirements" :key="requirement.id" 

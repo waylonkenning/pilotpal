@@ -764,11 +764,11 @@ p {
   --metro-tile-padding: 1.5rem;
 }
 
-/* Metro Grid Container - Full Width Edge-to-Edge */
+/* Metro Grid Container - Full Width Edge-to-Edge with Zero Gaps */
 .metro-grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--metro-tile-gap);
+  grid-template-columns: repeat(6, 1fr); /* 6-column grid for 100%, 50%, 33% support */
+  gap: 0; /* Zero margins between tiles */
   padding: 0;
   margin: 0 calc(-100vw / 2 + 50%); /* Force full viewport width */
   width: 100vw; /* Full viewport width */
@@ -786,7 +786,9 @@ p {
 .metro-tile {
   border-radius: 0 \!important;
   box-shadow: none \!important;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   padding: var(--metro-tile-padding);
   display: flex;
   flex-direction: column;
@@ -806,22 +808,41 @@ p {
   transform: scale(0.95);
 }
 
-/* Metro Tile Sizes */
+/* Metro Tile Sizes - Based on 6-column grid */
+/* 100% width tiles */
+.metro-tile-full {
+  min-height: 120px;
+  grid-column: span 6;
+}
+
+/* 50% width tiles */
+.metro-tile-half {
+  min-height: 120px;
+  grid-column: span 3;
+}
+
+/* 33% width tiles */
+.metro-tile-third {
+  min-height: 120px;
+  grid-column: span 2;
+}
+
+/* Legacy tile sizes for backward compatibility */
 .metro-tile-1x1 {
   min-height: 120px;
-  grid-column: span 1;
+  grid-column: span 2;
   grid-row: span 1;
 }
 
 .metro-tile-2x1 {
   min-height: 120px;
-  grid-column: span 2;
+  grid-column: span 3;
   grid-row: span 1;
 }
 
 .metro-tile-2x2 {
   min-height: 400px;
-  grid-column: span 2;
+  grid-column: span 6;
   grid-row: span 2;
 }
 
@@ -1032,13 +1053,28 @@ p {
 /* Metro-specific responsive adjustments */
 @media (max-width: 768px) {
   .metro-grid-container {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.25rem;
+    grid-template-columns: repeat(2, 1fr); /* 2-column grid on mobile */
+    gap: 0; /* Keep zero gaps on mobile */
     margin: 0 calc(-100vw / 2 + 50%);
     width: 100vw;
     padding: 0;
   }
   
+  /* Mobile tile sizes */
+  .metro-tile-full {
+    grid-column: span 2; /* Full width on mobile */
+  }
+  
+  .metro-tile-half {
+    grid-column: span 1; /* Half width becomes full column on mobile */
+  }
+  
+  .metro-tile-third {
+    grid-column: span 1; /* Third width becomes full column on mobile */
+  }
+  
+  /* Legacy mobile adjustments */
+  .metro-tile-1x1,
   .metro-tile-2x1,
   .metro-tile-2x2 {
     grid-column: span 2;
