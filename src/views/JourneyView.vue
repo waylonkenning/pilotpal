@@ -79,6 +79,57 @@
             <div class="text-sm">{{ nextStepsMessage }}</div>
           </div>
         </div>
+
+        <!-- Training Phase Indicator -->
+        <div class="card card-elevated mb-xl" data-testid="training-phase-indicator">
+          <div class="flex items-center gap-md mb-md">
+            <div class="text-xl">{{ currentPhase.icon }}</div>
+            <div>
+              <h2 class="font-bold">{{ currentPhase.name }}</h2>
+              <p class="text-sm opacity-80">{{ currentPhase.description }}</p>
+            </div>
+          </div>
+          
+          <div class="card card-compact" :style="{ background: currentPhase.gradient, color: 'var(--text-inverse)' }">
+            <div class="font-medium mb-sm">🎯 Current Focus</div>
+            <div class="text-sm opacity-90 mb-md">{{ currentPhase.focus }}</div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+              <div class="text-center">
+                <div class="text-lg font-bold">{{ currentPhase.progress.completed }}</div>
+                <div class="text-sm opacity-90">{{ currentPhase.progress.label }}</div>
+              </div>
+              <div class="text-center">
+                <div class="text-lg font-bold">{{ currentPhase.requirements.total - currentPhase.requirements.completed }}</div>
+                <div class="text-sm opacity-90">Remaining</div>
+              </div>
+              <div class="text-center">
+                <div class="text-lg font-bold">{{ Math.round((currentPhase.requirements.completed / currentPhase.requirements.total) * 100) }}%</div>
+                <div class="text-sm opacity-90">Complete</div>
+              </div>
+            </div>
+
+            <!-- Phase Progress Bar -->
+            <div class="mt-md">
+              <div class="progress">
+                <div class="progress-bar" 
+                     :style="{ width: Math.round((currentPhase.requirements.completed / currentPhase.requirements.total) * 100) + '%' }">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase Navigation -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-sm mt-md">
+            <div v-for="(phase, index) in allPhases" :key="index" 
+                 class="text-center p-sm rounded"
+                 :class="phase.name === currentPhase.name ? 'bg-primary text-white' : 'bg-secondary'"
+                 data-testid="phase-indicator">
+              <div class="text-lg">{{ phase.icon }}</div>
+              <div class="text-xs font-medium">{{ phase.shortName }}</div>
+            </div>
+          </div>
+        </div>
         
         <!-- Back to Dashboard -->
         <div class="text-center">
@@ -156,7 +207,16 @@ const progress = ref({
     total: 0
   },
   achievements: [] as string[],
-  totalSpent: 0
+  totalSpent: 0,
+  medicalCertificate: null as any,
+  theoryExams: {
+    airLaw: { attempts: [], passed: false },
+    navigation: { attempts: [], passed: false },
+    technicalKnowledge: { attempts: [], passed: false },
+    humanFactors: { attempts: [], passed: false },
+    meteorology: { attempts: [], passed: false },
+    radioTelephony: { attempts: [], passed: false }
+  }
 })
 
 // Modals
@@ -206,6 +266,123 @@ const nextStepsMessage = computed(() => {
     return 'Prepare for your flight test. Review all maneuvers and ensure regulatory requirements are complete.'
   }
 })
+
+// Enhanced training phase detection
+const currentPhase = computed(() => {
+  const totalHours = progress.value.flightHours.total
+  const soloHours = progress.value.flightHours.solo
+  const lessonsCompleted = progress.value.completedLessons.length
+  const hasFlownSolo = soloHours > 0
+  const hasMedical = progress.value.medicalCertificate
+  
+  // Phase 1: Pre-Solo Training (0-10 hours, no solo)
+  if (!hasFlownSolo && totalHours < 15) {
+    return {
+      name: 'Pre-Solo Training',
+      shortName: 'Pre-Solo',
+      icon: '🎓',
+      description: 'Building fundamental flying skills',
+      gradient: 'var(--gradient-primary)',
+      focus: 'Master basic aircraft control, navigation, and emergency procedures before your first solo flight.',
+      progress: {
+        completed: lessonsCompleted,
+        label: 'Lessons Done'
+      },
+      requirements: {
+        completed: Math.min(lessonsCompleted, 12),
+        total: 12
+      }
+    }
+  }
+  
+  // Phase 2: Solo Training (First solo to cross-country)
+  if (hasFlownSolo && progress.value.flightHours.crossCountry < 5) {
+    return {
+      name: 'Solo Training',
+      shortName: 'Solo',
+      icon: '🦅',
+      description: 'Developing independent flight skills',
+      gradient: 'var(--gradient-success)',
+      focus: 'Build confidence with solo flights and prepare for cross-country navigation.',
+      progress: {
+        completed: soloHours.toFixed(1),
+        label: 'Solo Hours'
+      },
+      requirements: {
+        completed: Math.min(soloHours, 10),
+        total: 10
+      }
+    }
+  }
+  
+  // Phase 3: Cross-Country Training
+  if (progress.value.flightHours.crossCountry >= 5 && totalHours < 35) {
+    return {
+      name: 'Cross-Country Training',
+      shortName: 'Cross-Country',
+      icon: '🗺️',
+      description: 'Long-distance navigation and planning',
+      gradient: 'var(--gradient-warning)',
+      focus: 'Master navigation, flight planning, and extended cross-country flights.',
+      progress: {
+        completed: progress.value.flightHours.crossCountry.toFixed(1),
+        label: 'XC Hours'
+      },
+      requirements: {
+        completed: Math.min(progress.value.flightHours.crossCountry, 10),
+        total: 10
+      }
+    }
+  }
+  
+  // Phase 4: Test Preparation (35+ hours)
+  if (totalHours >= 35) {
+    const theoryPassed = Object.values(progress.value.theoryExams || {}).filter((exam: any) => exam.passed).length
+    return {
+      name: 'Test Preparation',
+      shortName: 'Test Prep',
+      icon: '📝',
+      description: 'Final preparation for flight test',
+      gradient: 'var(--gradient-info)',
+      focus: 'Complete theory exams and intensive test preparation with your instructor.',
+      progress: {
+        completed: theoryPassed,
+        label: 'Theory Exams'
+      },
+      requirements: {
+        completed: theoryPassed,
+        total: 6
+      }
+    }
+  }
+  
+  // Default: Getting Started
+  return {
+    name: 'Getting Started',
+    shortName: 'Starting',
+    icon: '🚀',
+    description: 'Beginning your pilot journey',
+    gradient: 'var(--gradient-primary)',
+    focus: 'Complete your medical certificate and start your first flying lessons.',
+    progress: {
+      completed: hasMedical ? 1 : 0,
+      label: 'Medical Done'
+    },
+    requirements: {
+      completed: hasMedical ? 1 : 0,
+      total: 1
+    }
+  }
+})
+
+// All phases for navigation
+const allPhases = computed(() => [
+  { name: 'Getting Started', shortName: 'Starting', icon: '🚀' },
+  { name: 'Pre-Solo Training', shortName: 'Pre-Solo', icon: '🎓' },
+  { name: 'Solo Training', shortName: 'Solo', icon: '🦅' },
+  { name: 'Cross-Country Training', shortName: 'Cross-Country', icon: '🗺️' },
+  { name: 'Test Preparation', shortName: 'Test Prep', icon: '📝' }
+])
 
 // Load progress data
 onMounted(() => {
