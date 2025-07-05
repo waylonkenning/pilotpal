@@ -10,7 +10,7 @@
       </div>
 
       <!-- Medical Certificate Section -->
-      <div class="card mb-6" data-testid="medical-certificate-section">
+      <div class="metro-card mb-6" data-testid="medical-certificate-section">
         <h2 class="text-xl font-semibold mb-4 text-blue-600">🏥 Medical Certificate</h2>
         
         <div v-if="!progress.medicalCertificate" class="space-y-4">
@@ -19,7 +19,7 @@
             <div class="text-yellow-700 mb-3">Required before solo flight - choose Class 2 or DL9 option</div>
             <button 
               @click="showMedicalInfo = true"
-              class="btn btn-secondary btn-sm" 
+              class="metro-button metro-button-secondary metro-button-sm" 
               data-testid="medical-certificate-learn-more"
             >
               Learn More
@@ -28,7 +28,7 @@
           
           <button 
             @click="showMedicalForm = true"
-            class="btn btn-primary w-full"
+            class="metro-button metro-button-primary w-full"
             data-testid="medical-cert-requirement"
           >
             📄 Complete Medical Certificate
@@ -68,10 +68,10 @@
             <div class="font-semibold text-orange-800 mb-2">⚠️ Medical Certificate Expiring Soon</div>
             <div class="text-orange-700 mb-3">Your medical certificate expires soon. Schedule a renewal to maintain flying privileges.</div>
             <div class="flex gap-3">
-              <button @click="showMedicalRenewalInfo = true" class="btn btn-secondary btn-sm" data-testid="medical-renewal-guidance">
+              <button @click="showMedicalRenewalInfo = true" class="metro-button metro-button-secondary metro-button-sm" data-testid="medical-renewal-guidance">
                 📋 Renewal Guide
               </button>
-              <button @click="showFindExaminer = true" class="btn btn-secondary btn-sm" data-testid="find-medical-examiner">
+              <button @click="showFindExaminer = true" class="metro-button metro-button-secondary metro-button-sm" data-testid="find-medical-examiner">
                 🔍 Find CAME
               </button>
             </div>
@@ -82,7 +82,7 @@
             <div class="text-red-700 mb-2" data-testid="medical-flight-restriction">
               Your medical certificate has expired. You cannot exercise pilot privileges until renewed.
             </div>
-            <button @click="showMedicalForm = true" class="btn btn-primary btn-sm" data-testid="renew-medical-cert">
+            <button @click="showMedicalForm = true" class="metro-button metro-button-primary metro-button-sm" data-testid="renew-medical-cert">
               🏥 Renew Medical Certificate
             </button>
           </div>
@@ -104,14 +104,14 @@
           <div class="flex gap-3 mt-4">
             <button 
               @click="editMedicalCert"
-              class="btn btn-secondary flex-1"
+              class="metro-button metro-button-secondary flex-1"
               data-testid="edit-medical-cert"
             >
               📝 Update Medical
             </button>
             <button 
               @click="showMedicalRenewalInfo = true"
-              class="btn btn-secondary flex-1"
+              class="metro-button metro-button-secondary flex-1"
               data-testid="view-renewal-info"
             >
               ℹ️ Renewal Info
@@ -120,7 +120,7 @@
 
           <!-- Edit Medical Certificate -->
           <div class="mt-4">
-            <button @click="editMedicalCert" class="btn btn-secondary" data-testid="edit-medical-cert">
+            <button @click="editMedicalCert" class="metro-button metro-button-secondary" data-testid="edit-medical-cert">
               ✏️ Update Medical Certificate
             </button>
           </div>
@@ -128,7 +128,7 @@
       </div>
 
       <!-- Fit and Proper Person Section -->
-      <div class="card mb-6">
+      <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-green-600">📋 Fit and Proper Person Assessment</h2>
         
         <div data-testid="fpp-requirement">
@@ -138,7 +138,7 @@
               <div class="text-yellow-700 mb-3">Required for license application under Civil Aviation Act</div>
               <button 
                 @click="showFppInfo = true"
-                class="btn btn-secondary btn-sm" 
+                class="metro-button metro-button-secondary metro-button-sm" 
                 data-testid="fpp-learn-more-button"
               >
                 Learn More
@@ -147,7 +147,7 @@
             
             <button 
               @click="showFppForm = true"
-              class="btn btn-primary w-full"
+              class="metro-button metro-button-primary w-full"
             >
               📝 Complete FPP Assessment
             </button>
@@ -168,7 +168,7 @@
       </div>
 
       <!-- Theory Exams Section -->
-      <div class="card mb-6">
+      <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-purple-600">📚 Theory Examinations</h2>
         
         <div class="mb-4">
@@ -203,7 +203,7 @@
             <button 
               v-if="!exam.passed"
               @click="scheduleExam(subject)"
-              class="btn btn-secondary btn-sm w-full"
+              class="metro-button metro-button-secondary metro-button-sm w-full"
             >
               📅 Schedule Exam
             </button>
@@ -242,7 +242,7 @@
       </div>
 
       <!-- BFR Currency Tracking Section (for Licensed Pilots) -->
-      <div class="card mb-6" data-testid="bfr-currency-section">
+      <div class="metro-card mb-6" data-testid="bfr-currency-section">
         <h2 class="text-xl font-semibold mb-4 text-indigo-600">🛩️ Biennial Flight Review (BFR) Currency</h2>
         
         <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200 mb-4" data-testid="bfr-requirements-info">
@@ -310,7 +310,7 @@
         <div class="mt-4">
           <button 
             @click="showBfrForm = true"
-            class="btn btn-primary w-full"
+            class="metro-button metro-button-primary w-full"
             data-testid="record-bfr-button"
           >
             📝 Record BFR
@@ -371,7 +371,7 @@
       </div>
 
       <!-- Night Flying Section (Optional) -->
-      <div class="card mb-6">
+      <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-orange-600">🌙 Night Flying (Optional)</h2>
         
         <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
@@ -386,7 +386,7 @@
       </div>
 
       <!-- Terrain Awareness Section (NZ Specific) -->
-      <div class="card mb-6">
+      <div class="metro-card mb-6">
         <h2 class="text-xl font-semibold mb-4 text-red-600">🏔️ Terrain Awareness Training</h2>
         
         <div class="bg-red-50 p-4 rounded-lg border border-red-200">
@@ -402,7 +402,7 @@
 
       <!-- Back to Dashboard -->
       <div class="text-center mt-16 mb-8 pt-8" style="margin-top: 4rem; padding-top: 2rem; margin-bottom: 2rem;">
-        <router-link to="/dashboard" class="btn btn-primary">
+        <router-link to="/dashboard" class="metro-button metro-button-primary">
           ← Back to Dashboard
         </router-link>
       </div>
@@ -460,7 +460,7 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showMedicalInfo = false" class="btn btn-primary flex-1">
+            <button @click="showMedicalInfo = false" class="metro-button metro-button-primary flex-1">
               Got it
             </button>
           </div>
@@ -519,10 +519,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="saveMedicalCert" class="btn btn-primary flex-1" data-testid="save-medical-cert">
+            <button @click="saveMedicalCert" class="metro-button metro-button-primary flex-1" data-testid="save-medical-cert">
               Save Medical Certificate
             </button>
-            <button @click="showMedicalForm = false" class="btn btn-secondary">
+            <button @click="showMedicalForm = false" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -597,7 +597,7 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showFppInfo = false" class="btn btn-primary flex-1">
+            <button @click="showFppInfo = false" class="metro-button metro-button-primary flex-1">
               Understood
             </button>
           </div>
@@ -637,10 +637,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="saveFppAssessment" class="btn btn-primary flex-1">
+            <button @click="saveFppAssessment" class="metro-button metro-button-primary flex-1">
               Save FPP Assessment
             </button>
-            <button @click="showFppForm = false" class="btn btn-secondary">
+            <button @click="showFppForm = false" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -755,12 +755,12 @@
           <div class="flex gap-3 mt-6">
             <button 
               @click="saveBfr" 
-              class="btn btn-primary flex-1"
+              class="metro-button metro-button-primary flex-1"
               data-testid="save-bfr-button"
             >
               {{ editingBfr ? 'Update BFR' : 'Save BFR' }}
             </button>
-            <button @click="cancelBfrForm" class="btn btn-secondary">
+            <button @click="cancelBfrForm" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -777,7 +777,7 @@
           <p class="text-gray-600 mb-4" data-testid="bfr-success-message">
             Your Biennial Flight Review has been recorded and your currency status updated.
           </p>
-          <button @click="showBfrSuccess = false" class="btn btn-primary">
+          <button @click="showBfrSuccess = false" class="metro-button metro-button-primary">
             Continue
           </button>
         </div>
@@ -793,10 +793,10 @@
             Are you sure you want to delete this BFR record? This action cannot be undone.
           </p>
           <div class="flex gap-3">
-            <button @click="confirmDeleteBfr" class="btn btn-primary flex-1" data-testid="confirm-delete-bfr">
+            <button @click="confirmDeleteBfr" class="metro-button metro-button-primary flex-1" data-testid="confirm-delete-bfr">
               Delete BFR
             </button>
-            <button @click="showDeleteBfrConfirmation = false" class="btn btn-secondary">
+            <button @click="showDeleteBfrConfirmation = false" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -842,10 +842,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showMedicalRenewalInfo = false" class="btn btn-primary flex-1">
+            <button @click="showMedicalRenewalInfo = false" class="metro-button metro-button-primary flex-1">
               Got it
             </button>
-            <button @click="showFindExaminer = true" class="btn btn-secondary">
+            <button @click="showFindExaminer = true" class="metro-button metro-button-secondary">
               Find CAME
             </button>
           </div>
@@ -892,10 +892,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showFindExaminer = false" class="btn btn-primary flex-1">
+            <button @click="showFindExaminer = false" class="metro-button metro-button-primary flex-1">
               Close
             </button>
-            <button @click="showMedicalForm = true" class="btn btn-secondary">
+            <button @click="showMedicalForm = true" class="metro-button metro-button-secondary">
               Book Renewal
             </button>
           </div>

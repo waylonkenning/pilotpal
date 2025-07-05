@@ -11,7 +11,7 @@
         </div>
         <button 
           @click="showContextualHelp = true"
-          class="btn btn-secondary text-sm"
+          class="metro-button metro-button-secondary metro-button-sm"
           data-testid="contextual-help-trigger"
         >
           ❓ Help
@@ -21,7 +21,7 @@
       <!-- Financial Overview Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 content-wrapper">
         <!-- Total Spent -->
-        <div class="card">
+        <div class="metro-card">
           <h3 class="text-lg font-semibold mb-2">Total Spent</h3>
           <div class="text-3xl font-bold text-orange-600 mb-2" data-testid="total-spent">
             ${{ formatCurrency(totalSpent) }}
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Budget Remaining -->
-        <div class="card">
+        <div class="metro-card">
           <h3 class="text-lg font-semibold mb-2">Budget Remaining</h3>
           <div class="text-3xl font-bold text-green-600 mb-2" data-testid="budget-remaining">
             ${{ formatCurrency(budgetRemaining) }}
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Progress to Budget -->
-        <div class="card">
+        <div class="metro-card">
           <h3 class="text-lg font-semibold mb-2">Budget Progress</h3>
           <div class="text-2xl font-bold mb-2" :class="budgetProgress > 100 ? 'text-red-600' : 'text-blue-600'">
             {{ budgetProgress.toFixed(1) }}%
@@ -80,7 +80,7 @@
             <h2 class="text-xl font-semibold">Expense Tracking</h2>
             <button 
               @click="showAddExpense = true"
-              class="btn btn-primary"
+              class="metro-button metro-button-primary"
               data-testid="add-expense-button"
             >
               + Add Expense
@@ -89,7 +89,7 @@
 
           <!-- Expense Categories Summary -->
           <div class="grid grid-auto-fill gap-4 mb-6">
-            <div class="card text-center" data-testid="flight-training-costs">
+            <div class="metro-card text-center" data-testid="flight-training-costs">
               <div class="text-2xl mb-2">✈️</div>
               <div class="font-semibold">Flight Training</div>
               <div class="text-lg font-bold text-blue-600">
@@ -97,7 +97,7 @@
               </div>
             </div>
             
-            <div class="card text-center" data-testid="theory-exam-costs">
+            <div class="metro-card text-center" data-testid="theory-exam-costs">
               <div class="text-2xl mb-2">📚</div>
               <div class="font-semibold">Theory Exams</div>
               <div class="text-lg font-bold text-purple-600">
@@ -105,7 +105,7 @@
               </div>
             </div>
             
-            <div class="card text-center" data-testid="medical-cert-costs">
+            <div class="metro-card text-center" data-testid="medical-cert-costs">
               <div class="text-2xl mb-2">🏥</div>
               <div class="font-semibold">Medical Certs</div>
               <div class="text-lg font-bold text-green-600">
@@ -113,7 +113,7 @@
               </div>
             </div>
             
-            <div class="card text-center" data-testid="equipment-costs">
+            <div class="metro-card text-center" data-testid="equipment-costs">
               <div class="text-2xl mb-2">🎧</div>
               <div class="font-semibold">Equipment</div>
               <div class="text-lg font-bold text-orange-600">
@@ -123,7 +123,7 @@
           </div>
 
           <!-- Export Section -->
-          <div class="card mb-6" data-testid="export-section">
+          <div class="metro-card mb-6" data-testid="export-section">
             <h3 class="text-lg font-semibold mb-4">📊 Export Financial Data</h3>
             <div class="text-sm text-gray-600 mb-4" data-testid="export-description">
               Export your financial data for record-keeping, tax purposes, or external analysis
@@ -136,7 +136,7 @@
                 <input 
                   v-model="exportFilters.dateFrom" 
                   type="date" 
-                  class="form-input"
+                  class="metro-input"
                   data-testid="export-date-from"
                 >
               </div>
@@ -145,7 +145,7 @@
                 <input 
                   v-model="exportFilters.dateTo" 
                   type="date" 
-                  class="form-input"
+                  class="metro-input"
                   data-testid="export-date-to"
                 >
               </div>
@@ -153,7 +153,7 @@
                 <label class="form-label">Category Filter</label>
                 <select 
                   v-model="exportFilters.category" 
-                  class="form-input"
+                  class="metro-input"
                   data-testid="export-category-filter"
                 >
                   <option value="">All Categories</option>
@@ -197,7 +197,7 @@
             <div class="flex gap-3">
               <button 
                 @click="exportToCSV"
-                class="btn btn-primary flex-1"
+                class="metro-button metro-button-primary flex-1"
                 data-testid="export-csv-button"
                 :disabled="filteredExpensesForExport.length === 0"
               >
@@ -205,7 +205,7 @@
               </button>
               <button 
                 @click="exportToPDF"
-                class="btn btn-secondary flex-1"
+                class="metro-button metro-button-secondary flex-1"
                 data-testid="export-pdf-button"
                 :disabled="filteredExpensesForExport.length === 0"
               >
@@ -225,7 +225,7 @@
           </div>
 
           <!-- Expense List -->
-          <div class="card">
+          <div class="metro-card">
             <h3 class="text-lg font-semibold mb-4">Recent Expenses</h3>
             <div v-if="expenses.length === 0" class="text-center py-8 text-gray-500">
               No expenses recorded yet. Add your first expense above!
@@ -274,7 +274,7 @@
           <h2 class="text-xl font-semibold mb-6">Budget Planning</h2>
           
           <!-- NZ PPL Cost Range -->
-          <div class="card mb-6" data-testid="nz-ppl-cost-range">
+          <div class="metro-card mb-6" data-testid="nz-ppl-cost-range">
             <h3 class="text-lg font-semibold mb-4">New Zealand PPL Typical Costs</h3>
             <div class="text-2xl font-bold text-blue-600 mb-4">$25,000 - $35,000</div>
             
@@ -306,7 +306,7 @@
           </div>
 
           <!-- Custom Budget Setting -->
-          <div class="card">
+          <div class="metro-card">
             <h3 class="text-lg font-semibold mb-4">Your Budget</h3>
             <div class="flex items-center gap-4">
               <div>
@@ -314,14 +314,14 @@
                 <input 
                   v-model="customBudgetInput" 
                   type="number" 
-                  class="form-input"
+                  class="metro-input"
                   placeholder="30000"
                   data-testid="custom-budget-input"
                 >
               </div>
               <button 
                 @click="setCustomBudget"
-                class="btn btn-primary"
+                class="metro-button metro-button-primary"
                 data-testid="save-budget-button"
               >
                 Update Budget
@@ -339,7 +339,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Projected Total Cost -->
-            <div class="card">
+            <div class="metro-card">
               <h3 class="text-lg font-semibold mb-4">Projected Total Cost</h3>
               <div class="text-3xl font-bold text-blue-600 mb-2" data-testid="projected-total-cost">
                 ${{ projectedTotalCost.toFixed(0) }}
@@ -365,7 +365,7 @@
             </div>
 
             <!-- Timeline Estimate -->
-            <div class="card">
+            <div class="metro-card">
               <h3 class="text-lg font-semibold mb-4">Completion Timeline</h3>
               <div class="text-2xl font-bold text-green-600 mb-2" data-testid="completion-timeline">
                 {{ estimatedMonthsRemaining }} months remaining
@@ -397,7 +397,7 @@
           <h2 class="text-xl font-semibold mb-6">Funding Options</h2>
           
           <!-- StudyLink Information -->
-          <div class="card mb-6" data-testid="studylink-info">
+          <div class="metro-card mb-6" data-testid="studylink-info">
             <h3 class="text-lg font-semibold mb-4">🎓 StudyLink Student Loan</h3>
             <div class="bg-blue-50 p-4 rounded-lg mb-4">
               <div class="text-2xl font-bold text-blue-600 mb-2" data-testid="studylink-amount">
@@ -409,7 +409,7 @@
             <div class="space-y-3">
               <button 
                 @click="showEligibilityInfo = true"
-                class="btn btn-secondary"
+                class="metro-button metro-button-secondary"
                 data-testid="studylink-eligibility-info"
               >
                 Check Eligibility Criteria
@@ -425,7 +425,7 @@
 
           <!-- Other Funding Options -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="card" data-testid="private-loan-options">
+            <div class="metro-card" data-testid="private-loan-options">
               <h3 class="text-lg font-semibold mb-4">💳 Private Loans</h3>
               <div class="space-y-2 text-sm">
                 <div>• Bank personal loans</div>
@@ -435,7 +435,7 @@
               </div>
             </div>
             
-            <div class="card" data-testid="payment-plan-options">
+            <div class="metro-card" data-testid="payment-plan-options">
               <h3 class="text-lg font-semibold mb-4">📅 Payment Plans</h3>
               <div class="space-y-2 text-sm">
                 <div>• Flight school payment plans</div>
@@ -453,7 +453,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Category Spending Chart -->
-            <div class="card">
+            <div class="metro-card">
               <h3 class="text-lg font-semibold mb-4">Spending by Category</h3>
               <div data-testid="category-spending-chart">
                 <div v-for="category in expenseCategories" :key="category.id" class="mb-3">
@@ -473,7 +473,7 @@
             </div>
 
             <!-- Cost Efficiency -->
-            <div class="card">
+            <div class="metro-card">
               <h3 class="text-lg font-semibold mb-4">Cost Efficiency</h3>
               <div data-testid="cost-efficiency">
                 <div class="space-y-3">
@@ -495,7 +495,7 @@
           </div>
 
           <!-- Monthly Spending Trend -->
-          <div class="card mt-6">
+          <div class="metro-card mt-6">
             <h3 class="text-lg font-semibold mb-4">Monthly Spending Trend</h3>
             <div data-testid="monthly-spending-trend">
               <div class="text-center py-8 text-gray-500">
@@ -512,19 +512,19 @@
         <div class="flex justify-center gap-4">
           <button 
             @click="exportData('csv')"
-            class="btn btn-secondary"
+            class="metro-button metro-button-secondary"
             data-testid="export-csv"
           >
             📊 Export CSV
           </button>
           <button 
             @click="exportData('pdf')"
-            class="btn btn-secondary"
+            class="metro-button metro-button-secondary"
             data-testid="export-pdf-report"
           >
             📄 Export PDF Report
           </button>
-          <router-link to="/dashboard" class="btn btn-primary">
+          <router-link to="/dashboard" class="metro-button metro-button-primary">
             ← Back to Dashboard
           </router-link>
         </div>
@@ -544,7 +544,7 @@
               <label class="form-label">Category</label>
               <select 
                 v-model="expenseForm.category" 
-                class="form-input"
+                class="metro-input"
                 :class="{ 'border-red-500': formErrors.category }"
                 data-testid="expense-category-select"
               >
@@ -567,7 +567,7 @@
                 v-model="expenseForm.amount" 
                 type="number" 
                 step="0.01"
-                class="form-input"
+                class="metro-input"
                 :class="{ 'border-red-500': formErrors.amount }"
                 placeholder="180.00"
                 data-testid="expense-amount-input"
@@ -582,7 +582,7 @@
               <input 
                 v-model="expenseForm.description" 
                 type="text" 
-                class="form-input"
+                class="metro-input"
                 placeholder="Lesson 5 - Circuit training"
                 data-testid="expense-description-input"
               >
@@ -593,17 +593,17 @@
               <input 
                 v-model="expenseForm.date" 
                 type="date" 
-                class="form-input"
+                class="metro-input"
                 data-testid="expense-date-input"
               >
             </div>
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="saveExpense" class="btn btn-primary flex-1" data-testid="save-expense-button">
+            <button @click="saveExpense" class="metro-button metro-button-primary flex-1" data-testid="save-expense-button">
               {{ editingExpense ? 'Update Expense' : 'Add Expense' }}
             </button>
-            <button @click="closeExpenseModal" class="btn btn-secondary">
+            <button @click="closeExpenseModal" class="metro-button metro-button-secondary">
               Cancel
             </button>
           </div>
@@ -661,7 +661,7 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showEligibilityInfo = false" class="btn btn-primary flex-1">
+            <button @click="showEligibilityInfo = false" class="metro-button metro-button-primary flex-1">
               Got it
             </button>
           </div>
@@ -714,10 +714,10 @@
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button @click="showContextualHelp = false" class="btn btn-primary flex-1">
+            <button @click="showContextualHelp = false" class="metro-button metro-button-primary flex-1">
               Got it!
             </button>
-            <router-link to="/education" class="btn btn-secondary">
+            <router-link to="/education" class="metro-button metro-button-secondary">
               Cost Guide
             </router-link>
           </div>
@@ -737,14 +737,14 @@
           <div class="flex gap-3">
             <button 
               @click="confirmDelete" 
-              class="btn btn-primary flex-1"
+              class="metro-button metro-button-primary flex-1"
               data-testid="confirm-delete-expense"
             >
               Delete
             </button>
             <button 
               @click="showDeleteConfirmation = false" 
-              class="btn btn-secondary flex-1"
+              class="metro-button metro-button-secondary flex-1"
             >
               Cancel
             </button>

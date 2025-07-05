@@ -6,7 +6,8 @@
           v-for="notification in errorNotifications"
           :key="notification.id"
           :class="getNotificationClass(notification.type)"
-          class="p-4 rounded-lg shadow-lg border relative"
+          class="p-4 shadow-lg border relative"
+          style="border-radius: 0 !important;"
           data-testid="error-notification"
         >
           <div class="flex items-start gap-3">

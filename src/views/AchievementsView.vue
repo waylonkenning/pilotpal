@@ -9,7 +9,7 @@
         </p>
         
         <!-- Achievement Stats -->
-        <div class="card max-w-lg mx-auto mb-8" data-testid="achievement-stats">
+        <div class="metro-card max-w-lg mx-auto mb-8" data-testid="achievement-stats">
           <div class="grid grid-cols-3 text-center">
             <div>
               <div class="text-2xl font-bold text-green-600" data-testid="badges-earned">
@@ -36,7 +36,7 @@
       <!-- Badge Categories -->
       <div class="space-y-8">
         <!-- Foundation Badges -->
-        <div class="card" data-testid="foundation-badges">
+        <div class="metro-card" data-testid="foundation-badges">
           <h2 class="text-xl font-semibold mb-4 text-blue-600">🛫 Foundation</h2>
           <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in foundationBadges" :key="badge.id" 
@@ -54,7 +54,7 @@
         </div>
 
         <!-- Skills Badges -->
-        <div class="card" data-testid="skills-badges">
+        <div class="metro-card" data-testid="skills-badges">
           <h2 class="text-xl font-semibold mb-4 text-green-600">⚡ Skills</h2>
           <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in skillsBadges" :key="badge.id" 
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Knowledge Badges -->
-        <div class="card" data-testid="knowledge-badges">
+        <div class="metro-card" data-testid="knowledge-badges">
           <h2 class="text-xl font-semibold mb-4 text-purple-600">📚 Knowledge</h2>
           <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in knowledgeBadges" :key="badge.id" 
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Special Badges -->
-        <div class="card" data-testid="special-badges">
+        <div class="metro-card" data-testid="special-badges">
           <h2 class="text-xl font-semibold mb-4 text-orange-600">⭐ Special</h2>
           <div class="grid grid-auto-fit gap-4">
             <div v-for="badge in specialBadges" :key="badge.id" 
@@ -113,7 +113,7 @@
 
       <!-- Back to Dashboard -->
       <div class="text-center mt-16 mb-8 pt-8" style="margin-top: 4rem; padding-top: 2rem; margin-bottom: 2rem;">
-        <router-link to="/dashboard" class="btn btn-primary">
+        <router-link to="/dashboard" class="metro-button metro-button-primary" data-testid="back-to-dashboard">
           ← Back to Dashboard
         </router-link>
       </div>
@@ -285,11 +285,13 @@ onMounted(() => {
 
 <style scoped>
 .badge-card {
-  @apply p-4 rounded-lg border transition-all duration-300 text-center;
+  @apply p-4 border transition-all duration-300 text-center;
+  border-radius: 0 !important;
 }
 
 .badge-card.earned {
-  @apply bg-green-50 border-green-200 shadow-md;
+  @apply bg-green-50 border-green-200;
+  box-shadow: none !important;
 }
 
 .badge-card.locked {
