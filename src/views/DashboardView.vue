@@ -164,7 +164,7 @@
 
     <!-- Complete Lesson Modal -->
     <div v-if="showCompleteLesson" class="modal-overlay" @click="showCompleteLesson = false">
-      <div class="modal-content" @click.stop>
+      <div class="modal-content" @click.stop style="max-width: 600px;">
         <div class="flex items-center justify-between mb-lg">
           <h3 class="font-bold text-lg">✅ Complete Lesson {{ currentLessonInfo.id }}</h3>
           <button @click="showCompleteLesson = false" class="btn-ghost text-2xl">&times;</button>
@@ -172,18 +172,100 @@
 
         <div class="card card-compact mb-lg">
           <div class="font-medium mb-sm">{{ currentLessonInfo.name }}</div>
-          <div class="text-sm opacity-80 mb-md">{{ currentLessonInfo.description }}</div>
-          <div class="text-sm opacity-60">Mark this lesson as completed in your progress tracking.</div>
+          <div class="text-sm opacity-80">{{ currentLessonInfo.description }}</div>
         </div>
 
-        <div class="flex gap-md">
-          <button @click="showCompleteLesson = false" class="btn btn-secondary flex-1">
-            Cancel
-          </button>
-          <button @click="completeLesson" class="btn btn-success flex-1">
-            Mark Complete
-          </button>
-        </div>
+        <form @submit.prevent="completeLesson" class="space-y-4">
+          <!-- Flight Hours Section -->
+          <div class="card card-compact">
+            <div class="font-medium mb-md">✈️ Flight Hours</div>
+            <div class="grid grid-cols-2 gap-md">
+              <div class="form-group">
+                <label class="form-label">Flight Time (hours)</label>
+                <input v-model.number="lessonForm.flightHours" type="number" step="0.1" min="0" max="10" class="form-input" placeholder="1.5" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Flight Type</label>
+                <select v-model="lessonForm.flightType" class="form-input" required>
+                  <option value="">Select type...</option>
+                  <option value="dual">Dual (with instructor)</option>
+                  <option value="solo">Solo</option>
+                  <option value="crossCountry">Cross Country</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Skills Section -->
+          <div class="card card-compact">
+            <div class="font-medium mb-md">🎯 Special Skills & Conditions</div>
+            <div class="grid grid-cols-2 gap-md">
+              <div class="form-group">
+                <label class="form-label">Night Flying (hours)</label>
+                <input v-model.number="lessonForm.nightHours" type="number" step="0.1" min="0" max="10" class="form-input" placeholder="0.0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Instrument Time (hours)</label>
+                <input v-model.number="lessonForm.instrumentHours" type="number" step="0.1" min="0" max="10" class="form-input" placeholder="0.0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Terrain Awareness (hours)</label>
+                <input v-model.number="lessonForm.terrainHours" type="number" step="0.1" min="0" max="10" class="form-input" placeholder="0.0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cross Country Distance (nm)</label>
+                <input v-model.number="lessonForm.crossCountryDistance" type="number" min="0" max="1000" class="form-input" placeholder="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Cost Section -->
+          <div class="card card-compact">
+            <div class="font-medium mb-md">💰 Lesson Costs</div>
+            <div class="grid grid-cols-2 gap-md">
+              <div class="form-group">
+                <label class="form-label">Aircraft Rental ($)</label>
+                <input v-model.number="lessonForm.aircraftCost" type="number" step="0.01" min="0" class="form-input" placeholder="280.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Instructor Fee ($)</label>
+                <input v-model.number="lessonForm.instructorCost" type="number" step="0.01" min="0" class="form-input" placeholder="120.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fuel Cost ($)</label>
+                <input v-model.number="lessonForm.fuelCost" type="number" step="0.01" min="0" class="form-input" placeholder="45.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Other Costs ($)</label>
+                <input v-model.number="lessonForm.otherCosts" type="number" step="0.01" min="0" class="form-input" placeholder="0.00">
+              </div>
+            </div>
+            <div class="mt-md">
+              <div class="flex justify-between items-center">
+                <span class="font-medium">Total Cost:</span>
+                <span class="text-lg font-bold">${{ totalLessonCost.toFixed(2) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes Section -->
+          <div class="card card-compact">
+            <div class="font-medium mb-md">📝 Lesson Notes</div>
+            <div class="form-group">
+              <label class="form-label">Notes & Achievements</label>
+              <textarea v-model="lessonForm.notes" class="form-input" rows="3" placeholder="What did you learn? Any challenges or achievements?"></textarea>
+            </div>
+          </div>
+
+          <div class="flex gap-md">
+            <button type="button" @click="showCompleteLesson = false" class="btn btn-secondary flex-1">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-success flex-1">
+              Complete Lesson ({{ totalLessonCost > 0 ? '$' + totalLessonCost.toFixed(2) : 'Free' }})
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -228,12 +310,35 @@ const progress = ref({
     total: 0
   },
   achievements: [] as string[],
-  totalSpent: 0
+  totalSpent: 0,
+  expenses: [] as Array<{
+    id: string;
+    description: string;
+    amount: number;
+    category: string;
+    date: string;
+    lessonDetails?: any;
+  }>
 })
 
 // Modals
 const showCompleteLesson = ref(false)
 const showLessonInfo = ref(false)
+
+// Lesson completion form
+const lessonForm = ref({
+  flightHours: 0,
+  flightType: '',
+  nightHours: 0,
+  instrumentHours: 0,
+  terrainHours: 0,
+  crossCountryDistance: 0,
+  aircraftCost: 0,
+  instructorCost: 0,
+  fuelCost: 0,
+  otherCosts: 0,
+  notes: ''
+})
 
 // Lesson definitions
 const lessons = [
@@ -253,6 +358,14 @@ const lessonProgress = computed(() => {
   return Math.round((progress.value.completedLessons.length / 27) * 100)
 })
 
+// Total lesson cost computed
+const totalLessonCost = computed(() => {
+  return (lessonForm.value.aircraftCost || 0) + 
+         (lessonForm.value.instructorCost || 0) + 
+         (lessonForm.value.fuelCost || 0) + 
+         (lessonForm.value.otherCosts || 0)
+})
+
 // Tooltip functions
 const showProgressTooltip = (_event: MouseEvent) => {
   // Tooltip logic here
@@ -265,11 +378,103 @@ const hideProgressTooltip = () => {
 // Lesson completion function
 const completeLesson = () => {
   if (!progress.value.completedLessons.includes(progress.value.currentLesson)) {
+    // Mark lesson as completed
     progress.value.completedLessons.push(progress.value.currentLesson)
+    
+    // Update flight hours based on flight type
+    const hours = lessonForm.value.flightHours || 0
+    if (lessonForm.value.flightType === 'dual') {
+      progress.value.flightHours.dual += hours
+    } else if (lessonForm.value.flightType === 'solo') {
+      progress.value.flightHours.solo += hours
+    } else if (lessonForm.value.flightType === 'crossCountry') {
+      progress.value.flightHours.crossCountry += hours
+      progress.value.flightHours.solo += hours // Cross country also counts as solo
+    }
+    
+    // Update special flight hours
+    progress.value.flightHours.night += lessonForm.value.nightHours || 0
+    progress.value.flightHours.instrument += lessonForm.value.instrumentHours || 0
+    progress.value.flightHours.terrainAwareness += lessonForm.value.terrainHours || 0
+    
+    // Update total hours (avoid double counting)
+    progress.value.flightHours.total = 
+      progress.value.flightHours.dual + 
+      progress.value.flightHours.solo
+    
+    // Add expense record
+    const totalCost = totalLessonCost.value
+    if (totalCost > 0) {
+      const expense = {
+        id: Date.now().toString(),
+        description: `Lesson ${progress.value.currentLesson}: ${currentLessonInfo.value.name}`,
+        amount: totalCost,
+        category: 'flightTraining',
+        date: new Date().toISOString().split('T')[0],
+        lessonDetails: {
+          lessonNumber: progress.value.currentLesson,
+          flightHours: lessonForm.value.flightHours,
+          flightType: lessonForm.value.flightType,
+          nightHours: lessonForm.value.nightHours,
+          instrumentHours: lessonForm.value.instrumentHours,
+          terrainHours: lessonForm.value.terrainHours,
+          crossCountryDistance: lessonForm.value.crossCountryDistance,
+          breakdown: {
+            aircraft: lessonForm.value.aircraftCost,
+            instructor: lessonForm.value.instructorCost,
+            fuel: lessonForm.value.fuelCost,
+            other: lessonForm.value.otherCosts
+          },
+          notes: lessonForm.value.notes
+        }
+      }
+      
+      progress.value.expenses.push(expense)
+      progress.value.totalSpent += totalCost
+    }
+    
+    // Move to next lesson
     progress.value.currentLesson += 1
     
     // Save to localStorage
     localStorage.setItem('ppl-quest-progress', JSON.stringify(progress.value))
+    
+    // Also save to financial tracking
+    const savedFinances = localStorage.getItem('ppl-quest-finances')
+    let financialData: { expenses: Array<{id: string; description: string; amount: number; category: string; date: string}>; budget: number } = { expenses: [], budget: 30000 }
+    if (savedFinances) {
+      try {
+        financialData = JSON.parse(savedFinances)
+      } catch (error) {
+        console.error('Failed to load financial data:', error)
+      }
+    }
+    
+    if (totalCost > 0) {
+      financialData.expenses.push({
+        id: Date.now().toString(),
+        description: `Lesson ${progress.value.currentLesson - 1}: ${currentLessonInfo.value.name}`,
+        amount: totalCost,
+        category: 'flightTraining',
+        date: new Date().toISOString().split('T')[0]
+      })
+      localStorage.setItem('ppl-quest-finances', JSON.stringify(financialData))
+    }
+  }
+  
+  // Reset form
+  lessonForm.value = {
+    flightHours: 0,
+    flightType: '',
+    nightHours: 0,
+    instrumentHours: 0,
+    terrainHours: 0,
+    crossCountryDistance: 0,
+    aircraftCost: 0,
+    instructorCost: 0,
+    fuelCost: 0,
+    otherCosts: 0,
+    notes: ''
   }
   
   showCompleteLesson.value = false
